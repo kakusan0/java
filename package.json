@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "webpack --config src/webpack.js"
+    "build": "webpack --config webpack.js"
   },
   "description": "",
   "devDependencies": {
