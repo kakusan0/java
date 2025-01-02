@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    ports:
+      - "3306:3306" # ホスト:コンテナ間のポートマッピング
+    environment: # 環境変数で初期設定を指定
+      MYSQL_ROOT_PASSWORD: root  # rootユーザーのパスワード
+      MYSQL_DATABASE: home         # 作成するデータベース名
+    volumes:
+      - mysql_data:/var/lib/mysql # データ永続化のためのボリュームマウント
+      - ./init-scripts:/docker-entrypoint-initdb.d # 初期化スクリプトを配置
+    restart: always # コンテナが停止した場合、自動的に再起動
+
+volumes:
+  mysql_data:
