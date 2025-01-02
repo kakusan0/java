@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h2>Welcome, <span th:text="${name}">User</span>!</h2>
+<img th:src="'https://cdn.discordapp.com/avatars/' + ${id} + '/' + ${avatar} + '.png'" alt="Avatar">
+<form th:action="@{/logout}" method="post">
+    <input type="submit" name="logout" value="ログアウト"/>
+</form>
+</body>
+</html>
