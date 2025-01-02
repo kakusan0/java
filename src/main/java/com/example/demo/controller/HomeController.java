@@ -23,7 +23,6 @@ public class HomeController {
         model.addAttribute("name", extractAttribute(authentication, USERNAME));
         model.addAttribute("id", extractAttribute(authentication, ID));
         model.addAttribute("avatar", extractAttribute(authentication, AVATAR));
-        System.out.println(authentication.getPrincipal().getAttributes());
         return "home";
     }
 
