@@ -1,4 +1,4 @@
-name: Self-Hosted Runner Example
+name: Deploy and Run Spring Boot
 
 on:
   push:
@@ -6,10 +6,20 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-run:
     runs-on: self-hosted
     steps:
+      # リポジトリからコードをチェックアウト
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Run build
-        run: echo "Hello from Self-hosted Runner!"
+
+      # MavenでSpring Bootアプリケーションをビルド
+      - name: Build JAR with Maven
+        run: |
+          ./mvnw clean package -DskipTests
+
+      # ビルドされたJARファイルを実行
+      - name: Run JAR on Rocky Linux
+        run: |
+          pkill -f 'java -jar target/demo-0.0.1-SNAPSHOT.jar' || true
+          nohup java -jar target/demo-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
