@@ -16,9 +16,9 @@ jobs:
       # Mavenのインストール
       - name: Install Maven
         run: |
-          mkdir -p /usr/local/apache-maven
+          sudo mkdir -p /usr/local/apache-maven
           curl -sSL https://apache.osuosl.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz | sudo tar -xz -C /usr/local/apache-maven --strip-components=1
-          ln -s /usr/local/apache-maven/bin/mvn /usr/bin/mvn
+          sudo ln -s /usr/local/apache-maven/bin/mvn /usr/bin/mvn
 
       # Mavenのインストール確認
       - name: Verify Maven Installation
