@@ -13,13 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Javaバージョン確認
+      - name: Check Java version
+        run: java -version
+
       # MavenでSpring Bootアプリケーションをビルド
       - name: Build JAR with Maven
         run: |
-          ./mvnw clean package -DskipTests
+          mvn clean package -DskipTests
 
       # ビルドされたJARファイルを実行
       - name: Run JAR on Rocky Linux
         run: |
-          pkill -f 'java -jar target/demo-0.0.1-SNAPSHOT.jar' || true
+          ps aux | grep 'java -jar target/demo-0.0.1-SNAPSHOT.jar' | grep -v grep | awk '{print $2}' | xargs -r kill || true
           nohup java -jar target/demo-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+          tail -f app.log
