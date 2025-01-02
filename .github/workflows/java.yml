@@ -13,11 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Mavenをインストール
+      # Mavenのインストール
       - name: Install Maven
         run: |
-          curl -sSL https://apache.osuosl.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz | tar -xz -C /usr/local
-          sudo ln -s /usr/local/apache-maven-3.9.5/bin/mvn /usr/bin/mvn
+          mkdir -p /usr/local/apache-maven
+          curl -sSL https://apache.osuosl.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz | sudo tar -xz -C /usr/local/apache-maven --strip-components=1
+          ln -s /usr/local/apache-maven/bin/mvn /usr/bin/mvn
 
       # Mavenのインストール確認
       - name: Verify Maven Installation
@@ -34,4 +35,3 @@ jobs:
         run: |
           ps aux | grep 'java -jar target/demo-0.0.1-SNAPSHOT.jar' | grep -v grep | awk '{print $2}' | xargs -r kill || true
           nohup java -jar target/demo-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
-          tail -f app.log
