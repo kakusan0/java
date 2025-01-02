@@ -13,9 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Javaバージョン確認
-      - name: Check Java version
-        run: java -version
+      # Mavenをインストール
+      - name: Install Maven
+        run: |
+          curl -sSL https://apache.osuosl.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.tar.gz | tar -xz -C /usr/local
+          sudo ln -s /usr/local/apache-maven-3.9.5/bin/mvn /usr/bin/mvn
+
+      # Mavenのインストール確認
+      - name: Verify Maven Installation
+        run: |
+          mvn -version
 
       # MavenでSpring Bootアプリケーションをビルド
       - name: Build JAR with Maven
