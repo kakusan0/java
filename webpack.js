@@ -3,7 +3,7 @@ module.exports = {
     entry: resolve('src/index.js'), // 必要に応じて変更
     output: {
         filename: 'main.js',
-        path: resolve(__dirname, 'main/resources/static/js/'),
+        path: resolve('src/main/resources/static/js/'),
     },
     mode: 'development', // 明示的に指定
     module: {
