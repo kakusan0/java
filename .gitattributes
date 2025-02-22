@@ -1,2 +1,30 @@
-/mvnw text eol=lf
-*.cmd text eol=crlf
+# Java ソースコード
+*.java text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.class binary
+*.jar binary
+*.war binary
+
+# JavaScript ソースコード
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+
+# シェルスクリプト
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# バイナリファイル
+*.png binary
+*.jpg binary
+*.gif binary
+
+# 自動生成物・ビルド生成物をアーカイブ対象外に
+target/* export-ignore
+dist/* export-ignore
+*.log export-ignore
+node_modules/* export-ignore

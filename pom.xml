@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1</version>
     <packaging>jar</packaging>
     <name>demo</name>
     <description>demo</description>
@@ -105,6 +105,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -152,9 +157,9 @@
                         </goals>
                         <phase>generate-resources</phase>
                         <configuration>
-<!--                            <srcdir>${project.basedir}/adasdadasd</srcdir>-->
-<!--                            <workingDirectory>${project.basedir}/adasdadasd</workingDirectory> &lt;!&ndash; プロジェクトルート &ndash;&gt;-->
-<!--                            <arguments>&#45;&#45;config ${project.basedir}/webpack.js</arguments> &lt;!&ndash; 設定ファイルを指定 &ndash;&gt;-->
+                            <!--                            <srcdir>${project.basedir}/adasdadasd</srcdir>-->
+                            <!--                            <workingDirectory>${project.basedir}/adasdadasd</workingDirectory> &lt;!&ndash; プロジェクトルート &ndash;&gt;-->
+                            <!--                            <arguments>&#45;&#45;config ${project.basedir}/webpack.js</arguments> &lt;!&ndash; 設定ファイルを指定 &ndash;&gt;-->
                         </configuration>
                     </execution>
                 </executions>
