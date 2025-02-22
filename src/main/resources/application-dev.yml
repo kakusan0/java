@@ -1,7 +1,12 @@
 # データベース関連設定
 spring:
+  docker:
+    compose:
+      file: src/main/resources/compose.yml
+      skip:
+        in-tests: false
   datasource:
-    url: jdbc:mysql://localhost:3306/home
+    url: jdbc:mysql://mysql_container:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver

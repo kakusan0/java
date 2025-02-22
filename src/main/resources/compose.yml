@@ -1,20 +1,8 @@
 services:
-  app:
-    # Dockerfile をビルドしてイメージを作成
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080" # ローカルポート 8080 をコンテナの 8080 にマッピング
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/home
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-    depends_on:
-      - mysql
   mysql:
     image: mysql:8.0
     container_name: mysql_container
+    user: "$UID:$GID"
     ports:
       - "3306:3306" # ホスト:コンテナ間のポートマッピング
     environment: # 環境変数で初期設定を指定
@@ -22,8 +10,13 @@ services:
       MYSQL_DATABASE: home         # 作成するデータベース名
     volumes:
       - mysql_data:/var/lib/mysql # データ永続化のためのボリュームマウント
-      - ./init-scripts:/docker-entrypoint-initdb.d # 初期化スクリプトを配置
+      - /tmp/init-scripts:/docker-entrypoint-initdb.d # 初期化スクリプトを配置
     restart: always # コンテナが停止した場合、自動的に再起動
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
 
 volumes:
   mysql_data:

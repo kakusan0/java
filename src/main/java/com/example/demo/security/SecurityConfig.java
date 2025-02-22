@@ -1,10 +1,15 @@
 package com.example.demo.security;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -12,39 +17,56 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private static final String LOGIN_PAGE = "/login";
-    private static final String HOME_PAGE = "/home";
+    private static final String LIST_PAGE = "/list";
     private static final String ROOT_PATH = "/";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // 認可設定
-        configureAuthorization(httpSecurity);
-
-        // OAuth2ログイン設定
-        configureOAuth2Login(httpSecurity);
-
-        // ログアウト設定
-        configureLogout(httpSecurity);
-
-        return httpSecurity.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(ROOT_PATH, LOGIN_PAGE).permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form // フォームログインの設定を追加
+                        .loginPage(LOGIN_PAGE) // ログインページのパスを指定
+                        .defaultSuccessUrl("/list", true) // ログイン成功時のリダイレクト先を"/hello"に設定
+                )
+                .rememberMe(rememberMe -> rememberMe
+                        .key("mySecretKey")
+                        .tokenValiditySeconds(1209600)
+                        .userDetailsService(userDetailsService)
+                )
+                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/list", true)) // OAuth2ログイン成功時のリダイレクト先も"/hello"に変更
+                .logout(logout -> logout
+                        .logoutSuccessUrl(ROOT_PATH)
+                        .deleteCookies("JSESSIONID")
+                )
+                .build();
     }
 
-    private void configureAuthorization(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers(ROOT_PATH, LOGIN_PAGE).permitAll()
-                .anyRequest().authenticated()
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+//        UserDetails user = User.builder()
+//                .username("user")
+//                .password(passwordEncoder.encode("password"))
+//                .roles("USER")
+//                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(
+//                user,
+                admin
         );
     }
 
-    private void configureOAuth2Login(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.oauth2Login(oauth -> oauth.defaultSuccessUrl(HOME_PAGE, true)
-        );
-    }
-
-    private void configureLogout(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.logout(logout -> logout
-                .logoutSuccessUrl(ROOT_PATH)
-                .deleteCookies("JSESSIONID")
-        );
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

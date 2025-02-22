@@ -4,10 +4,19 @@
     <title>ログイン</title>
 </head>
 <body>
-<div th:replace="~{nav.html::navbar}" ></div>
+<div th:replace="~{nav.html::navbar}"></div>
+<form method="post" th:action="@{/login}">
+    <label for="username">ユーザー名:</label>
+    <input id="username" name="username" required type="text">
+    <br>
+    <label for="password">パスワード:</label>
+    <input id="password" name="password" required type="password">
+    <br>
+    <button type="submit">ログイン</button>
+</form>
 <h2>Welcome to Discord OAuth2 Login</h2>
 <a href="/oauth2/authorization/discord">
-    <img th:src="'https://cdn.discordapp.com/embed/avatars/0.png'" alt="Discord Login">
+    <img alt="Discord Login" th:src="'https://cdn.discordapp.com/embed/avatars/0.png'">
 </a>
 </body>
 </html>
