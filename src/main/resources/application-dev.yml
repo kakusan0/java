@@ -1,12 +1,12 @@
 # データベース関連設定
 spring:
-  docker:
-    compose:
-      file: src/main/resources/compose.yml
-      skip:
-        in-tests: false
+  #  docker:
+  #    compose:
+  #      file: compose.yml
+  #      skip:
+  #        in-tests: false
   datasource:
-    url: jdbc:mysql://mysql_container:3306/home?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,7 +29,10 @@ spring:
             token-uri: https://discord.com/api/oauth2/token
             user-info-uri: https://discord.com/api/users/@me
             user-name-attribute: username
-
+logging:
+  level:
+    org.apache.ibatis: DEBUG
+    java.sql: TRACE
 # MyBatis の設定
 mybatis:
   mapper-locations: classpath:mapper/*.xml

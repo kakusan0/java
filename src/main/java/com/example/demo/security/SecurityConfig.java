@@ -4,69 +4,53 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String LOGIN_PAGE = "/login";
+    public static final String LOGIN_PROCESSING_URL = "/login";
     private static final String LIST_PAGE = "/list";
-    private static final String ROOT_PATH = "/";
+    private static final String REGISTER_URL = "/register";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ROOT_PATH, LOGIN_PAGE).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers(LOGIN_PROCESSING_URL, REGISTER_URL, REGISTER_URL + "/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form // フォームログインの設定を追加
-                        .loginPage(LOGIN_PAGE) // ログインページのパスを指定
-                        .defaultSuccessUrl("/list", true) // ログイン成功時のリダイレクト先を"/hello"に設定
+                .formLogin(form -> form
+                        .loginPage(LOGIN_PROCESSING_URL)
+                        .loginProcessingUrl(LOGIN_PROCESSING_URL)
+                        .defaultSuccessUrl(LIST_PAGE, true)
                 )
-                .rememberMe(rememberMe -> rememberMe
-                        .key("mySecretKey")
-                        .tokenValiditySeconds(1209600)
-                        .userDetailsService(userDetailsService)
-                )
-                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/list", true)) // OAuth2ログイン成功時のリダイレクト先も"/hello"に変更
+                .oauth2Login(oauth -> oauth
+                        .loginPage(LOGIN_PROCESSING_URL)
+                        .defaultSuccessUrl(LIST_PAGE, true))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(ROOT_PATH)
+                        .logoutSuccessUrl(LOGIN_PROCESSING_URL)
                         .deleteCookies("JSESSIONID")
                 )
                 .build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(passwordEncoder.encode("password"))
-//                .roles("USER")
-//                .build();
-
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(
-//                user,
-                admin
-        );
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder
+    passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public SpringResourceTemplateResolver templateResolver() {
+//        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+//        resolver.setPrefix("classpath:/templates/");
+//        resolver.setSuffix(".html");
+//        resolver.setTemplateMode(TemplateMode.HTML);
+//        resolver.setCharacterEncoding("UTF-8");
+//        return resolver;
+//    }
 }

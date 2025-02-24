@@ -1,22 +1,36 @@
+<!-- login/index.html -->
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ログイン</title>
+    <!-- login/index.html の head 部分 -->
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <title th:text="#{login.page.title}"
+    ></title>
 </head>
 <body>
-<div th:replace="~{nav.html::navbar}"></div>
+<h1 th:text="#{login.page.title}"/>
 <form method="post" th:action="@{/login}">
-    <label for="username">ユーザー名:</label>
-    <input id="username" name="username" required type="text">
-    <br>
-    <label for="password">パスワード:</label>
-    <input id="password" name="password" required type="password">
-    <br>
-    <button type="submit">ログイン</button>
+    <div>
+        <label>ユーザー名:
+            <input name="username" type="text"/>
+        </label>
+    </div>
+    <div>
+        <label>パスワード:
+            <input name="password" type="password"/>
+        </label>
+    </div>
+    <div>
+        <button type="submit">ログイン</button>
+    </div>
+    <a href="/oauth2/authorization/discord">
+        <img alt="Discord Login" th:src="'https://cdn.discordapp.com/embed/avatars/0.png'">
+    </a>
+    <div th:if="${param.error}">
+        <p style="color: red;">ログインに失敗しました。再度お試しください。</p>
+    </div>
 </form>
-<h2>Welcome to Discord OAuth2 Login</h2>
-<a href="/oauth2/authorization/discord">
-    <img alt="Discord Login" th:src="'https://cdn.discordapp.com/embed/avatars/0.png'">
-</a>
 </body>
 </html>

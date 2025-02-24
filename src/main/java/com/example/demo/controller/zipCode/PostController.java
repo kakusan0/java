@@ -40,7 +40,7 @@ public class PostController {
         model.addAttribute("username", userName); // Authenticationの名前またはデフォルト値
 
 
-        return "post/postList";
+        return "postList";
     }
 
     private void populateModelWithUserAttributes(OAuth2AuthenticationToken authentication, Model model) {
