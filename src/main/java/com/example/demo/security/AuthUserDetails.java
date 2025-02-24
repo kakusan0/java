@@ -6,10 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuthUserDetails implements UserDetails {
 
@@ -17,13 +16,12 @@ public class AuthUserDetails implements UserDetails {
     private final MasterUser loginUser;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public AuthUserDetails(MasterUser loginUser) {
+    public AuthUserDetails(MasterUser loginUser, List<String> roles) {
         this.loginUser = loginUser;
-        List<String> list = new ArrayList<>(Collections.singletonList("ROLE_USER"));
-        this.authorities = list
+        this.authorities = roles
                 .stream()
                 .map(SimpleGrantedAuthority::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -31,13 +29,11 @@ public class AuthUserDetails implements UserDetails {
         return authorities;
     }
 
-    // 修正：実際のパスワードを返す
     @Override
     public String getPassword() {
         return loginUser.getPassword();
     }
 
-    // 修正：実際のユーザー名を返す
     @Override
     public String getUsername() {
         return loginUser.getUsername();
