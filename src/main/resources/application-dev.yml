@@ -6,7 +6,7 @@ spring:
   #      skip:
   #        in-tests: false
   datasource:
-    url: jdbc:mysql://localhost:3306/home?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
