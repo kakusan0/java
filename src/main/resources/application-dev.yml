@@ -2,7 +2,7 @@
 spring:
   docker:
     compose:
-      file: src/main/resources/compose.yml
+      file: compose.yml
       skip:
         in-tests: false
   datasource:
