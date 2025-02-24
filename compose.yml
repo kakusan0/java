@@ -10,7 +10,7 @@ services:
       MYSQL_DATABASE: home         # 作成するデータベース名
     volumes:
       - mysql_data:/var/lib/mysql # データ永続化のためのボリュームマウント
-      - /tmp/init-scripts:/docker-entrypoint-initdb.d # 初期化スクリプトを配置
+      - ./init-scripts:/docker-entrypoint-initdb.d # 初期化スクリプトを配置
     restart: always # コンテナが停止した場合、自動的に再起動
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
