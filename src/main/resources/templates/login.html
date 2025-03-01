@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <title th:text="#{login.page.title}"/>
+</head>
+<body>
+<h1 th:text="#{login.page.title}"/>
+<div>
+    <form method="post" th:action="@{/login}">
+        <div class="mb-3">
+            <label class="form-label">ユーザー名:
+                <input name="username" type="text" placeholder="ユーザ名" required/>
+            </label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">パスワード:
+                <input name="password" type="password" placeholder="パスワード" required/>
+            </label>
+        </div>
+        <div>
+            <button type="submit">ログイン</button>
+        </div>
+        <a href="/oauth2/authorization/discord">
+            <img alt="Discord Login" th:src="'https://cdn.discordapp.com/embed/avatars/0.png'">
+        </a>
+        <div th:if="${param.error}">
+            <p style="color: red;">ログインに失敗しました。再度お試しください。</p>
+        </div>
+    </form>
+</div>
+</body>
+</html>

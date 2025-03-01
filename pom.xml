@@ -161,16 +161,10 @@
                             <goal>webpack</goal>
                         </goals>
                         <phase>generate-resources</phase>
-                        <configuration>
-                            <!--                            <srcdir>${project.basedir}/adasdadasd</srcdir>-->
-                            <!--                            <workingDirectory>${project.basedir}/adasdadasd</workingDirectory> &lt;!&ndash; プロジェクトルート &ndash;&gt;-->
-                            <!--                            <arguments>&#45;&#45;config ${project.basedir}/webpack.js</arguments> &lt;!&ndash; 設定ファイルを指定 &ndash;&gt;-->
-                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
                     <workingDirectory>${project.basedir}</workingDirectory> <!-- プロジェクトルート -->
-                    <installDirectory>${project.basedir}</installDirectory>
                     <nodeVersion>v20.9.0</nodeVersion>
                 </configuration>
             </plugin>

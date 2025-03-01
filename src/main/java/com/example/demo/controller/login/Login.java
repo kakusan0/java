@@ -8,6 +8,6 @@ public class Login {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "index";
+        return "login";
     }
 }

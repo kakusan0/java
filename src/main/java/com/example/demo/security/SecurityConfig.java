@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,11 +10,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
     private static final String LIST_PAGE = "/list";
     private static final String REGISTER_URL = "/register";
+
+    private final DefaultOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,11 +29,11 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
-                        .loginProcessingUrl(LOGIN_PROCESSING_URL)
                         .defaultSuccessUrl(LIST_PAGE, true)
                 )
                 .oauth2Login(oauth -> oauth
                         .loginPage(LOGIN_PROCESSING_URL)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .defaultSuccessUrl(LIST_PAGE, true))
                 .logout(logout -> logout
                         .logoutSuccessUrl(LOGIN_PROCESSING_URL)
@@ -43,14 +47,4 @@ public class SecurityConfig {
     passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    public SpringResourceTemplateResolver templateResolver() {
-//        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-//        resolver.setPrefix("classpath:/templates/");
-//        resolver.setSuffix(".html");
-//        resolver.setTemplateMode(TemplateMode.HTML);
-//        resolver.setCharacterEncoding("UTF-8");
-//        return resolver;
-//    }
 }

@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "webpack --config webpack.js"
+    "build": "webpack --config webpack.js",
+    "start": "webpack serve --open --mode development"
   },
   "description": "",
   "devDependencies": {

@@ -8,7 +8,11 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface UserMapper {
     @Select("select count(id) from users where username = #{username}")
-    int existsByUsernameAndPassword(
+    int existsByUsername(
+            String username);
+
+    @Select("select count(id) from users where discordName = #{username}")
+    int existsByUsernameDiscord(
             String username);
 
     @Select("select username, password from users where username = #{username}")
@@ -16,6 +20,8 @@ public interface UserMapper {
             String username);
 
     @Insert("insert into users (username, password) values (#{username}, #{password})")
-    void insert(MasterUser user);
+    void insert(MasterUser username);
 
+    @Insert("insert into users (username) values (#{username})")
+    void insertDiscord(String username);
 }
