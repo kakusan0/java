@@ -17,9 +17,6 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     public UserDetails(MasterUser loginUser) {
         this.loginUser = loginUser;
-
-        // MasterUser から権限情報を動的に設定する（必要ならカスタマイズ）
-        // 例: 必要に応じて role フィールドまたは固定値 "ROLE_USER" を使用
         this.authorities = loginUser.getRoles() != null
                 ? loginUser.getRoles().stream()
                 .map(SimpleGrantedAuthority::new)
@@ -49,16 +46,16 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // アカウントはロックされていないと仮定
+        return loginUser.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // 資格情報は期限切れではないと仮定
+        return loginUser.getCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return loginUser.isEnabled(); // MasterUser の有効状態を使用
+        return loginUser.isEnabled();
     }
 }
