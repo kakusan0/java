@@ -15,6 +15,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private final MasterUser loginUser;
     private final Collection<? extends GrantedAuthority> authorities;
 
+    // コンストラクタ: MasterUserを受け取り、権限を設定する
     public UserDetails(MasterUser loginUser) {
         this.loginUser = loginUser;
         this.authorities = loginUser.getRoles() != null
@@ -24,36 +25,43 @@ public class UserDetails implements org.springframework.security.core.userdetail
                 : Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+    // ユーザーに付与された権限を返す
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
 
+    // ユーザーのパスワードを返す
     @Override
     public String getPassword() {
         return loginUser.getPassword();
     }
 
+    // ユーザー名を返す
     @Override
     public String getUsername() {
         return loginUser.getUsername();
     }
 
+    // アカウントが有効期限切れかどうかを判定する (今回は常に有効としている)
     @Override
     public boolean isAccountNonExpired() {
-        return true; // アカウントは期限切れではないと仮定
+        return true;
     }
 
+    // アカウントがロックされていないかどうかを判定する (今回は常にロックされていないと仮定)
     @Override
     public boolean isAccountNonLocked() {
-        return loginUser.isAccountNonLocked();
+        return true;
     }
 
+    // 資格情報が有効期限切れかどうかを判定する (今回は常に有効と仮定)
     @Override
     public boolean isCredentialsNonExpired() {
-        return loginUser.getCredentialsNonExpired();
+        return loginUser.isCredentialsNonExpired();
     }
 
+    // ユーザーが有効であるかどうかを判定する (今回は常に有効と仮定)
     @Override
     public boolean isEnabled() {
         return loginUser.isEnabled();

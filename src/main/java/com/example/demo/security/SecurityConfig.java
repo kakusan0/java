@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .defaultSuccessUrl(LIST_PAGE, true))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(LOGIN_PROCESSING_URL)
+                        .logoutSuccessUrl(LOGIN_PROCESSING_URL).invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                 )
                 .build();

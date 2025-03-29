@@ -15,7 +15,7 @@ public interface UserMapper {
     int existsByUsernameDiscord(
             String username);
 
-    @Select("select username, password from users where username = #{username}")
+    @Select("select * from users where username = #{username}")
     MasterUser existsByUsernameAndPasswordAndId(
             String username);
 

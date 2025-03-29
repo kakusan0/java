@@ -1,5 +1,5 @@
 # ベースイメージは OpenJDK の軽量イメージ
-FROM eclipse-temurin:17-jdk AS java
+FROM openjdk:23-slim AS java
 
 # アプリケーション JAR ファイルを格納するディレクトリを指定
 WORKDIR /app

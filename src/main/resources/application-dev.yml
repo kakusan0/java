@@ -5,8 +5,13 @@ spring:
   #      file: compose.yml
   #      skip:
   #        in-tests: false
+  thymeleaf:
+    cache: false
+    check-template: false
+    check-template-location: false
+    enabled: true
   datasource:
-    url: jdbc:mysql://mysql:3306/home?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -33,9 +38,12 @@ logging:
   level:
     org.apache.ibatis: DEBUG
     java.sql: TRACE
+    org.springframework.security: DEBUG
 # MyBatis の設定
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 # Discord Bot Token
 discord:

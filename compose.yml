@@ -26,10 +26,7 @@ services:
       - "8080:8080" # ローカルポート 8080 をコンテナの 8080 にマッピング
       - "5050:5050"
       - "2222:22"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/home
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+    restart: always
     depends_on:
       - mysql
 

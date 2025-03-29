@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.post.MasterUser;
 import com.example.demo.mapper.post.UserMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
 
     private final UserMapper userMapper;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public RegistrationController(UserMapper userMapper, BCryptPasswordEncoder passwordEncoder) {
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @GetMapping("/register")
     public String showRegistrationForm() {
@@ -47,7 +43,7 @@ public class RegistrationController {
         }
 
         // パスワードのハッシュ化処理
-        String hashedPassword = passwordEncoder.encode(password);
+        String hashedPassword = new BCryptPasswordEncoder().encode(password);
 
         // ユーザー登録用エンティティの作成
         MasterUser user = new MasterUser();
@@ -59,6 +55,6 @@ public class RegistrationController {
 
         model.addAttribute("message", "アカウント登録が完了しました！");
         model.addAttribute("username", username);
-        return "register_success";
+        return "login";
     }
 }
