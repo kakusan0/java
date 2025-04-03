@@ -15,7 +15,6 @@ public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
     private static final String LIST_PAGE = "/list";
-    private static final String REGISTER_URL = "/register";
 
     private final DefaultOAuth2UserService customOAuth2UserService;
 
@@ -24,9 +23,16 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-                        .requestMatchers(LOGIN_PROCESSING_URL, REGISTER_URL, REGISTER_URL + "/**").permitAll()
+                        .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
                         .anyRequest().authenticated()
                 )
+                .sessionManagement(session -> session
+                        .invalidSessionUrl(LOGIN_PROCESSING_URL)
+                        .sessionFixation()
+                        .migrateSession()
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(true)
+                        .expiredUrl(LOGIN_PROCESSING_URL))
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
                         .defaultSuccessUrl(LIST_PAGE, true)

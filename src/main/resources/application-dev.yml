@@ -5,11 +5,16 @@ spring:
   #      file: compose.yml
   #      skip:
   #        in-tests: false
+  session:
+    store-type: jdbc
   thymeleaf:
     cache: false
     check-template: false
     check-template-location: false
     enabled: true
+  sql:
+    init:
+      mode: always
   datasource:
     url: jdbc:mysql://localhost:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
