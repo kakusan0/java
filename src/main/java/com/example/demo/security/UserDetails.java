@@ -49,19 +49,19 @@ public class UserDetails implements org.springframework.security.core.userdetail
         return true;
     }
 
-    // アカウントがロックされていないかどうかを判定する (今回は常にロックされていないと仮定)
+    // アカウントがロックされていないかどうかを判定する
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    // 資格情報が有効期限切れかどうかを判定する (今回は常に有効と仮定)
+    // 資格情報が有効期限切れかどうかを判定する
     @Override
     public boolean isCredentialsNonExpired() {
         return loginUser.isCredentialsNonExpired();
     }
 
-    // ユーザーが有効であるかどうかを判定する (今回は常に有効と仮定)
+    // ユーザーが有効であるかどうかを判定する
     @Override
     public boolean isEnabled() {
         return loginUser.isEnabled();

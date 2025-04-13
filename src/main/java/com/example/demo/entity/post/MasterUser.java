@@ -11,18 +11,18 @@ import java.util.List;
 public class MasterUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Long id;
-    private String username;
-    private String password;
-    private String email;
-    private List<String> roles;
-    private String discordName;
-    private Date passwordExpiryDate;
-    private Date credentialsNonExpired;
-    private Date accountNonExpired;
-    private boolean discordStatus;
-    private boolean enabled;
-    private boolean accountNonLocked;
+    private Long id; // ユーザーの一意な識別子
+    private String username; // ユーザー名
+    private String password; // ユーザーのパスワード
+    private String email; // ユーザーの電子メールアドレス
+    private List<String> roles; // ユーザーに割り当てられたロールのリスト
+    private String discordName; // ユーザーのDiscord名
+    private Date passwordExpiryDate; // パスワードの有効期限日
+    private Date credentialsNonExpired; // 資格情報の有効期限日
+    private Date accountNonExpired; // アカウントの有効期限日
+    private boolean discordStatus; // Discord認証のステータス
+    private boolean enabled; // アカウントが有効かどうか
+    private boolean accountNonLocked; // アカウントがロックされていないかどうか
 
     /**
      * パスワードの有効期限が切れている場合は true を返します。

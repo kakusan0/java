@@ -18,12 +18,12 @@ public class Login {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "login/login";
     }
 
     @GetMapping("/register")
     public String showRegistrationForm() {
-        return "register";
+        return "login/register";
     }
 
     @PostMapping("/register")
@@ -39,12 +39,12 @@ public class Login {
                 password == null || password.isEmpty() ||
                 confirmPassword == null || confirmPassword.isEmpty()) {
             model.addAttribute("error", "全てのフィールドに入力してください。");
-            return "register";
+            return "login/register";
         }
 
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "パスワードが一致しません。");
-            return "register";
+            return "login/register";
         }
 
         // パスワードのハッシュ化処理
@@ -60,6 +60,6 @@ public class Login {
 
         model.addAttribute("message", "アカウント登録が完了しました！");
         model.addAttribute("username", username);
-        return "login";
+        return "login/login";
     }
 }
