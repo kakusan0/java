@@ -133,9 +133,35 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>11.8.0</version>
+                <configuration>
+                    <url>jdbc:mysql://localhost:3306/home?useSSL=false&amp;allowPublicKeyRetrieval=true</url>
+                    <user>root</user>
+                    <password>root</password>
+                    <schemas>
+                        <schema>home</schema>
+                    </schemas>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <cleanDisabled>false</cleanDisabled>
+                    <baselineVersion>1.0</baselineVersion>
+                    <baselineDescription>Initial</baselineDescription>
+                    <locations>classpath:/db/migration</locations>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
