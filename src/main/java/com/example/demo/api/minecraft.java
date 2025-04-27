@@ -1,6 +1,5 @@
 package com.example.demo.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.vv32.rcon.Rcon;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +15,7 @@ import java.util.regex.Pattern;
 public class minecraft {
 
     @GetMapping("/rcon")
-    public String sendRconCommand(
+    public Object sendRconCommand(
             @RequestParam String hostname,
             @RequestParam int port,
             @RequestParam String password,
@@ -47,25 +46,40 @@ public class minecraft {
                         result.put("maxPlayers", matcherOffline.group(2));
                         result.put("players", ""); // プレイヤーがいない場合は空文字列
                     } else {
-                        return "予期しないレスポンス:" + response; // デバッグ用にレスポンス全文を返す
+                        return new RconResponse(command, "予期しないレスポンス:" + response); // デバッグ用にレスポンス全文を返す
                     }
 
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    try {
-                        return objectMapper.writeValueAsString(result);
-                    } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
-                        return "JSON変換に失敗しました。";
-                    }
+                    return result;
                 }
 
-                return response;
+                return new RconResponse(command, response);
 
             } else {
-                return "認証に失敗しました。";
+                return new RconResponse(command, "認証に失敗しました。");
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return new RconResponse(command, "例外が発生しました：" + e.getMessage());
         }
 
+    }
+
+
+    private static class RconResponse {
+        private final String command;
+        private final String response;
+
+        public RconResponse(String command, String response) {
+            this.command = command;
+            this.response = response;
+        }
+
+
+        public String getCommand() {
+            return command;
+        }
+
+        public String getResponse() {
+            return response;
+        }
     }
 }
