@@ -5,6 +5,11 @@ spring:
   #      file: compose.yml
   #      skip:
   #        in-tests: false
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
   session:
     store-type: jdbc
   thymeleaf:
