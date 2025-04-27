@@ -15,12 +15,7 @@ import java.util.regex.Pattern;
 public class minecraft {
 
     @GetMapping("/rcon")
-    public Object sendRconCommand(
-            @RequestParam String hostname,
-            @RequestParam int port,
-            @RequestParam String password,
-            @RequestParam(defaultValue = "list") String command
-    ) {
+    public Object sendRconCommand(@RequestParam String hostname, @RequestParam int port, @RequestParam String password, @RequestParam(defaultValue = "list") String command) {
         try (Rcon rcon = Rcon.open(hostname, port)) {
 
             if (rcon.authenticate(password)) {
@@ -63,23 +58,7 @@ public class minecraft {
 
     }
 
-
-    private static class RconResponse {
-        private final String command;
-        private final String response;
-
-        public RconResponse(String command, String response) {
-            this.command = command;
-            this.response = response;
-        }
-
-
-        public String getCommand() {
-            return command;
-        }
-
-        public String getResponse() {
-            return response;
-        }
+    private record RconResponse(String command, String response) {
     }
+
 }
