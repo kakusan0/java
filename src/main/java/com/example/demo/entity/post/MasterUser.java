@@ -14,7 +14,6 @@ public class MasterUser implements Serializable {
     private Long id; // ユーザーの一意な識別子
     private String username; // ユーザー名
     private String password; // ユーザーのパスワード
-    private String email; // ユーザーの電子メールアドレス
     private List<String> roles; // ユーザーに割り当てられたロールのリスト
     private String discordName; // ユーザーのDiscord名
     private Date passwordExpiryDate; // パスワードの有効期限日

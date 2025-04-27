@@ -28,14 +28,12 @@ public class Login {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam("username") String username,
-                               @RequestParam("email") String email,
                                @RequestParam("password") String password,
                                @RequestParam("confirmPassword") String confirmPassword,
                                Model model) {
 
         // 入力値のチェック
         if (username == null || username.isEmpty() ||
-                email == null || email.isEmpty() ||
                 password == null || password.isEmpty() ||
                 confirmPassword == null || confirmPassword.isEmpty()) {
             model.addAttribute("error", "全てのフィールドに入力してください。");

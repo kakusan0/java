@@ -11,7 +11,7 @@ public interface UserMapper {
     int existsByUsername(
             String username);
 
-    @Select("select count(id) from users where discordName = #{username}")
+    @Select("select count(id) from users where discord_name = #{username}")
     int existsByUsernameDiscord(
             String username);
 
