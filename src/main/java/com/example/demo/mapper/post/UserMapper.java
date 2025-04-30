@@ -19,9 +19,9 @@ public interface UserMapper {
     MasterUser existsByUsernameAndPasswordAndId(
             String username);
 
-    @Insert("insert into mst_user (username, password) values (#{username}, #{password})")
+    @Insert("insert into mst_user(username, password) values (#{username}, #{password})")
     void insert(MasterUser username);
 
-    @Insert("insert into mst_user (username) values (#{username})")
+    @Insert("insert into mst_user(username) values (#{username})")
     void insertDiscord(String username);
 }
