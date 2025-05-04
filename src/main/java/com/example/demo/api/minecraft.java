@@ -20,13 +20,13 @@ public class minecraft {
 
     private static final Logger logger = LoggerFactory.getLogger(minecraft.class);
 
-    @Value("${RCON_HOSTNAME}")
+    @Value("${rcon.hostname}")
     private String rconHostname;
 
-    @Value("${RCON_PORT}")
+    @Value("${rcon.port}")
     private int rconPort;
 
-    @Value("${RCON_PASSWORD}")
+    @Value("${rcon.password}")
     private String rconPassword;
 
     /**
