@@ -34,7 +34,8 @@ public class SecurityConfig {
                         .migrateSession()
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
-                        .expiredUrl(LOGIN_PROCESSING_URL))
+                        .expiredUrl(LOGIN_PROCESSING_URL)
+                )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
                         .defaultSuccessUrl(LIST_PAGE, true)
