@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +38,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
                         .defaultSuccessUrl(LIST_PAGE, true)
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 )
                 .oauth2Login(oauth -> oauth
                         .loginPage(LOGIN_PROCESSING_URL)
@@ -52,5 +55,14 @@ public class SecurityConfig {
     public BCryptPasswordEncoder
     passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public HttpFirewall httpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowedHttpMethods(
+                java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH", "PROPFIND")
+        );
+        return firewall;
     }
 }
