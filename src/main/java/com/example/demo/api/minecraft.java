@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/API/rcon")
+@RequestMapping("/api/rcon")
 public class minecraft {
 
     private static final Logger logger = LoggerFactory.getLogger(minecraft.class);
