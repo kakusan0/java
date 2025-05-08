@@ -42,6 +42,9 @@ public class Login {
     @GetMapping("/public")
     public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user) {
         String url = "https://wiki.aristos.server-on.net/";
+        if (user.getUsername().equals("admin")) {
+            return "redirect:/register";
+        }
         if (user != null && !ObjectUtils.isEmpty(user)) {
             url += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
         }
