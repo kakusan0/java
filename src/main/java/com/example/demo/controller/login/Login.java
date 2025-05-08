@@ -1,12 +1,16 @@
 package com.example.demo.controller.login;
 
 import com.example.demo.entity.post.MasterUser;
+import com.example.demo.form.UserValidation;
 import com.example.demo.mapper.post.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +23,14 @@ public class Login {
     @GetMapping("/login")
     public String loginPage() {
         return "login/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute UserValidation form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "login/login";
+        }
+        return "redirect:/list";
     }
 
     @GetMapping("/register")

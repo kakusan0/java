@@ -12,9 +12,9 @@
                            id="floatingInput"
                            name="username"
                            placeholder=""
-                           type="text"
+                           required
                            th:value="${param.username}"
-                           required>
+                           type="text">
                     <label for="floatingInput">ユーザ名</label>
                 </div>
                 <div class="form-floating mb-3">
@@ -22,8 +22,8 @@
                            id="floatingPassword"
                            name="password"
                            placeholder=""
-                           type="password"
-                           required>
+                           required
+                           type="password">
                     <label for="floatingPassword">パスワード</label>
                 </div>
                 <div>
@@ -31,11 +31,6 @@
                             type="submit">ログイン
                     </button>
                 </div>
-<!--                <a href="/oauth2/authorization/discord">-->
-<!--                    <img alt="Discord Login"-->
-<!--                         class="img-fluid w-25"-->
-<!--                         th:src="'https://cdn.discordapp.com/embed/avatars/0.png'">-->
-<!--                </a>-->
                 <div th:if="${param.error}">
                     <p style="color: red;">ログインに失敗しました。再度お試しください。</p>
                 </div>
