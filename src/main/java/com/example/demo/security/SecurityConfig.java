@@ -16,9 +16,7 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
-    private static final String LIST_PAGE = "/list";
-
-    private final DefaultOAuth2UserService customOAuth2UserService;
+    private static final String PUBLIC_PAGE = "/public";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,13 +36,9 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
-                        .defaultSuccessUrl(LIST_PAGE, true)
+                        .defaultSuccessUrl(PUBLIC_PAGE, true)
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 )
-                .oauth2Login(oauth -> oauth
-                        .loginPage(LOGIN_PROCESSING_URL)
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .defaultSuccessUrl(LIST_PAGE, true))
                 .logout(logout -> logout
                         .logoutSuccessUrl(LOGIN_PROCESSING_URL).invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")

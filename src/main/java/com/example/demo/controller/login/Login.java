@@ -4,6 +4,7 @@ import com.example.demo.entity.post.MasterUser;
 import com.example.demo.form.UserValidation;
 import com.example.demo.mapper.post.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,10 +40,10 @@ public class Login {
     }
 
     @GetMapping("/public")
-    public String home(MasterUser user) {
+    public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user) {
         String url = "https://wiki.aristos.server-on.net/";
         if (user != null && !ObjectUtils.isEmpty(user)) {
-            url += "?user=" + encode(String.valueOf(user), StandardCharsets.UTF_8);
+            url += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
         }
         return "redirect:" + url;
     }
