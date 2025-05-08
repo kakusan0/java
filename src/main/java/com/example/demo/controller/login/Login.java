@@ -7,12 +7,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.nio.charset.StandardCharsets;
+
+import static java.net.URLEncoder.encode;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +36,15 @@ public class Login {
             return "login/login";
         }
         return "redirect:/list";
+    }
+
+    @GetMapping("/public")
+    public String home(MasterUser user) {
+        String url = "https://wiki.aristos.server-on.net/";
+        if (user != null && !ObjectUtils.isEmpty(user)) {
+            url += "?user=" + encode(String.valueOf(user), StandardCharsets.UTF_8);
+        }
+        return "redirect:" + url;
     }
 
     @GetMapping("/register")
