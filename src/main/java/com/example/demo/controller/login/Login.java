@@ -56,7 +56,7 @@ public class Login {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public String registerUser(
             @AuthenticationPrincipal com.example.demo.security.UserDetails user1, @RequestParam("username") String username,
             @RequestParam("password") String password,

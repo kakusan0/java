@@ -22,10 +22,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-                        .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
-                        .requestMatchers("/register").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                                .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
+//                        .requestMatchers("/register").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)

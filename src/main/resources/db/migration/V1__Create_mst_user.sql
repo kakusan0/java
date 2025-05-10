@@ -15,3 +15,6 @@ CREATE TABLE mst_user
     created_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                            -- レコード作成日時
     updated_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- レコード更新日時（自動更新）
 );
+
+insert into home.mst_user (id, username, password, email, discord_name, password_expiry_date, credentials_non_expired, account_non_expired, discord_status, enabled, role, account_non_locked, created_at, updated_at)
+values  (1, 'admin', '$2a$10$j/tXs0s2jP3FNeIxsnl/qe6Ejn16xvgdgcE0JZ2Hhe3Nv18/ryYCe', null, null, null, null, null, 0, 1, 'ROLE_ADMIN', 1, '2025-05-10 11:57:12', '2025-05-10 11:57:34');
