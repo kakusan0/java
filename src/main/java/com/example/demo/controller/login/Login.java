@@ -3,7 +3,6 @@ package com.example.demo.controller.login;
 import com.example.demo.entity.MasterUser;
 import com.example.demo.form.UserValidation;
 import com.example.demo.mapper.UserMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,14 +41,9 @@ public class Login {
     }
 
     @GetMapping("/public")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user, HttpServletRequest request) {
-        String remoteAddr = request.getRemoteAddr();
+    @PreAuthorize("hasRole('USER')")
+    public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user) {
         String url = "https://wiki.aristos.server-on.net/";
-        if (user != null && user.getUsername().equals("admin") &&
-                ("127.0.0.1".equals(remoteAddr) || "0:0:0:0:0:0:0:1".equals(remoteAddr))) {
-            return "redirect:/register";
-        }
         if (user != null && !ObjectUtils.isEmpty(user)) {
             url += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
         }
@@ -62,7 +56,7 @@ public class Login {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String registerUser(
             @AuthenticationPrincipal com.example.demo.security.UserDetails user1, @RequestParam("username") String username,
             @RequestParam("password") String password,

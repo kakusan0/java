@@ -24,11 +24,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                         .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
+                        .requestMatchers("/register").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
-                        .defaultSuccessUrl(PUBLIC_PAGE, true)
+                        .successHandler(customAuthenticationSuccessHandler()) // ← ここを変更
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .sessionManagement(session -> session
                         .invalidSessionUrl(LOGIN_PROCESSING_URL)
@@ -38,9 +39,21 @@ public class SecurityConfig {
                         .maxSessionsPreventsLogin(true)
                         .expiredUrl(LOGIN_PROCESSING_URL))
                 .headers(headers -> headers
-                        .cacheControl(cache -> cache.disable()) // キャッシュを無効化
-                )
+                        .cacheControl(cache -> cache.disable()))
                 .build();
+    }
+
+    @Bean
+    public org.springframework.security.web.authentication.AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+            if (isAdmin) {
+                response.sendRedirect("/register");
+            } else {
+                response.sendRedirect("/public");
+            }
+        };
     }
 
     @Bean

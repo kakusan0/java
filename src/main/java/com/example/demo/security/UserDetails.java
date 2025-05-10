@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
@@ -17,9 +17,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // コンストラクタ: MasterUserを受け取り、権限を設定する
     public UserDetails(MasterUser loginUser) {
         this.loginUser = loginUser;
-        this.authorities = loginUser.getRole().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        this.authorities = List.of(new SimpleGrantedAuthority(loginUser.getRole()));
     }
 
     // ユーザーに付与された権限を返す

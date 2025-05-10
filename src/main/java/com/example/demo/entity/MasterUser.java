@@ -5,7 +5,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class MasterUser implements Serializable {
@@ -14,7 +13,7 @@ public class MasterUser implements Serializable {
     private Long id; // ユーザーの一意な識別子
     private String username; // ユーザー名
     private String password; // ユーザーのパスワード
-    private List<String> role; // ユーザーに割り当てられたロールのリスト
+    private String role; // ユーザーに割り当てられたロールのリスト
     private String discordName; // ユーザーのDiscord名
     private Date passwordExpiryDate; // パスワードの有効期限日
     private Date credentialsNonExpired; // 資格情報の有効期限日
