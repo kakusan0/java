@@ -29,8 +29,15 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
                         .defaultSuccessUrl(PUBLIC_PAGE, true)
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler())
-                ).build();
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
+                        .sessionManagement(session -> session
+                                .invalidSessionUrl(LOGIN_PROCESSING_URL)
+                                .sessionFixation()
+                                .migrateSession()
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(true)
+                                .expiredUrl(LOGIN_PROCESSING_URL))
+                .build();
     }
 
     @Bean

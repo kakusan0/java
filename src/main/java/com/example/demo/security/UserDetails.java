@@ -18,8 +18,8 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // コンストラクタ: MasterUserを受け取り、権限を設定する
     public UserDetails(MasterUser loginUser) {
         this.loginUser = loginUser;
-        this.authorities = loginUser.getRoles() != null
-                ? loginUser.getRoles().stream()
+        this.authorities = loginUser.getRole() != null
+                ? loginUser.getRole().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList())
                 : Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
