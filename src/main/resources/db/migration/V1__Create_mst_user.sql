@@ -10,6 +10,7 @@ CREATE TABLE mst_user
     account_non_expired     DATE,                                                           -- アカウントの有効期限日
     discord_status          BOOLEAN   DEFAULT FALSE,                                        -- Discord認証のステータス
     enabled                 BOOLEAN   DEFAULT TRUE,                                         -- アカウントが有効かどうか
+    role                    VARCHAR(255) NOT NULL,
     account_non_locked      BOOLEAN   DEFAULT TRUE,                                         -- アカウントがロックされていないかどうか
     created_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                            -- 作成日時
     updated_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 更新日時
