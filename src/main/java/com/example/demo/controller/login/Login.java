@@ -1,8 +1,8 @@
 package com.example.demo.controller.login;
 
-import com.example.demo.entity.post.MasterUser;
+import com.example.demo.entity.MasterUser;
 import com.example.demo.form.UserValidation;
-import com.example.demo.mapper.post.UserMapper;
+import com.example.demo.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

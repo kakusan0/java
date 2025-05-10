@@ -1,7 +1,7 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.post.MasterUser;
-import com.example.demo.mapper.post.UserMapper;
+import com.example.demo.entity.MasterUser;
+import com.example.demo.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

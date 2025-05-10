@@ -1,12 +1,11 @@
 package com.example.demo.security;
 
-import com.example.demo.entity.post.MasterUser;
+import com.example.demo.entity.MasterUser;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
@@ -18,11 +17,9 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // コンストラクタ: MasterUserを受け取り、権限を設定する
     public UserDetails(MasterUser loginUser) {
         this.loginUser = loginUser;
-        this.authorities = loginUser.getRole() != null
-                ? loginUser.getRole().stream()
+        this.authorities = loginUser.getRole().stream()
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList())
-                : Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+                .collect(Collectors.toList());
     }
 
     // ユーザーに付与された権限を返す
