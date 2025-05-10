@@ -1,9 +1,4 @@
 spring:
-  #  docker:
-  #    compose:
-  #      file: compose.yml
-  #      skip:
-  #        in-tests: false
   devtools:
     restart:
       enabled: true

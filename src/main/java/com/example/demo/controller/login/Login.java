@@ -42,7 +42,7 @@ public class Login {
     }
 
     @GetMapping("/public")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user, HttpServletRequest request) {
         String remoteAddr = request.getRemoteAddr();
         String url = "https://wiki.aristos.server-on.net/";
@@ -63,13 +63,14 @@ public class Login {
 
     @PostMapping("/register")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String registerUser(@RequestParam("username") String username,
-                               @RequestParam("password") String password,
-                               @RequestParam("confirmPassword") String confirmPassword,
-                               Model model) {
+    public String registerUser(
+            @AuthenticationPrincipal com.example.demo.security.UserDetails user1, @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword,
+            Model model) {
 
         // 入力値のチェック
-        if (username == null || username.isEmpty() ||
+        if (user1.getUsername().equals("admin") || username == null || username.isEmpty() ||
                 password == null || password.isEmpty() ||
                 confirmPassword == null || confirmPassword.isEmpty()) {
             model.addAttribute("error", "全てのフィールドに入力してください。");
