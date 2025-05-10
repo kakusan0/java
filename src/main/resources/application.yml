@@ -3,28 +3,3 @@ spring:
     name: local
   profiles:
     active: dev
-  mybatis:
-    mapper-locations: classpath:mapper/*.xml
-    configuration:
-      map-underscore-to-camel-case: true
-  session:
-    store-type: jdbc
-  security:
-    oauth2:
-      client:
-        registration:
-          discord:
-            client-id: 1287736063619764266
-            client-secret: mSbfVrIq8MEx9lyi8lGv5xweFaz9_lYU
-            scope:
-              - identify
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            authorization-grant-type: authorization_code
-            client-name: Discord
-            provider: discord
-        provider:
-          discord:
-            authorization-uri: https://discord.com/api/oauth2/authorize
-            token-uri: https://discord.com/api/oauth2/token
-            user-info-uri: https://discord.com/api/users/@me
-            user-name-attribute: username

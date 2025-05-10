@@ -1,7 +1,3 @@
-rcon:
-  port: 25575
-  hostname: localhost
-  password: test
 spring:
   #  docker:
   #    compose:
@@ -28,7 +24,3 @@ logging:
     org.apache.ibatis: DEBUG
     java.sql: TRACE
     org.springframework.security: DEBUG
-# Discord Bot Token
-discord:
-  bot:
-    token: MTI4NzczNjA2MzYxOTc2NDI2Ng.GYxU_E.Wn6JecbJzuuzjADHWZC8bhRSIYOGxHtuenP42c

@@ -3,7 +3,9 @@ package com.example.demo.controller.login;
 import com.example.demo.entity.post.MasterUser;
 import com.example.demo.form.UserValidation;
 import com.example.demo.mapper.post.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -40,9 +42,12 @@ public class Login {
     }
 
     @GetMapping("/public")
-    public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String home(@AuthenticationPrincipal com.example.demo.security.UserDetails user, HttpServletRequest request) {
+        String remoteAddr = request.getRemoteAddr();
         String url = "https://wiki.aristos.server-on.net/";
-        if (user.getUsername().equals("admin")) {
+        if (user != null && user.getUsername().equals("admin") &&
+                ("127.0.0.1".equals(remoteAddr) || "0:0:0:0:0:0:0:1".equals(remoteAddr))) {
             return "redirect:/register";
         }
         if (user != null && !ObjectUtils.isEmpty(user)) {
@@ -57,6 +62,7 @@ public class Login {
     }
 
     @PostMapping("/register")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String registerUser(@RequestParam("username") String username,
                                @RequestParam("password") String password,
                                @RequestParam("confirmPassword") String confirmPassword,
