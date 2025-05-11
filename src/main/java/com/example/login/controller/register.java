@@ -48,7 +48,7 @@ public class register {
         }
 
         // ★ ここで重複チェック（既にユーザー名が使われている場合）
-        int existsUser = userMapper.existsByUsername(username);
+        int existsUser = userMapper.existsById(username);
         if (existsUser > 0) {
             model.addAttribute("error", "「" + username + "」は既に使われています。");
             return "login/register";

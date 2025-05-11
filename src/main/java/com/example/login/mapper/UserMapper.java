@@ -4,24 +4,28 @@ import com.example.login.entity.MasterUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
     @Select("select count(id) from mst_user where username = #{username}")
-    int existsByUsername(
-            String username);
-
-    @Select("select count(id) from mst_user where discord_name = #{username}")
-    int existsByUsernameDiscord(
+    int existsById(
             String username);
 
     @Select("select * from mst_user where username = #{username}")
-    MasterUser existsByUsernameAndPasswordAndId(
+    MasterUser existsByUsername(
+            String username);
+
+    @Select("select count(id) from mst_user where ((bindingStatus = 1 and wikiStatus = 1) or (bindingStatus = 1)) and username = #{username}")
+    int existsByBindingANDWikiStatus(String username);
+
+    @Select("select count(id) from mst_user where wikiStatus = 1 and username = #{username}")
+    int existsByWikiStatus(String username);
+
+    @Update("update mst_user set wikiStatus = 0 where username = #{username}")
+    void updateWikiStatus(
             String username);
 
     @Insert("insert into mst_user(username, password, role) values (#{username}, #{password}, 'ROLE_USER')")
     void insert(MasterUser username);
-
-    @Insert("insert into mst_user(username, role) values (#{username}, 'ROLE_USER')")
-    void insertDiscord(String username);
 }

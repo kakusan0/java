@@ -14,10 +14,10 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        int userCount = userMapper.existsByUsername(username);
+        int userCount = userMapper.existsById(username);
 
         if (userCount > 0) {
-            MasterUser user = userMapper.existsByUsernameAndPasswordAndId(username);
+            MasterUser user = userMapper.existsByUsername(username);
             return new UserDetails(user);
         } else {
             throw new UsernameNotFoundException("User not found: " + username);

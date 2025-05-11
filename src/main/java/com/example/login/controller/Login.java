@@ -1,26 +1,30 @@
 package com.example.login.controller;
 
-import com.example.login.form.UserValidation;
+import com.example.login.mapper.UserMapper;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class Login {
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login/login";
-    }
+    private final UserMapper userMapper;
 
-    @PostMapping("/login")
-    public String login(@Validated @ModelAttribute UserValidation form, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "login/login";
+    @GetMapping("/login")
+    public String loginPage(HttpSession session, @AuthenticationPrincipal com.example.login.security.UserDetails user) {
+        if (user != null) {
+            if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
+                session.invalidate();
+                return "login/login";
+            } else if (userMapper.existsByWikiStatus(user.getUsername()) > 0) {
+                userMapper.updateWikiStatus(user.getUsername());
+                session.invalidate();
+                return "login/login";
+            }
         }
-        return "redirect:/list";
+        return "login/login";
     }
 }
