@@ -1,4 +1,4 @@
-package com.example.demo.controller.login;
+package com.example.demo.controller;
 
 import com.example.demo.entity.MasterUser;
 import com.example.demo.form.UserValidation;
