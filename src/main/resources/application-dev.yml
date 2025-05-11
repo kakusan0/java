@@ -14,11 +14,3 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-  servlet:
-    session:
-      timeout: 1m
-  mybatis:
-    type-aliases-package: com.example.demo.entity
-    mapper-locations: classpath:mapper/*.xml
-    configuration:
-      map-underscore-to-camel-case: true

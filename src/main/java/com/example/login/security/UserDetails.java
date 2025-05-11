@@ -1,6 +1,6 @@
-package com.example.demo.security;
+package com.example.login.security;
 
-import com.example.demo.entity.MasterUser;
+import com.example.login.entity.MasterUser;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

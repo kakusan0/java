@@ -1,6 +1,6 @@
-package com.example.demo.mapper;
+package com.example.login.mapper;
 
-import com.example.demo.entity.MasterUser;
+import com.example.login.entity.MasterUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -19,9 +19,9 @@ public interface UserMapper {
     MasterUser existsByUsernameAndPasswordAndId(
             String username);
 
-    @Insert("insert into mst_user(username, password) values (#{username}, #{password})")
+    @Insert("insert into mst_user(username, password, role) values (#{username}, #{password}, 'ROLE_USER')")
     void insert(MasterUser username);
 
-    @Insert("insert into mst_user(username) values (#{username})")
+    @Insert("insert into mst_user(username, role) values (#{username}, 'ROLE_USER')")
     void insertDiscord(String username);
 }

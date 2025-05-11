@@ -1,9 +1,9 @@
-package com.example.demo.security;
+package com.example.login.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,24 +12,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
     private static final String PUBLIC_PAGE = "/public";
+    private static final String REGISTER_PAGE = "/register";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-                                .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
-//                        .requestMatchers("/register").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                        .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
+                        .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
-                        .successHandler(customAuthenticationSuccessHandler()) // ← ここを変更
+                        .successHandler(customAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .sessionManagement(session -> session
                         .invalidSessionUrl(LOGIN_PROCESSING_URL)
@@ -38,8 +39,11 @@ public class SecurityConfig {
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
                         .expiredUrl(LOGIN_PROCESSING_URL))
-                .headers(headers -> headers
-                        .cacheControl(cache -> cache.disable()))
+                .logout(logout -> logout
+                        .logoutSuccessUrl(LOGIN_PROCESSING_URL).invalidateHttpSession(true)
+                        .deleteCookies("SESSION")
+                )
+//                .csrf(csrf -> csrf.disable())
                 .build();
     }
 
@@ -49,9 +53,9 @@ public class SecurityConfig {
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
             if (isAdmin) {
-                response.sendRedirect("/register");
+                response.sendRedirect(REGISTER_PAGE);
             } else {
-                response.sendRedirect("/public");
+                response.sendRedirect(PUBLIC_PAGE);
             }
         };
     }

@@ -1,7 +1,8 @@
-package com.example.demo.entity;
+package com.example.login.entity;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Data
 public class MasterUser implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private Long id; // ユーザーの一意な識別子
     private String username; // ユーザー名

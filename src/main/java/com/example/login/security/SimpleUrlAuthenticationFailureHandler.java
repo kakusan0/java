@@ -1,8 +1,9 @@
-package com.example.demo.security;
+package com.example.login.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
+
 import java.io.IOException;
 
 public class SimpleUrlAuthenticationFailureHandler extends org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler {
