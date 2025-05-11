@@ -1,6 +1,7 @@
 package com.example.login.controller;
 
 import com.example.login.mapper.UserMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +15,12 @@ public class Login {
     private final UserMapper userMapper;
 
     @GetMapping("/login")
-    public String loginPage(HttpSession session, @AuthenticationPrincipal com.example.login.security.UserDetails user) {
+    public String loginPage(HttpSession session, @AuthenticationPrincipal com.example.login.security.UserDetails user, HttpServletResponse response
+    ) {
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
         if (user != null) {
             if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
                 session.invalidate();

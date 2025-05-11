@@ -1,5 +1,7 @@
 spring:
   application:
     name: local
+  session:
+    timeout: 300
   profiles:
     active: local
