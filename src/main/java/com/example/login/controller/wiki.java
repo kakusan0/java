@@ -1,6 +1,7 @@
 package com.example.login.controller;
 
 import com.example.login.mapper.UserMapper;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,13 +25,14 @@ public class wiki {
 //    private String redirectURL;
 
     @GetMapping("/public")
-    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user, Model model) {
+    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user, Model model, HttpSession session) {
         String url = "https://wiki.aristos.server-on.net/";
         if (user != null && !ObjectUtils.isEmpty(user)) {
             url += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
         }
         if (user != null) {
             if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
+                session.invalidate();
                 model.addAttribute("error", "管理者にお問い合わせください");
                 return "login/login";
             }

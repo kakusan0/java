@@ -43,7 +43,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl(LOGIN_PROCESSING_URL).invalidateHttpSession(true)
                         .deleteCookies("SESSION")
                 )
-//                .csrf(CsrfConfigurer::disable)
                 .build();
     }
 
