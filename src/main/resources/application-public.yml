@@ -11,6 +11,6 @@ spring:
     enabled: true
   datasource:
     url: jdbc:mysql://192.168.3.18:3306/home?useSSL=false&allowPublicKeyRetrieval=true
-    username: ARISTOS
-    password: ARISTOSPASS
+    username: root
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
