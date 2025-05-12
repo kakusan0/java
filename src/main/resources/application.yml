@@ -5,5 +5,17 @@ spring:
     timeout: 300
   profiles:
     active: kakusan0_local
+
 wiki:
   url: https://wiki.aristos.server-on.net/
+
+server:
+  compression:
+    enabled: true
+  undertow:
+    accesslog:
+      enabled: true
+      pattern: "%t %a %r %s (%D milliseconds)"
+    options:
+      server:
+        record-request-start-time: true

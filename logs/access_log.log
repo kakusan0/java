@@ -1,0 +1,8 @@
+[13/May/2025:06:15:12 +0900] 0:0:0:0:0:0:0:1 GET /login HTTP/1.1 302 (81 milliseconds)
+[13/May/2025:06:15:12 +0900] 0:0:0:0:0:0:0:1 GET /login HTTP/1.1 200 (279 milliseconds)
+[13/May/2025:06:15:13 +0900] 0:0:0:0:0:0:0:1 GET /webjars/bootstrap/5.3.0/css/bootstrap.min.css HTTP/1.1 200 (37 milliseconds)
+[13/May/2025:06:15:13 +0900] 0:0:0:0:0:0:0:1 GET /webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js HTTP/1.1 200 (33 milliseconds)
+[13/May/2025:06:15:14 +0900] 192.168.0.2 PROPFIND / HTTP/1.0 400 (5 milliseconds)
+[13/May/2025:06:17:04 +0900] 192.168.0.2 GET / HTTP/1.0 302 (23 milliseconds)
+[13/May/2025:06:17:05 +0900] 192.168.0.2 GET /login HTTP/1.0 200 (25 milliseconds)
+[13/May/2025:06:18:17 +0900] 192.168.0.2 PROPFIND / HTTP/1.0 400 (0 milliseconds)
