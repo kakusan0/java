@@ -3,7 +3,6 @@ package com.example.login.controller;
 import com.example.login.entity.MasterUser;
 import com.example.login.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class register {
 
     private final UserMapper userMapper;
-    private MessageSource messageSource;
 
     @GetMapping("/register")
     public String showRegistrationForm() {
@@ -67,7 +65,7 @@ public class register {
         // 登録処理（データベースへの保存）
         userMapper.insert(user);
 
-        model.addAttribute("message", "アカウント登録が完了しました！");
+        model.addAttribute("message", "アカウント登録が完了しました");
         model.addAttribute("username", username);
         return "login/login";
     }
