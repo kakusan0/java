@@ -5,3 +5,5 @@ spring:
     timeout: 300
   profiles:
     active: local
+wiki:
+  url: https://wiki.aristos.server-on.net/
