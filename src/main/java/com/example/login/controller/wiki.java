@@ -21,11 +21,12 @@ public class wiki {
 
     private final UserMapper userMapper;
 
-//    @Value("${RCON_HOSTNAME}")
-//    private String redirectURL;
+    // @Value("${RCON_HOSTNAME}")
+    // private String redirectURL;
 
     @GetMapping("/public")
-    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user, Model model, HttpSession session) {
+    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user, Model model,
+            HttpSession session) {
         String url = "https://wiki.aristos.server-on.net/";
         if (user != null && !ObjectUtils.isEmpty(user)) {
             url += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);

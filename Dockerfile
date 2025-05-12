@@ -1,5 +1,5 @@
 # ベースイメージは OpenJDK の軽量イメージ
-FROM openjdk:23-slim AS java
+FROM openjdk:25-slim AS java
 
 # アプリケーション JAR ファイルを格納するディレクトリを指定
 WORKDIR /app

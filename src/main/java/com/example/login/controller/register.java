@@ -22,7 +22,6 @@ public class register {
     private final UserMapper userMapper;
     private MessageSource messageSource;
 
-
     @GetMapping("/register")
     public String showRegistrationForm() {
         return "login/register";
