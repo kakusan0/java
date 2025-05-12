@@ -1,26 +1,26 @@
-name: Run JAR in target
+# name: Run JAR in target
 
-on:
-  push:
-    branches:
-      - public
+# on:
+#   push:
+#     branches:
+#       - public
 
-jobs:
-  run-jar:
-    runs-on: ubuntu-latest
+# jobs:
+#   run-jar:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: リポジトリをチェックアウト
-        uses: actions/checkout@v4
+#     steps:
+#       - name: リポジトリをチェックアウト
+#         uses: actions/checkout@v4
 
-      - name: Javaをセットアップ
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+#       - name: Javaをセットアップ
+#         uses: actions/setup-java@v4
+#         with:
+#           distribution: 'temurin'
+#           java-version: '17'
 
-      - name: JARをビルド
-        run: mvn clean package
+#       - name: JARをビルド
+#         run: mvn clean package
 
-      - name: JARファイルを実行
-        run: java -jar target/login-*.jar
+#       - name: JARファイルを実行
+#         run: java -jar target/login-*.jar
