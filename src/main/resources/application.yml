@@ -4,6 +4,6 @@ spring:
   session:
     timeout: 300
   profiles:
-    active: local
+    active: kakusan0_local
 wiki:
   url: https://wiki.aristos.server-on.net/
