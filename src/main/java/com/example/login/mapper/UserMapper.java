@@ -25,4 +25,7 @@ public interface UserMapper {
 
         @Insert("insert into mst_user(username, password, role) values (#{username}, #{password}, 'ROLE_USER')")
         void insert(MasterUser username);
+
+        @Select("select password from mst_user where username = #{username}")
+        String getPassword(String username);
 }

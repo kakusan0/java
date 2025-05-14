@@ -3,27 +3,35 @@ package com.example.login.service;
 import com.example.login.entity.MasterUser;
 import com.example.login.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import java.security.SecureRandom;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @RequiredArgsConstructor
 public class registerService {
 
     private final UserMapper userMapper;
+    private static final String CHARACTERS =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int PASSWORD_LENGTH = 15;
+
+    // パスワード自動生成メソッド
+    public String generateRandomPassword() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PASSWORD_LENGTH);
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
+    }
 
     @Transactional
-    public void add(String user1, String username, String password, String confirmPassword) {
-
+    public String insert(String username) {
         // パスワードのハッシュ化処理
+        String password = generateRandomPassword();
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
 
         // ユーザー登録用エンティティの作成
@@ -33,5 +41,13 @@ public class registerService {
 
         // 登録処理（データベースへの保存）
         userMapper.insert(user);
+
+        return password;
     }
+
+    public String getPassword(MasterUser username) {
+        return userMapper.getPassword(username.getUsername());
+    }
+
+
 }

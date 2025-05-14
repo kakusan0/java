@@ -5,7 +5,6 @@ import com.example.login.service.registerService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,21 +25,10 @@ public class register {
     }
 
     @PostMapping("/register")
-    public String registerUser(
-            @AuthenticationPrincipal com.example.login.security.UserDetails user1,
-            @RequestParam("username") String username, @RequestParam("password") String password,
-            @RequestParam("confirmPassword") String confirmPassword, Model model) {
-
+    public String registerUser(@RequestParam("username") String username, Model model) {
         // 入力値のチェック
-        if (!user1.getUsername().equals("admin") || username == null || username.isEmpty()
-                || password == null || password.isEmpty() || confirmPassword == null
-                || confirmPassword.isEmpty()) {
-            model.addAttribute("error", "全てのフィールドに入力してください。");
-            return "login/register";
-        }
-
-        if (!password.equals(confirmPassword)) {
-            model.addAttribute("error", "パスワードが一致しません。");
+        if (username == null || username.isEmpty()) {
+            model.addAttribute("error", "ユーザ名を入力してください。");
             return "login/register";
         }
 
@@ -51,10 +39,10 @@ public class register {
             return "login/register";
         }
 
-        registerService.add(user1.getUsername(), username, password, confirmPassword);
+        String password = registerService.insert(username);
 
-        model.addAttribute("message", "アカウント登録が完了しました");
         model.addAttribute("username", username);
+        model.addAttribute("password", password);
         return "login/login";
     }
 }
