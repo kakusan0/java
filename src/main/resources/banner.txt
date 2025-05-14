@@ -6,4 +6,4 @@
 |       ||       ||   |_| ||   | | | |   |
 |_______||_______||_______||___| |_|  |__|
 
-Powered by Spring Boot ${spring-boot.formatted-version}: ${spring-boot.version} 
+Powered by Spring Boot ${spring-boot.formatted-version}: ${spring-boot.version}

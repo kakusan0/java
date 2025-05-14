@@ -27,10 +27,11 @@ public class wiki {
     private String redirectURL;
 
     @GetMapping("/public")
-    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user, Model model,
-            HttpSession session) {
+    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user,
+            Model model, HttpSession session) {
         if (user != null && !ObjectUtils.isEmpty(user)) {
-            redirectURL += "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
+            redirectURL +=
+                    "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
         }
         if (user != null) {
             if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {

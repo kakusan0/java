@@ -14,7 +14,8 @@ public class Login {
     private final UserMapper userMapper;
 
     @GetMapping("/login")
-    public String loginPage(HttpSession session, @AuthenticationPrincipal com.example.login.security.UserDetails user) {
+    public String loginPage(HttpSession session,
+            @AuthenticationPrincipal com.example.login.security.UserDetails user) {
         if (user != null) {
             if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
                 session.invalidate();
