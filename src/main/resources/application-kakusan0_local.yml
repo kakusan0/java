@@ -17,3 +17,5 @@ spring:
 server:
   compression:
     enabled: true
+wiki:
+  url: https://wiki.aristos.server-on.net/

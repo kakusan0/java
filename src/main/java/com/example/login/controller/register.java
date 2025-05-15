@@ -2,10 +2,6 @@ package com.example.login.controller;
 
 import com.example.login.mapper.UserMapper;
 import com.example.login.service.registerService;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -28,7 +24,7 @@ public class register {
     }
 
     @PostMapping("/register")
-    public String registerUser(@NotEmpty @RequestParam("username") String username, Model model) {
+    public String registerUser(@RequestParam("username") String username, Model model) {
         // 入力値のチェック
         if (username == null || username.isEmpty()) {
             model.addAttribute("error", "ユーザ名を入力してください。");
