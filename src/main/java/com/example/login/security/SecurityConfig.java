@@ -26,8 +26,7 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                         .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
                         .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage(LOGIN_PROCESSING_URL)
                         .successHandler(customAuthenticationSuccessHandler())
@@ -40,9 +39,9 @@ public class SecurityConfig {
                         .maxSessionsPreventsLogin(true)
                         .expiredUrl(LOGIN_PROCESSING_URL))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(LOGIN_PROCESSING_URL).invalidateHttpSession(true)
-                        .deleteCookies("SESSION")
-                )
+                        .logoutSuccessUrl(LOGIN_PROCESSING_URL)
+                        .invalidateHttpSession(true)
+                        .deleteCookies("SESSION"))
                 .build();
     }
 
@@ -60,8 +59,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder
-    passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
