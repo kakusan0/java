@@ -40,6 +40,8 @@ public class wiki {
                 return "login/login";
             }
         }
-        return "redirect:" + redirectURL;
+        session.invalidate();
+        model.addAttribute("error", redirectURL);
+        return "login/login";
     }
 }
