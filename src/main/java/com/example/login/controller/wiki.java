@@ -27,19 +27,25 @@ public class wiki {
     private String redirectURL;
 
     @GetMapping("/public")
-    public String home(@AuthenticationPrincipal com.example.login.security.UserDetails user,
-            Model model, HttpSession session) {
+    public String home(
+        @AuthenticationPrincipal com.example.login.security.UserDetails user,
+        Model model, HttpSession session) {
+
+        // プロパティから読み込んだ baseURL は変更しない
+        String targetUrl = redirectURL;
+
         if (user != null && !ObjectUtils.isEmpty(user)) {
-            redirectURL +=
-                    "?user=" + encode(String.valueOf(user.getUsername()), StandardCharsets.UTF_8);
+            targetUrl += "?user=" +
+                encode(user.getUsername(), StandardCharsets.UTF_8);
         }
-        if (user != null) {
-            if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
-                session.invalidate();
-                model.addAttribute("error", "管理者にお問い合わせください");
-                return "login/login";
-            }
+
+        if (user != null && userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
+            session.invalidate();
+            model.addAttribute("error", "管理者にお問い合わせください");
+            return "login/login";
         }
-        return "redirect:" + redirectURL;
+
+        return "redirect:" + targetUrl;
     }
+
 }

@@ -18,4 +18,4 @@ server:
   compression:
     enabled: true
 wiki:
-  url: http://localhost/
+  url: https://wiki.aristos.server-on.net/
