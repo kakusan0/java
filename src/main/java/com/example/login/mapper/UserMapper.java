@@ -1,7 +1,6 @@
 package com.example.login.mapper;
 
 import com.example.login.entity.MasterUser;
-import com.example.login.form.UserValidation;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,9 +11,6 @@ import org.apache.ibatis.annotations.Update;
 public interface UserMapper {
         @Select("select count(id) from mst_user where username = #{username}")
         int existsById(String username);
-
-        @Select("select count(id) from mst_user where username = #{username}")
-        int existsById1(UserValidation userName);
 
         @Select("select * from mst_user where username = #{username}")
         MasterUser existsByUsername(String username);

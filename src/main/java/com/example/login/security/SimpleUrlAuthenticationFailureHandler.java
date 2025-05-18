@@ -11,6 +11,6 @@ public class SimpleUrlAuthenticationFailureHandler extends org.springframework.s
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
         String username = request.getParameter("username");
-        getRedirectStrategy().sendRedirect(request, response, "/login?error&username=" + username);
+        getRedirectStrategy().sendRedirect(request, response, "/userName?error&username=" + username);
     }
 }

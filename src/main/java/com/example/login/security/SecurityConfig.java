@@ -25,10 +25,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                         .requestMatchers("/userName").permitAll()
-                        .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
+                        .requestMatchers("/userNameCheck").permitAll()
+                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/userName")
+                        .loginPage("/login")
                         .successHandler(customAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .sessionManagement(session -> session
@@ -51,11 +53,12 @@ public class SecurityConfig {
     @Bean
     public org.springframework.security.web.authentication.AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            boolean isAdmin = authentication.getAuthorities().stream()
-                    .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-            if (isAdmin) {
+            String username = authentication.getName();
+            if ("admin".equals(username)) {
+                // ユーザ名がadminの場合のみ管理ページへ
                 response.sendRedirect(REGISTER_PAGE);
             } else {
+                // それ以外のユーザ名の場合
                 response.sendRedirect(PUBLIC_PAGE);
             }
         };

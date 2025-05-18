@@ -1,57 +1,53 @@
 package com.example.login.controller;
 
 import com.example.login.entity.MasterUser;
-import com.example.login.form.UserValidation;
+import com.example.login.form.formUser;
 import com.example.login.mapper.UserMapper;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
+@Log4j2
 public class Login {
 
     private final UserMapper userMapper;
-
-    @GetMapping("/login")
-    public String loginPage(HttpSession session,
-            @AuthenticationPrincipal com.example.login.security.UserDetails user) {
-        if (user != null) {
-            if (userMapper.existsByBindingANDWikiStatus(user.getUsername()) > 0) {
-                session.invalidate();
-                return "login/login";
-            } else if (userMapper.existsByWikiStatus(user.getUsername()) > 0) {
-                userMapper.updateWikiStatus(user.getUsername());
-                session.invalidate();
-                return "login/login";
-            }
-        }
-        return "login/login";
-    }
+    private final MessageSource messageSource;
 
     @GetMapping("/userName")
-    public String userName() {
-        return "login/userNameCheack";
+    public String userName(@ModelAttribute formUser formUser) {
+        return "login/userName";
     }
 
     @PostMapping("/userNameCheck")
     public String userNameCheck(
             Model model,
-            @RequestParam(name = "username") @Validated UserValidation userName,
-            BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
-            userMapper.existsById1(userName);
-            model.addAttribute("username", userName);
-        } else {
-            model.addAttribute("error", userName + "はすでに使用されています");
+            @ModelAttribute("userValidation") MasterUser user
+            ) {
+        if (ObjectUtils.isEmpty(user)) {
+            String errorMsg = messageSource.getMessage(
+                    "login.error.duplicate", null, Locale.getDefault());
+            model.addAttribute("error", user.getUsername() + errorMsg);
+            return "login/login";
         }
+        int count = userMapper.existsById(user.getUsername());
+        if (count == 0) {
+            String errorMsg = messageSource.getMessage(
+                    "login.error.notfound", null, Locale.getDefault());
+            model.addAttribute("error", user.getUsername() + errorMsg);
+            return "login/userName";
+        }
+        model.addAttribute("username", user.getUsername());
+        log.debug("userName: {}", user.getUsername());
         return "login/login";
     }
 }

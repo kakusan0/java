@@ -3,7 +3,9 @@ package com.example.login.form;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class UserValidation {
+public class formUser {
+
+
 
     @NotBlank(message = "ユーザー名は必須です")
     private String username;

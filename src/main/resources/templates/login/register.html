@@ -74,6 +74,63 @@
             <p style="color: red" th:text="${error}"></p>
           </div>
         </div>
+        <div class="col-md-4 offset-md-4" th:if="${#authorization.expression('isAuthenticated()')}">
+          <div
+                  th:if="${message}"
+                  class="alert alert-success alert-dismissible fade show"
+                  role="alert"
+          >
+            <span>ユーザー名: </span><span th:text="${username}"></span><br />
+            <span>パスワード: </span><span th:text="${password}"></span>
+            <br />
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+            ></button>
+          </div>
+          <h1 th:text="#{register.page.title}"></h1>
+          <form
+                  method="post"
+                  th:action="@{/register}"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+          >
+            <div class="form-floating mb-3">
+              <input
+                      class="form-control bg-dark text-white"
+                      id="username"
+                      name="username"
+                      placeholder=""
+                      required
+                      type="text"
+              />
+              <label for="username" th:text="#{register.user.name}" />
+            </div>
+            <button
+                    class="btn btn-primary mb-3"
+                    th:text="#{register.botton.submit}"
+                    type="submit"
+            />
+          </form>
+          <form
+                  method="post"
+                  style="display: inline"
+                  th:action="@{/logout}"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+          >
+            <button
+                    class="btn btn-secondary mb-3"
+                    th:text="#{register.botton.logout}"
+            />
+          </form>
+
+          <div th:if="${error}">
+            <p style="color: red" th:text="${error}"></p>
+          </div>
+        </div>
       </div>
     </div>
   </body>
