@@ -1,7 +1,7 @@
-package com.example.login.controller;
+package com.jp.login.controller;
 
-import com.example.login.mapper.UserMapper;
-import com.example.login.service.registerService;
+import com.jp.login.mapper.UserMapper;
+import com.jp.login.service.registerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class register {
 
     private final UserMapper userMapper;
     private final registerService registerService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/register")
     public String showRegistrationForm() {
         return "login/register";

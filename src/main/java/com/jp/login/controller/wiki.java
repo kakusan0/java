@@ -1,9 +1,9 @@
-package com.example.login.controller;
+package com.jp.login.controller;
 
-import com.example.login.mapper.UserMapper;
+import com.jp.login.mapper.UserMapper;
+import com.jp.login.security.UserDetails;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +28,7 @@ public class wiki {
 
     @GetMapping("/public")
     public String home(
-        @AuthenticationPrincipal com.example.login.security.UserDetails user,
+        @AuthenticationPrincipal UserDetails user,
         Model model, HttpSession session) {
 
         // プロパティから読み込んだ baseURL は変更しない

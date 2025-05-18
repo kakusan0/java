@@ -1,4 +1,4 @@
-package com.example.login.entity;
+package com.jp.login.entity;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @Data
-public class MasterUser implements Serializable {
+public class user implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

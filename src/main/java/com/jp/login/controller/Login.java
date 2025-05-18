@@ -1,8 +1,7 @@
-package com.example.login.controller;
+package com.jp.login.controller;
 
-import com.example.login.entity.MasterUser;
-import com.example.login.form.formUser;
-import com.example.login.mapper.UserMapper;
+import com.jp.login.entity.user;
+import com.jp.login.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.MessageSource;
@@ -24,20 +23,19 @@ public class Login {
     private final MessageSource messageSource;
 
     @GetMapping("/userName")
-    public String userName(@ModelAttribute formUser formUser) {
+    public String userName() {
         return "login/userName";
     }
 
     @PostMapping("/userNameCheck")
-    public String userNameCheck(
-            Model model,
-            @ModelAttribute("userValidation") MasterUser user
+    public String userNameCheck(Model model,
+            @ModelAttribute("userValidation") user user
             ) {
         if (ObjectUtils.isEmpty(user)) {
             String errorMsg = messageSource.getMessage(
                     "login.error.duplicate", null, Locale.getDefault());
             model.addAttribute("error", user.getUsername() + errorMsg);
-            return "login/login";
+            return "login/userName";
         }
         int count = userMapper.existsById(user.getUsername());
         if (count == 0) {

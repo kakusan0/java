@@ -1,12 +1,13 @@
-package com.example.login.service;
+package com.jp.login.service;
 
-import com.example.login.entity.MasterUser;
-import com.example.login.mapper.UserMapper;
+import com.jp.login.entity.MasterUser;
+import com.jp.login.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import java.security.SecureRandom;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SecureRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +36,12 @@ public class registerService {
 
         // ユーザー登録用エンティティの作成
         MasterUser user = new MasterUser();
-        user.setUsername(username);
-        user.setPassword(hashedPassword);
+        user.getUser().setUsername(username);
+        user.getUser().setPassword(hashedPassword);
 
         // 登録処理（データベースへの保存）
         userMapper.insert(user);
 
         return password;
     }
-
-    public String getPassword(MasterUser username) {
-        return userMapper.getPassword(username.getUsername());
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.example.login.security;
+package com.jp.login.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,22 +29,19 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
 //                        .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .successHandler(customAuthenticationSuccessHandler())
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .sessionManagement(session -> session
-                        .invalidSessionUrl(
-                                "/userName")
+                        .invalidSessionUrl("/userName")
                         .sessionFixation()
                         .migrateSession()
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
-                        .expiredUrl(
-                                "/userName"))
+                        .expiredUrl("/userName"))
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .successHandler(customAuthenticationSuccessHandler())
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(
-                                "/userName")
+                        .logoutSuccessUrl("/userName")
                         .invalidateHttpSession(true)
                         .deleteCookies("SESSION"))
                 .build();

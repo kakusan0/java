@@ -1,7 +1,7 @@
-package com.example.login.security;
+package com.jp.login.security;
 
-import com.example.login.entity.MasterUser;
-import com.example.login.mapper.UserMapper;
+import com.jp.login.entity.user;
+import com.jp.login.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         int userCount = userMapper.existsById(username);
 
         if (userCount > 0) {
-            MasterUser user = userMapper.existsByUsername(username);
+            user user = userMapper.existsByUsername(username);
             return new UserDetails(user);
         } else {
             throw new UsernameNotFoundException("User not found: " + username);

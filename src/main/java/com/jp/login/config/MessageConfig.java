@@ -1,4 +1,4 @@
-package com.example.login.config;
+package com.jp.login.config;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

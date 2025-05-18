@@ -1,6 +1,6 @@
-package com.example.login.security;
+package com.jp.login.security;
 
-import com.example.login.entity.MasterUser;
+import com.jp.login.entity.user;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,11 +11,11 @@ import java.util.List;
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     @Getter
-    private final MasterUser loginUser;
+    private final user loginUser;
     private final Collection<? extends GrantedAuthority> authorities;
 
     // コンストラクタ: MasterUserを受け取り、権限を設定する
-    public UserDetails(MasterUser loginUser) {
+    public UserDetails(user loginUser) {
         this.loginUser = loginUser;
         this.authorities = List.of(new SimpleGrantedAuthority(loginUser.getRole()));
     }

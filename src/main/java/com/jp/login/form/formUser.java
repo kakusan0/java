@@ -1,4 +1,4 @@
-package com.example.login.form;
+package com.jp.login.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
