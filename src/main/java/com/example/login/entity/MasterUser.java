@@ -25,7 +25,8 @@ public class MasterUser implements Serializable {
     private boolean accountNonLocked; // アカウントがロックされていないかどうか
 
     /**
-     * パスワードの有効期限が切れている場合は true を返します。 もし passwordExpiryDate が null の場合は、有効期限が設定されていないと判断し true
+     * パスワードの有効期限が切れている場合は true を返します。 もし passwordExpiryDate が null
+     * の場合は、有効期限が設定されていないと判断し true
      * を返します。
      */
     public boolean isPasswordExpired() {

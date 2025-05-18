@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class registerService {
 
     private final UserMapper userMapper;
-    private static final String CHARACTERS =
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int PASSWORD_LENGTH = 15;
 
     // パスワード自動生成メソッド
@@ -48,6 +47,5 @@ public class registerService {
     public String getPassword(MasterUser username) {
         return userMapper.getPassword(username.getUsername());
     }
-
 
 }

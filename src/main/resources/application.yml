@@ -4,4 +4,4 @@ spring:
   session:
     timeout: 300
   profiles:
-    active: aristosptolemy_local
+    active: kakusan0_local

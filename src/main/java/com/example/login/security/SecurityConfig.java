@@ -24,22 +24,25 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-                        .requestMatchers(LOGIN_PROCESSING_URL).permitAll()
+                        .requestMatchers("/userName").permitAll()
                         .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage(LOGIN_PROCESSING_URL)
+                        .loginPage("/userName")
                         .successHandler(customAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .sessionManagement(session -> session
-                        .invalidSessionUrl(LOGIN_PROCESSING_URL)
+                        .invalidSessionUrl(
+                                "/userName")
                         .sessionFixation()
                         .migrateSession()
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(true)
-                        .expiredUrl(LOGIN_PROCESSING_URL))
+                        .expiredUrl(
+                                "/userName"))
                 .logout(logout -> logout
-                        .logoutSuccessUrl(LOGIN_PROCESSING_URL)
+                        .logoutSuccessUrl(
+                                "/userName")
                         .invalidateHttpSession(true)
                         .deleteCookies("SESSION"))
                 .build();
