@@ -23,11 +23,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
-                        .requestMatchers("/userName").permitAll()
-                        .requestMatchers("/userNameCheck").permitAll()
-                        .requestMatchers("/login").permitAll()
-//                        .requestMatchers(REGISTER_PAGE).hasRole("ADMIN")
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/","/userName","/userName","/userNameCheck").permitAll()
+                        .requestMatchers("/login").hasAnyRole("UserCheckOK")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .invalidSessionUrl("/userName")
@@ -38,27 +35,13 @@ public class SecurityConfig {
                         .expiredUrl("/userName"))
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .successHandler(customAuthenticationSuccessHandler())
+                        .defaultSuccessUrl(REGISTER_PAGE, true)
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/userName")
                         .invalidateHttpSession(true)
                         .deleteCookies("SESSION"))
                 .build();
-    }
-
-    @Bean
-    public org.springframework.security.web.authentication.AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-        return (request, response, authentication) -> {
-            String username = authentication.getName();
-            if ("admin".equals(username)) {
-                // ユーザ名がadminの場合のみ管理ページへ
-                response.sendRedirect(REGISTER_PAGE);
-            } else {
-                // それ以外のユーザ名の場合
-                response.sendRedirect(PUBLIC_PAGE);
-            }
-        };
     }
 
     @Bean

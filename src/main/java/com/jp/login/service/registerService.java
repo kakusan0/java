@@ -36,8 +36,8 @@ public class registerService {
 
         // ユーザー登録用エンティティの作成
         MasterUser user = new MasterUser();
-        user.getUser().setUsername(username);
-        user.getUser().setPassword(hashedPassword);
+        user.setUsername(username);
+        user.setPassword(hashedPassword);
 
         // 登録処理（データベースへの保存）
         userMapper.insert(user);

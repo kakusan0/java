@@ -1,7 +1,6 @@
 package com.jp.login.mapper;
 
 import com.jp.login.entity.MasterUser;
-import com.jp.login.entity.user;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -13,7 +12,7 @@ public interface UserMapper {
         int existsById(String username);
 
         @Select("select * from mst_user where username = #{username}")
-        user existsByUsername(String username);
+        MasterUser existsByUsername(String username);
 
         @Select("select count(id) from mst_user where ((bindingStatus = 1 and wikiStatus = 1) or (bindingStatus = 1)) and username = #{username}")
         int existsByBindingANDWikiStatus(String username);
