@@ -22,10 +22,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/userName")
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/","/userName","/userName","/userNameCheck").permitAll()
-                        .requestMatchers("/login").hasAnyRole("UserCheckOK")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/","/userName","/userName","/userNameCheck").permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .invalidSessionUrl("/userName")
                         .sessionFixation()
@@ -35,7 +36,7 @@ public class SecurityConfig {
                         .expiredUrl("/userName"))
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl(REGISTER_PAGE, true)
+                        .defaultSuccessUrl(REGISTER_PAGE, false)
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/userName")
