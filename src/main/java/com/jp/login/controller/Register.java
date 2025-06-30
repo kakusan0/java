@@ -6,25 +6,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class register {
+@PreAuthorize("hasRole('ADMIN')")
+public class Register {
 
     private final UserMapper userMapper;
     private final registerService registerService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/register")
-    public String showRegistrationForm() {
-        return "login/register";
-    }
-
     @PostMapping("/register")
-    public String registerUser(@RequestParam("username") String username, Model model) {
+    public String registerUser(@RequestParam String username, Model model) {
         // 入力値のチェック
         if (username == null || username.isEmpty()) {
             model.addAttribute("error", "ユーザ名を入力してください。");

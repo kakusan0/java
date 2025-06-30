@@ -17,3 +17,41 @@ spring:
 server:
   compression:
     enabled: true
+
+# ロギング設定を追加
+logging:
+  level:
+    # ルートロガーの設定
+    root: DEBUG
+    
+    # Spring関連
+#    org.springframework: DEBUG
+    org.springframework.web: DEBUG
+#    org.springframework.security: DEBUG
+    org.springframework.boot: DEBUG
+    
+    # データベース関連
+    org.hibernate: DEBUG
+    org.mybatis: DEBUG
+#    com.zaxxer.hikari: DEBUG
+    
+    # アプリケーション固有のパッケージ
+    com.jp.login: DEBUG
+    
+  # ログ出力の形式
+  pattern:
+    # コンソール出力のパターン
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"
+    # ファイル出力のパターン
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    
+  # ログファイルの設定
+  file:
+    name: logs/application.log
+
+  # ログファイルのローテーション設定
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
+      total-size-cap: 100MB

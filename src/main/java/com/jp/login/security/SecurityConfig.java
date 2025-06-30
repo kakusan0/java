@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -16,17 +17,22 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
-    private static final String PUBLIC_PAGE = "/public";
     private static final String REGISTER_PAGE = "/register";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/userName")
-                )
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        FormLoginMethodCheckFilter methodCheckFilter = new FormLoginMethodCheckFilter();
+
+    	return http
+//                .exceptionHandling(exception -> exception
+//                        .accessDeniedPage("/userName")
+//
+//                )
+                .addFilterBefore(methodCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/","/userName","/userName","/userNameCheck").permitAll().anyRequest().authenticated())
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/userName","/userNameCheck").permitAll()
+                        .requestMatchers(LOGIN_PROCESSING_URL).hasAuthority("ROLE_UserCheckOK")
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .invalidSessionUrl("/userName")
                         .sessionFixation()
@@ -46,7 +52,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
