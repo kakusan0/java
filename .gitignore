@@ -35,5 +35,5 @@ node
 
 ### VS Code ###
 .vscode/
-logs/access_log.log
 actions-runner*
+/logs/

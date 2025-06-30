@@ -24,10 +24,6 @@ public class SecurityConfig {
         FormLoginMethodCheckFilter methodCheckFilter = new FormLoginMethodCheckFilter();
 
     	return http
-//                .exceptionHandling(exception -> exception
-//                        .accessDeniedPage("/userName")
-//
-//                )
                 .addFilterBefore(methodCheckFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**","/userName","/userNameCheck").permitAll()

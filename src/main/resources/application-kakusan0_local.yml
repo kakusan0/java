@@ -22,7 +22,7 @@ server:
 logging:
   level:
     # ルートロガーの設定
-    root: DEBUG
+#    root: DEBUG
     
     # Spring関連
 #    org.springframework: DEBUG
@@ -36,7 +36,7 @@ logging:
 #    com.zaxxer.hikari: DEBUG
     
     # アプリケーション固有のパッケージ
-    com.jp.login: DEBUG
+#    com.jp.login: DEBUG
     
   # ログ出力の形式
   pattern:
