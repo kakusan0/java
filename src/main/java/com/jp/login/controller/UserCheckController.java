@@ -37,8 +37,7 @@ public class UserCheckController {
             model.addAttribute("error", user.getUsername() + errorMsg);
             return "login/userName";
         }
-        int count = userMapper.existsById(user.getUsername());
-        if (count == 0) {
+        if (userMapper.existsById(user.getUsername()) == 0) {
             String errorMsg = messageSource.getMessage(
                     "login.error.notfound", null, Locale.getDefault());
             model.addAttribute("error", user.getUsername() + errorMsg);
