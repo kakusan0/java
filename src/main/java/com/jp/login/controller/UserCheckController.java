@@ -19,6 +19,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static com.jp.login.constants.ApplicationConstants.ApplicationBase.userNameCheck;
+import static com.jp.login.constants.ApplicationConstants.ApplicationFromUrl.from_login;
+import static com.jp.login.constants.ApplicationConstants.ApplicationRedirectUrl.from_userName_redirect;
+import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login_to_userName;
+
 @Controller
 @RequiredArgsConstructor
 @Log4j2
@@ -27,7 +32,7 @@ public class UserCheckController {
     private final UserMapper userMapper;
     private final MessageSource messageSource;
 
-    @PostMapping("/userNameCheck")
+    @PostMapping(userNameCheck)
     public String userNameCheck(Model model,
             @ModelAttribute("userValidation") MasterUser user
             ) {
@@ -35,13 +40,13 @@ public class UserCheckController {
             String errorMsg = messageSource.getMessage(
                     "login.error.duplicate", null, Locale.getDefault());
             model.addAttribute("error", user.getUsername() + errorMsg);
-            return "login/userName";
+            return login_to_userName;
         }
         if (userMapper.existsById(user.getUsername()) == 0) {
             String errorMsg = messageSource.getMessage(
                     "login.error.notfound", null, Locale.getDefault());
             model.addAttribute("error", user.getUsername() + errorMsg);
-            return "redirect:/userName";
+            return from_userName_redirect;
         }
         model.addAttribute("username", user.getUsername());
         log.debug("userName: {}", user.getUsername());
@@ -60,6 +65,6 @@ public class UserCheckController {
         );
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-        return "login/login";
+        return from_login;
     }
 }

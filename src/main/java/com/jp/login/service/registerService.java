@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
+import static com.jp.login.constants.ApplicationConstants.RegisterConstants.CHARACTERS;
+import static com.jp.login.constants.ApplicationConstants.RegisterConstants.PASSWORD_LENGTH;
+
 @Service
 @RequiredArgsConstructor
 public class registerService {
 
     private final UserMapper userMapper;
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int PASSWORD_LENGTH = 15;
 
     // パスワード自動生成メソッド
     public String generateRandomPassword() {
