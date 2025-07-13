@@ -18,7 +18,7 @@ public class FormLoginMethodCheckFilter extends OncePerRequestFilter {
 
     // URLパターンとアクセス制御のマッピング
     private static final Map<String, Boolean> URL_PATTERNS = Map.of(
-            "/login/**", true,      // ログイン関連
+            "/login", true,      // ログイン関連
             "/register", true,      // 登録ページ
             "/css/**", true,       // 静的リソース
             "/js/**", true,
@@ -41,7 +41,7 @@ public class FormLoginMethodCheckFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         // GETメソッドでのログインURLへのアクセスをチェック
-        if (HttpMethod.GET.matches(method) && pathMatcher.match("/login/**", requestUri)) {
+        if (HttpMethod.GET.matches(method) && pathMatcher.match("/login", requestUri)) {
             response.sendRedirect("/userName");
             return;
         }

@@ -1,6 +1,7 @@
 package com.jp.login.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     public static final String LOGIN_PROCESSING_URL = "/login";
+    @Value("/register")
     private static final String REGISTER_PAGE = "/register";
 
     @Bean
