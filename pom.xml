@@ -107,21 +107,6 @@
     <build>
         <plugins>
             <plugin>
-              <groupId>org.owasp</groupId>
-              <artifactId>dependency-check-maven</artifactId>
-              <version>12.1.0</version>
-                <configuration>
-                    <nvdApiKey>deadd531-22fd-44ea-a116-4cb1784785d0  </nvdApiKey>
-                </configuration>
-                <executions>
-                  <execution>
-                      <goals>
-                          <goal>check</goal>
-                      </goals>
-                  </execution>
-              </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
