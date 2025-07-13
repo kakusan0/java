@@ -12,7 +12,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RedirectView handleMethodNotSupported() {
-        // 必要に応じてフラッシュ属性など追加可能
         return new RedirectView("/userName");
     }
 }
