@@ -1,0 +1,111 @@
+:root {
+  --header-height: 60px;
+  --sidebar-width-expanded: 160px; /* 広げた時の幅 */
+  --sidebar-width-collapsed: 120px;  /* 畳んだ時の幅を少し広げる */
+  /* JSが失敗した場合の予備として100vhを設定 */
+  --app-height: 100vh;
+}
+
+/* デスクトップ表示をデフォルトのスタイルとする */
+body {
+  padding-top: var(--header-height);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 1050;
+}
+
+.offcanvas-md {
+  --bs-offcanvas-width: var(--sidebar-width-expanded);
+}
+
+/* サイドバー内リンクの基本スタイル（横並び） */
+.offcanvas-body .nav-link {
+  display: flex;
+  align-items: center; /* アイコンとテキストを垂直方向に中央揃え */
+  padding: 1rem 1.5rem; /* パディングを調整 */
+}
+.offcanvas-body .nav-link .bi {
+  margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
+}
+
+/* スマホ表示 (md未満) のスタイルを定義 */
+@media (max-width: 767.98px) { /* 768pxと重複しないように修正 */
+  body {
+    /* ヘッダーが下に来るので、paddingを下に変更 */
+    padding-top: 0;
+    padding-bottom: var(--header-height);
+  }
+
+  .header {
+    /* ヘッダーを画面下部に固定 */
+    top: auto;
+    bottom: 0;
+    border-bottom: none;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .offcanvas.offcanvas-start {
+    height: calc(var(--app-height) - var(--header-height));
+    border: 0;
+  }
+
+  .offcanvas-body {
+    /* サイドバー内のコンテンツを下に配置 */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .offcanvas-body .nav {
+    /* メニュー(ul)をコンテナの下端に押しやる */
+    margin-top: auto;
+  }
+}
+
+/* PC表示 (md以上) のスタイルを再定義 */
+@media (min-width: 768px) {
+  .offcanvas-md.offcanvas-start {
+    /* PCではヘッダーの下に配置 */
+    top: var(--header-height);
+    height: calc(var(--app-height) - var(--header-height));
+    transform: none;
+    visibility: visible !important;
+    border-right: 1px solid #dee2e6;
+    width: var(--sidebar-width-expanded);
+    transition: width 0.3s ease;
+  }
+
+  .main-content {
+    margin-left: var(--sidebar-width-expanded);
+    transition: margin-left 0.3s ease;
+  }
+
+  /* --- is-collapsedクラスが付与された時のスタイル --- */
+  .offcanvas-md.is-collapsed {
+    width: var(--sidebar-width-collapsed);
+  }
+
+  .main-content.is-collapsed {
+    margin-left: var(--sidebar-width-collapsed);
+  }
+
+  /* 畳んだ状態のレイアウトを「アイコン＋名称」の縦並びに変更 */
+  .offcanvas-md.is-collapsed .nav-link {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  .offcanvas-md.is-collapsed .nav-link .bi {
+    margin-right: 0;
+    margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
+  }
+}

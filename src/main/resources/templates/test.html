@@ -11,128 +11,16 @@
     rel="stylesheet"
     href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
   />
+  <!-- ▼▼▼ 修正点: 外部CSSファイルを読み込む ▼▼▼ -->
+  <link rel="stylesheet" href="/css/style.css" />
   <title th:text="#{register.page.title}"></title>
-  <style>
-    :root {
-      --header-height: 60px;
-      --sidebar-width-expanded: 160px; /* 広げた時の幅 */
-      --sidebar-width-collapsed: 120px;  /* 畳んだ時の幅を少し広げる */
-      --app-height: 0px;
-    }
-
-    /* デスクトップ表示をデフォルトのスタイルとする */
-    body {
-      padding-top: var(--header-height);
-    }
-
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--header-height);
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
-      z-index: 1050;
-    }
-
-    .offcanvas-md {
-      --bs-offcanvas-width: var(--sidebar-width-expanded);
-    }
-
-    /* サイドバー内リンクの基本スタイル（横並び） */
-    .offcanvas-body .nav-link {
-      display: flex;
-      align-items: center; /* アイコンとテキストを垂直方向に中央揃え */
-      padding: 1rem 1.5rem; /* パディングを調整 */
-    }
-    .offcanvas-body .nav-link .bi {
-      margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
-    }
-
-    /* スマホ表示 (md未満) のスタイルを定義 */
-    @media (max-width: 768px) {
-      body {
-        /* ヘッダーが下に来るので、paddingを下に変更 */
-        padding-top: 0;
-        padding-bottom: var(--header-height);
-      }
-
-      .header {
-        /* ヘッダーを画面下部に固定 */
-        top: auto;
-        bottom: 0;
-        border-bottom: none;
-        border: 0;
-        border-top: 1px solid #dee2e6;
-      }
-
-      /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
-      .offcanvas.offcanvas-start {
-        height: calc(var(--app-height, 100vh) - var(--header-height));
-        border: 0;
-      }
-
-      .offcanvas-body {
-        /* サイドバー内のコンテンツを下に配置 */
-        display: flex;
-        flex-direction: column;
-      }
-
-      .offcanvas-body .nav {
-        /* メニュー(ul)をコンテナの下端に押しやる */
-        margin-top: auto;
-      }
-    }
-
-    /* PC表示 (md以上) のスタイルを再定義 */
-    @media (min-width: 768px) {
-      .offcanvas-md.offcanvas-start {
-        /* PCではヘッダーの下に配置 */
-        top: var(--header-height);
-        /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
-        height: calc(var(--app-height, 100vh) - var(--header-height));
-        transform: none;
-        visibility: visible !important;
-        border-right: 1px solid #dee2e6;
-        width: var(--sidebar-width-expanded);
-        transition: width 0.3s ease;
-      }
-
-      .main-content {
-        margin-left: var(--sidebar-width-expanded);
-        transition: margin-left 0.3s ease;
-      }
-
-      /* --- is-collapsedクラスが付与された時のスタイル --- */
-      .offcanvas-md.is-collapsed {
-        width: var(--sidebar-width-collapsed);
-      }
-
-      .main-content.is-collapsed {
-        margin-left: var(--sidebar-width-collapsed);
-      }
-
-      /* 畳んだ状態のレイアウトを「アイコン＋名称」の縦並びに変更 */
-      .offcanvas-md.is-collapsed .nav-link {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-      }
-      .offcanvas-md.is-collapsed .nav-link .bi {
-        margin-right: 0;
-        margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
-      }
-    }
-  </style>
+  <!-- <style> タグは削除 -->
 </head>
 <body>
 
 <!-- ヘッダー -->
-<!-- ヘッダー -->
 <header class="header">
+  <!-- ▼▼▼ 修正点: 冗長なクラスを整理 ▼▼▼ -->
   <div class="d-flex align-items-center h-100 px-5 px-md-5">
     <!-- スマホ用ボタン (md未満で表示) -->
     <button
@@ -196,75 +84,11 @@
   </div>
 </main>
 
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // PC用サイドバーの開閉
-    const pcSidebarToggle = document.getElementById('pcSidebarToggle');
-    if (pcSidebarToggle) {
-      pcSidebarToggle.addEventListener('click', function() {
-        document.getElementById('sidebarMenu').classList.toggle('is-collapsed');
-        document.querySelector('.main-content').classList.toggle('is-collapsed');
-      });
-    }
-
-    // スマホでのスワイプ開閉機能
-    const sidebarElement = document.getElementById('sidebarMenu');
-    if (sidebarElement) {
-      const sidebar = new bootstrap.Offcanvas(sidebarElement);
-
-      // ▼▼▼ 修正点2: スワイプ検知の閾値をより実用的な値に修正 ▼▼▼
-      const edgeThreshold = 400;     // スワイプを開始して良い画面左端からの範囲(px)
-      const swipeThreshold = 80;    // スワイプとして認識する最小水平距離(px)
-      const verticalThreshold = 400; // スワイプとして許容する最大の垂直移動距離(px)
-
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let isSwipingFromEdge = false;
-
-      document.addEventListener('touchstart', e => {
-        if (e.touches.length === 1 && !sidebarElement.classList.contains('show') && e.touches[0].clientX < edgeThreshold) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          isSwipingFromEdge = true;
-        }
-      }, { passive: true });
-
-      document.addEventListener('touchend', e => {
-        if (!isSwipingFromEdge) {
-          return;
-        }
-        isSwipingFromEdge = false;
-
-        if (e.changedTouches.length === 1) {
-          const touch = e.changedTouches[0];
-          const deltaX = touch.clientX - touchStartX;
-          const deltaY = Math.abs(touch.clientY - touchStartY);
-
-          if (deltaX > swipeThreshold && deltaY < verticalThreshold) {
-            sidebar.show();
-          }
-        }
-      }, { passive: true });
-
-      document.addEventListener('touchcancel', () => {
-        isSwipingFromEdge = false;
-      }, { passive: true });
-    }
-
-    // ▼▼▼ 修正点3: 画面の実際の高さを取得してCSS変数にセットする機能を追加 ▼▼▼
-    const setAppHeight = () => {
-      const doc = document.documentElement;
-      // window.innerHeightから取得した実際の高さを--app-heightというCSS変数にセット
-      doc.style.setProperty('--app-height', `${window.innerHeight}px`);
-    };
-
-    // ページ読み込み時とウィンドウサイズ変更時に高さを再計算
-    window.addEventListener('resize', setAppHeight);
-    setAppHeight();
-  });
-</script>
+<!-- ▼▼▼ 修正点: 外部JSファイルを読み込む ▼▼▼ -->
+<script src="/js/main.js"></script>
+<!-- インラインの <script> タグは削除 -->
 
 </body>
 </html>
