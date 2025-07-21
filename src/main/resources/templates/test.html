@@ -17,105 +17,155 @@
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <title th:text="#{register.page.title}"></title>
   <style>
+    /* 改善点1: CSS変数を定義し、メンテナンス性を向上 */
+    :root {
+      --header-height: 60px;
+      --sidebar-width-pc: 100px;
+      --sidebar-width-pc-open: 200px;
+      --sidebar-width-mobile: 250px;
+      --transition-speed: 0.3s;
+    }
+
+    body {
+      /* ヘッダーがコンテンツに重ならないように、bodyにpadding-topを設定 */
+      padding-top: var(--header-height);
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--header-height);
+      background-color: #f8f9fa; /* Bootstrapの背景色に合わせて調整 */
+      border-bottom: 1px solid #dee2e6;
+      z-index: 1060; /* サイドバーやオーバーレイより上 */
+    }
+
     .sidebar {
       position: fixed;
-      top: 60px; /* ヘッダーの高さ */
-      left: 0; /* 初期状態で表示 */
-      width: 100px; /* 初期幅 */
-      height: 100vh;
-      background-color: #343a40;
-      color: white;
+      top: var(--header-height);
+      left: 0;
+      width: var(--sidebar-width-pc);
+      height: calc(100vh - var(--header-height));
+      background-color: #ffffff;
+      border-right: 1px solid #dee2e6;
       overflow-x: hidden;
-      z-index: 1050; /* offcanvasと同じかそれ以上のz-index */
+      z-index: 1050;
+      /* 改善点2: スムーズなアニメーションを有効化 */
+      transition: width var(--transition-speed) ease, left var(--transition-speed) ease;
     }
     .sidebar.open {
-      width: 200px; /* メニューが開いている状態 */
+      width: var(--sidebar-width-pc-open);
     }
-    .sidebar .nav-link {
-      padding: 10px;
-      color: white;
-      text-align: center; /* アイコンを中央に配置 */
-      display: flex; /* Flexboxを使用 */
-      flex-direction: column; /* 子要素を縦に並べる */
-      align-items: center; /* 水平方向中央揃え */
-    }
-    .sidebar .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
+
     .content {
-      margin-left: 100px; /* サイドバーの初期幅 */
-      padding-top: 60px; /* ヘッダーの高さ */
+      margin-left: var(--sidebar-width-pc);
+      transition: margin-left var(--transition-speed) ease;
     }
     .content.open {
-      margin-left: 200px; /* メニューが開いている状態 */
+      margin-left: var(--sidebar-width-pc-open);
     }
-    .nav-link i {
-      display: block; /* アイコンを表示 */
-      margin-bottom: 5px; /* アイコンとテキストの間隔 */
+
+    /* 改善点3: オーバーレイを追加し、スマホでの操作性を向上 */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1040; /* サイドバーより下 */
     }
-    .nav-link span {
-      display: block; /* 初期状態でテキストを表示 */
-      text-align: center; /* テキストを中央に配置 */
+
+    /* --- サイドバー内のスタイル --- */
+    .sidebar .nav-link {
+      padding: 15px;
+      color: #343a40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px; /* アイコンとテキストの間隔 */
+      transition: background-color 0.2s ease;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #e9ecef;
     }
     .sidebar.open .nav-link {
-      flex-direction: row; /* メニューが開いているときは横並び */
-      text-align: left; /* メニューが開いているときはテキストを左寄せ */
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 15px;
     }
-    .sidebar.open .nav-link i {
-      display: inline-block; /* メニューが開いているときはアイコンを表示 */
-      margin-right: 5px; /* アイコンとテキストの間隔 */
-      margin-bottom: 0; /* アイコンとテキストの間隔 */
+    .px-custom {
+      padding-left: 32px !important;
     }
-    .sidebar.open .nav-link span {
-      display: inline-block; /* メニューが開いているときはテキストを表示 */
-      text-align: left; /* メニューが開いているときはテキストを左寄せ */
+
+    /* ▼▼▼ Bootstrapのブレークポイント(md)に合わせてレスポンシブ対応 ▼▼▼ */
+    @media (max-width: 767.98px) {
+      .sidebar {
+        width: var(--sidebar-width-mobile);
+        left: calc(-1 * var(--sidebar-width-mobile)); /* 初期状態で画面の外に隠す */
+      }
+      .sidebar.open {
+        left: 0;
+        width: var(--sidebar-width-mobile);
+      }
+      .content {
+        margin-left: 0;
+      }
+      .content.open {
+        margin-left: 0;
+      }
+      /* スマホでは常に「アイコン＋テキスト」のレイアウトにする */
+      .sidebar .nav-link {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 15px;
+      }
+      /* スマホでメニューが開いた時だけオーバーレイを表示 */
+      .sidebar.open ~ .overlay {
+        display: block;
+      }
     }
   </style>
 </head>
 <body>
-<header class="fixed-top bg-light">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center py-2">
-      <button class="btn btn-primary" type="button" id="menuButton">
-        <i class="fas fa-bars"></i>
-      </button>
-      <button
-        class="btn btn-primary"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasRight"
-        aria-controls="offcanvasRight"
-      >
-        Toggle right offcanvas
-      </button>
-    </div>
+<div class="header">
+  <div class="d-flex align-items-center h-100 px-custom">
+    <button class="btn btn-primary" type="button" id="menuButton">
+      <i class="fas fa-bars"></i>
+    </button>
   </div>
-</header>
+</div>
 
 <div class="sidebar">
   <ul class="nav flex-column">
     <li class="nav-item">
       <a class="nav-link" href="#">
-        <i class="fas fa-home"></i>
+        <i class="fas fa-home fa-fw"></i>
         <span>Home</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">
-        <i class="fas fa-tachometer-alt"></i>
+        <i class="fas fa-tachometer-alt fa-fw"></i>
         <span>Dashboard</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">
-        <i class="fas fa-cog"></i>
+        <i class="fas fa-cog fa-fw"></i>
         <span>Settings</span>
       </a>
     </li>
   </ul>
 </div>
 
-<main class="content">
+<!-- 改善点3: オーバーレイ用のHTMLを追加 -->
+<div class="overlay"></div>
+
+<main class="content p-4">
   <div class="container-fluid">
     <table class="table">
       <tr th:each="row : ${#numbers.sequence(1, 100)}">
@@ -127,32 +177,24 @@
   </div>
 </main>
 
-<div
-  class="offcanvas offcanvas-end"
-  tabindex="-1"
-  id="offcanvasRight"
-  aria-labelledby="offcanvasRightLabel"
->
-  <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
-    <button
-      type="button"
-      class="btn-close text-reset"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="offcanvas-body">
-    <div th:insert="~{offcanvas :: offcanvas-content}"></div>
-  </div>
-</div>
+<!-- 改善点4: JavaScriptを改善 -->
 <script>
-  document.getElementById('menuButton').addEventListener('click', function() {
-    var sidebar = document.querySelector('.sidebar');
-    var content = document.querySelector('.content');
+  // DOMが完全に読み込まれてからスクリプトを実行する
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.getElementById('menuButton');
+    const sidebar = document.querySelector('.sidebar');
+    const content = document.querySelector('.content');
+    const overlay = document.querySelector('.overlay');
 
-    sidebar.classList.toggle('open');
-    content.classList.toggle('open');
+    // メニューの開閉を行う共通関数
+    function toggleMenu() {
+      sidebar.classList.toggle('open');
+      content.classList.toggle('open');
+    }
+
+    // ハンバーガーボタンとオーバーレイにクリックイベントを設定
+    menuButton.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
   });
 </script>
 </body>
