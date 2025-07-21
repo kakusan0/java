@@ -9,25 +9,19 @@
   />
   <link
     rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+    href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
   />
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <title th:text="#{register.page.title}"></title>
   <style>
-    /* 改善点1: CSS変数を定義し、メンテナンス性を向上 */
     :root {
       --header-height: 60px;
-      --sidebar-width-pc: 100px;
-      --sidebar-width-pc-open: 200px;
-      --sidebar-width-mobile: 250px;
-      --transition-speed: 0.3s;
+      --sidebar-width-expanded: 160px; /* 広げた時の幅 */
+      --sidebar-width-collapsed: 120px;  /* 畳んだ時の幅を少し広げる */
+      --app-height: 0px;
     }
 
+    /* デスクトップ表示をデフォルトのスタイルとする */
     body {
-      /* ヘッダーがコンテンツに重ならないように、bodyにpadding-topを設定 */
       padding-top: var(--header-height);
     }
 
@@ -37,135 +31,160 @@
       left: 0;
       width: 100%;
       height: var(--header-height);
-      background-color: #f8f9fa; /* Bootstrapの背景色に合わせて調整 */
+      background-color: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
-      z-index: 1060; /* サイドバーやオーバーレイより上 */
-    }
-
-    .sidebar {
-      position: fixed;
-      top: var(--header-height);
-      left: 0;
-      width: var(--sidebar-width-pc);
-      height: calc(100vh - var(--header-height));
-      background-color: #ffffff;
-      border-right: 1px solid #dee2e6;
-      overflow-x: hidden;
       z-index: 1050;
-      /* 改善点2: スムーズなアニメーションを有効化 */
-      /*transition: width var(--transition-speed) ease, left var(--transition-speed) ease;*/
-    }
-    .sidebar.open {
-      width: var(--sidebar-width-pc-open);
     }
 
-    .content {
-      margin-left: var(--sidebar-width-pc);
-      /*transition: margin-left var(--transition-speed) ease;*/
-    }
-    .content.open {
-      margin-left: var(--sidebar-width-pc-open);
+    .offcanvas-md {
+      --bs-offcanvas-width: var(--sidebar-width-expanded);
     }
 
-    /* 改善点3: オーバーレイを追加し、スマホでの操作性を向上 */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1040; /* サイドバーより下 */
-    }
-
-    /* --- サイドバー内のスタイル --- */
-    .sidebar .nav-link {
-      padding: 15px;
-      color: #343a40;
+    /* サイドバー内リンクの基本スタイル（横並び） */
+    .offcanvas-body .nav-link {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px; /* アイコンとテキストの間隔 */
-      transition: background-color 0.2s ease;
+      align-items: center; /* アイコンとテキストを垂直方向に中央揃え */
+      padding: 1rem 1.5rem; /* パディングを調整 */
     }
-    .sidebar .nav-link:hover {
-      background-color: #e9ecef;
-    }
-    .sidebar.open .nav-link {
-      flex-direction: row;
-      justify-content: flex-start;
-      gap: 15px;
-    }
-    .px-custom {
-      padding-left: 32px !important;
+    .offcanvas-body .nav-link .bi {
+      margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
     }
 
-    /* ▼▼▼ Bootstrapのブレークポイント(md)に合わせてレスポンシブ対応 ▼▼▼ */
-    @media (max-width: 767.98px) {
-      .sidebar {
-        width: var(--sidebar-width-mobile);
-        left: calc(-1 * var(--sidebar-width-mobile)); /* 初期状態で画面の外に隠す */
+    /* スマホ表示 (md未満) のスタイルを定義 */
+    @media (max-width: 768px) {
+      body {
+        /* ヘッダーが下に来るので、paddingを下に変更 */
+        padding-top: 0;
+        padding-bottom: var(--header-height);
       }
-      .sidebar.open {
-        left: 0;
-        width: var(--sidebar-width-mobile);
+
+      .header {
+        /* ヘッダーを画面下部に固定 */
+        top: auto;
+        bottom: 0;
+        border-bottom: none;
+        border: 0;
+        border-top: 1px solid #dee2e6;
       }
-      .content {
-        margin-left: 0;
+
+      /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
+      .offcanvas.offcanvas-start {
+        height: calc(var(--app-height, 100vh) - var(--header-height));
+        border: 0;
       }
-      .content.open {
-        margin-left: 0;
+
+      .offcanvas-body {
+        /* サイドバー内のコンテンツを下に配置 */
+        display: flex;
+        flex-direction: column;
       }
-      /* スマホでは常に「アイコン＋テキスト」のレイアウトにする */
-      .sidebar .nav-link {
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 15px;
+
+      .offcanvas-body .nav {
+        /* メニュー(ul)をコンテナの下端に押しやる */
+        margin-top: auto;
       }
-      /* スマホでメニューが開いた時だけオーバーレイを表示 */
-      .sidebar.open ~ .overlay {
-        display: block;
+    }
+
+    /* PC表示 (md以上) のスタイルを再定義 */
+    @media (min-width: 768px) {
+      .offcanvas-md.offcanvas-start {
+        /* PCではヘッダーの下に配置 */
+        top: var(--header-height);
+        /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
+        height: calc(var(--app-height, 100vh) - var(--header-height));
+        transform: none;
+        visibility: visible !important;
+        border-right: 1px solid #dee2e6;
+        width: var(--sidebar-width-expanded);
+        transition: width 0.3s ease;
+      }
+
+      .main-content {
+        margin-left: var(--sidebar-width-expanded);
+        transition: margin-left 0.3s ease;
+      }
+
+      /* --- is-collapsedクラスが付与された時のスタイル --- */
+      .offcanvas-md.is-collapsed {
+        width: var(--sidebar-width-collapsed);
+      }
+
+      .main-content.is-collapsed {
+        margin-left: var(--sidebar-width-collapsed);
+      }
+
+      /* 畳んだ状態のレイアウトを「アイコン＋名称」の縦並びに変更 */
+      .offcanvas-md.is-collapsed .nav-link {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+      .offcanvas-md.is-collapsed .nav-link .bi {
+        margin-right: 0;
+        margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
       }
     }
   </style>
 </head>
 <body>
-<div class="header">
-  <div class="d-flex align-items-center h-100 px-custom">
-    <button class="btn btn-primary" type="button" id="menuButton">
-      <i class="fas fa-bars"></i>
+
+<!-- ヘッダー -->
+<!-- ヘッダー -->
+<header class="header">
+  <div class="d-flex align-items-center h-100 px-5 px-md-5">
+    <!-- スマホ用ボタン (md未満で表示) -->
+    <button
+      class="btn btn-primary d-md-none border-0"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#sidebarMenu"
+      aria-controls="sidebarMenu"
+    >
+      <i class="bi bi-list"></i>
     </button>
+    <!-- PC用ボタン (md以上で表示) -->
+    <button class="btn btn-primary d-none d-md-block border-0" type="button" id="pcSidebarToggle">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+</header>
+
+<!-- PC表示の初期状態を「閉じた状態」にする -->
+<div
+  class="offcanvas offcanvas-start offcanvas-md is-collapsed"
+  tabindex="-1"
+  id="sidebarMenu"
+  aria-labelledby="sidebarMenuLabel"
+>
+  <!-- メニュー本体 -->
+  <div class="offcanvas-body p-0">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="#">
+          <i class="bi bi-house-door-fill"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="#">
+          <i class="bi bi-speedometer2"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="#">
+          <i class="bi bi-gear-fill"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </div>
 
-<div class="sidebar">
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fas fa-home fa-fw"></i>
-        <span>Home</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fas fa-tachometer-alt fa-fw"></i>
-        <span>Dashboard</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">
-        <i class="fas fa-cog fa-fw"></i>
-        <span>Settings</span>
-      </a>
-    </li>
-  </ul>
-</div>
-
-<!-- 改善点3: オーバーレイ用のHTMLを追加 -->
-<div class="overlay"></div>
-
-<main class="content p-4">
+<!-- PC表示の初期状態を「閉じた状態」にする -->
+<main class="main-content p-4 is-collapsed">
   <div class="container-fluid">
     <table class="table">
       <tr th:each="row : ${#numbers.sequence(1, 100)}">
@@ -177,25 +196,75 @@
   </div>
 </main>
 
-<!-- 改善点4: JavaScriptを改善 -->
-<script>
-  // DOMが完全に読み込まれてからスクリプトを実行する
-  document.addEventListener('DOMContentLoaded', function() {
-    const menuButton = document.getElementById('menuButton');
-    const sidebar = document.querySelector('.sidebar');
-    const content = document.querySelector('.content');
-    const overlay = document.querySelector('.overlay');
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    // メニューの開閉を行う共通関数
-    function toggleMenu() {
-      sidebar.classList.toggle('open');
-      content.classList.toggle('open');
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // PC用サイドバーの開閉
+    const pcSidebarToggle = document.getElementById('pcSidebarToggle');
+    if (pcSidebarToggle) {
+      pcSidebarToggle.addEventListener('click', function() {
+        document.getElementById('sidebarMenu').classList.toggle('is-collapsed');
+        document.querySelector('.main-content').classList.toggle('is-collapsed');
+      });
     }
 
-    // ハンバーガーボタンとオーバーレイにクリックイベントを設定
-    menuButton.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu);
+    // スマホでのスワイプ開閉機能
+    const sidebarElement = document.getElementById('sidebarMenu');
+    if (sidebarElement) {
+      const sidebar = new bootstrap.Offcanvas(sidebarElement);
+
+      // ▼▼▼ 修正点2: スワイプ検知の閾値をより実用的な値に修正 ▼▼▼
+      const edgeThreshold = 400;     // スワイプを開始して良い画面左端からの範囲(px)
+      const swipeThreshold = 80;    // スワイプとして認識する最小水平距離(px)
+      const verticalThreshold = 400; // スワイプとして許容する最大の垂直移動距離(px)
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isSwipingFromEdge = false;
+
+      document.addEventListener('touchstart', e => {
+        if (e.touches.length === 1 && !sidebarElement.classList.contains('show') && e.touches[0].clientX < edgeThreshold) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          isSwipingFromEdge = true;
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchend', e => {
+        if (!isSwipingFromEdge) {
+          return;
+        }
+        isSwipingFromEdge = false;
+
+        if (e.changedTouches.length === 1) {
+          const touch = e.changedTouches[0];
+          const deltaX = touch.clientX - touchStartX;
+          const deltaY = Math.abs(touch.clientY - touchStartY);
+
+          if (deltaX > swipeThreshold && deltaY < verticalThreshold) {
+            sidebar.show();
+          }
+        }
+      }, { passive: true });
+
+      document.addEventListener('touchcancel', () => {
+        isSwipingFromEdge = false;
+      }, { passive: true });
+    }
+
+    // ▼▼▼ 修正点3: 画面の実際の高さを取得してCSS変数にセットする機能を追加 ▼▼▼
+    const setAppHeight = () => {
+      const doc = document.documentElement;
+      // window.innerHeightから取得した実際の高さを--app-heightというCSS変数にセット
+      doc.style.setProperty('--app-height', `${window.innerHeight}px`);
+    };
+
+    // ページ読み込み時とウィンドウサイズ変更時に高さを再計算
+    window.addEventListener('resize', setAppHeight);
+    setAppHeight();
   });
 </script>
+
 </body>
 </html>
