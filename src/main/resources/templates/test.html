@@ -1,270 +1,452 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta charset="UTF-8" />
-  <link
-    href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <link
-    rel="stylesheet"
-    href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
-  />
-  <title th:text="#{register.page.title}"></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="#{register.page.title}">アプリケーション</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+
   <style>
     :root {
       --header-height: 60px;
-      --sidebar-width-expanded: 160px; /* 広げた時の幅 */
-      --sidebar-width-collapsed: 120px;  /* 畳んだ時の幅を少し広げる */
-      --app-height: 0px;
+      --sidebar-expanded: 160px;
+      --sidebar-collapsed: 120px;
+      --app-height: 100vh;
+      --transition-duration: 0.3s;
+      --border-color: #dee2e6;
+      --bg-header: #f8f9fa;
     }
 
-    /* デスクトップ表示をデフォルトのスタイルとする */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       padding-top: var(--header-height);
+      overflow-x: hidden;
     }
 
+    /* ヘッダー */
     .header {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
+      right: 0;
       height: var(--header-height);
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
+      background-color: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
       z-index: 1050;
-    }
-
-    .offcanvas-md {
-      --bs-offcanvas-width: var(--sidebar-width-expanded);
-    }
-
-    /* サイドバー内リンクの基本スタイル（横並び） */
-    .offcanvas-body .nav-link {
       display: flex;
-      align-items: center; /* アイコンとテキストを垂直方向に中央揃え */
-      padding: 1rem 1.5rem; /* パディングを調整 */
-    }
-    .offcanvas-body .nav-link .bi {
-      margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
+      align-items: center;
+      padding: 0 1.25rem;
     }
 
-    /* スマホ表示 (md未満) のスタイルを定義 */
-    @media (max-width: 768px) {
+    .header-toggle {
+      background: none;
+      border: none;
+      color: #0d6efd;
+      font-size: 1.25rem;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .header-toggle:hover {
+      background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    /* サイドバー */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      width: var(--sidebar-expanded);
+      height: calc(var(--app-height) - var(--header-height));
+      background-color: white;
+      border-right: 1px solid var(--border-color);
+      transform: translateX(-100%);
+      transition: transform var(--transition-duration) ease, width var(--transition-duration) ease;
+      z-index: 1040;
+    }
+
+    .sidebar.show {
+      transform: translateX(0);
+    }
+
+    .sidebar-nav {
+      height: 100%;
+      overflow-y: auto;
+      padding: 0;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .nav-link:hover {
+      background-color: #f8f9fa;
+      color: #0d6efd;
+    }
+
+    .nav-link .bi {
+      margin-right: 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    /* メインコンテンツ */
+    .main-content {
+      padding: 1.5rem;
+      transition: margin-left var(--transition-duration) ease;
+    }
+
+    /* PCスタイル */
+    @media (min-width: 768px) {
+      .sidebar {
+        position: fixed;
+        transform: translateX(0);
+        width: var(--sidebar-collapsed);
+      }
+
+      .sidebar.expanded {
+        width: var(--sidebar-expanded);
+      }
+
+      .main-content {
+        margin-left: var(--sidebar-collapsed);
+      }
+
+      .main-content.expanded {
+        margin-left: var(--sidebar-expanded);
+      }
+
+      /* 折りたたみ状態のナビゲーション */
+      .sidebar:not(.expanded) .nav-link {
+        flex-direction: column;
+        justify-content: center;
+        padding: 0.75rem 0.5rem;
+        text-align: center;
+      }
+
+      .sidebar:not(.expanded) .nav-link .bi {
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+      }
+
+      .sidebar:not(.expanded) .nav-link span {
+        font-size: 0.75rem;
+        line-height: 1;
+      }
+
+      .header-toggle.d-md-none {
+        display: none !important;
+      }
+
+      .header-toggle.d-md-block {
+        display: block !important;
+      }
+    }
+
+    /* モバイルスタイル */
+    @media (max-width: 767px) {
       body {
-        /* ヘッダーが下に来るので、paddingを下に変更 */
         padding-top: 0;
         padding-bottom: var(--header-height);
       }
 
       .header {
-        /* ヘッダーを画面下部に固定 */
         top: auto;
         bottom: 0;
         border-bottom: none;
-        border: 0;
-        border-top: 1px solid #dee2e6;
+        border-top: 1px solid var(--border-color);
       }
 
-      /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
-      .offcanvas.offcanvas-start {
-        height: calc(var(--app-height, 100vh) - var(--header-height));
-        border: 0;
+      .sidebar {
+        top: 0;
+        height: calc(var(--app-height) - var(--header-height));
+        width: var(--sidebar-expanded);
       }
 
-      .offcanvas-body {
-        /* サイドバー内のコンテンツを下に配置 */
+      .sidebar-nav {
         display: flex;
         flex-direction: column;
-      }
-
-      .offcanvas-body .nav {
-        /* メニュー(ul)をコンテナの下端に押しやる */
-        margin-top: auto;
-      }
-    }
-
-    /* PC表示 (md以上) のスタイルを再定義 */
-    @media (min-width: 768px) {
-      .offcanvas-md.offcanvas-start {
-        /* PCではヘッダーの下に配置 */
-        top: var(--header-height);
-        /* ▼▼▼ 修正点1: JSで算出した画面高さを利用する ▼▼▼ */
-        height: calc(var(--app-height, 100vh) - var(--header-height));
-        transform: none;
-        visibility: visible !important;
-        border-right: 1px solid #dee2e6;
-        width: var(--sidebar-width-expanded);
-        transition: width 0.3s ease;
+        justify-content: flex-end;
+        padding-bottom: 2rem;
       }
 
       .main-content {
-        margin-left: var(--sidebar-width-expanded);
-        transition: margin-left 0.3s ease;
+        margin-left: 0;
       }
 
-      /* --- is-collapsedクラスが付与された時のスタイル --- */
-      .offcanvas-md.is-collapsed {
-        width: var(--sidebar-width-collapsed);
+      .header-toggle.d-md-block {
+        display: none !important;
       }
 
-      .main-content.is-collapsed {
-        margin-left: var(--sidebar-width-collapsed);
+      .header-toggle.d-md-none {
+        display: block !important;
       }
+    }
 
-      /* 畳んだ状態のレイアウトを「アイコン＋名称」の縦並びに変更 */
-      .offcanvas-md.is-collapsed .nav-link {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-      }
-      .offcanvas-md.is-collapsed .nav-link .bi {
-        margin-right: 0;
-        margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
-      }
+    /* テーブルのスタイル改善 */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .content-table {
+      min-width: 600px;
+    }
+
+    .content-table td {
+      white-space: nowrap;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
     }
   </style>
 </head>
 <body>
-
-<!-- ヘッダー -->
 <!-- ヘッダー -->
 <header class="header">
-  <div class="d-flex align-items-center h-100 px-5 px-md-5">
-    <!-- スマホ用ボタン (md未満で表示) -->
-    <button
-      class="btn btn-primary d-md-none border-0"
-      type="button"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#sidebarMenu"
-      aria-controls="sidebarMenu"
-    >
-      <i class="bi bi-list"></i>
-    </button>
-    <!-- PC用ボタン (md以上で表示) -->
-    <button class="btn btn-primary d-none d-md-block border-0" type="button" id="pcSidebarToggle">
-      <i class="bi bi-list"></i>
-    </button>
-  </div>
+  <button class="header-toggle d-md-none" type="button" aria-label="メニューを開く" data-sidebar-toggle>
+    <i class="bi bi-list" aria-hidden="true"></i>
+  </button>
+  <button class="header-toggle d-none d-md-block" type="button" aria-label="サイドバーを切り替え" data-sidebar-toggle>
+    <i class="bi bi-list" aria-hidden="true"></i>
+  </button>
 </header>
 
-<!-- PC表示の初期状態を「閉じた状態」にする -->
-<div
-  class="offcanvas offcanvas-start offcanvas-md is-collapsed"
-  tabindex="-1"
-  id="sidebarMenu"
-  aria-labelledby="sidebarMenuLabel"
->
-  <!-- メニュー本体 -->
-  <div class="offcanvas-body p-0">
+<!-- サイドバー -->
+<aside class="sidebar" id="sidebar" aria-label="ナビゲーションメニュー">
+  <nav class="sidebar-nav">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#">
-          <i class="bi bi-house-door-fill"></i>
+        <a class="nav-link" href="#" aria-label="ホーム">
+          <i class="bi bi-house-door-fill" aria-hidden="true"></i>
           <span>Home</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#">
-          <i class="bi bi-speedometer2"></i>
+        <a class="nav-link" href="#" aria-label="ダッシュボード">
+          <i class="bi bi-speedometer2" aria-hidden="true"></i>
           <span>Dashboard</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#">
-          <i class="bi bi-gear-fill"></i>
+        <a class="nav-link" href="#" aria-label="設定">
+          <i class="bi bi-gear-fill" aria-hidden="true"></i>
           <span>Settings</span>
         </a>
       </li>
     </ul>
-  </div>
-</div>
+  </nav>
+</aside>
 
-<!-- PC表示の初期状態を「閉じた状態」にする -->
-<main class="main-content p-4 is-collapsed">
+<!-- メインコンテンツ -->
+<main class="main-content" id="mainContent">
   <div class="container-fluid">
-    <table class="table">
-      <tr th:each="row : ${#numbers.sequence(1, 100)}">
-        <td th:each="col : ${#numbers.sequence(1, 10)}">
-          コンテンツ <span th:text="${row * col}"></span>
-        </td>
-      </tr>
-    </table>
+    <div class="table-container">
+      <table class="table content-table">
+        <tbody>
+        <tr th:each="row : ${#numbers.sequence(1, 100)}">
+          <td th:each="col : ${#numbers.sequence(1, 10)}">
+            コンテンツ <span th:text="${row * col}"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </main>
 
+<!-- サイドバーの背景オーバーレイ（モバイル用） -->
+<div class="sidebar-overlay d-md-none" id="sidebarOverlay" style="display: none;"></div>
+
+<!-- Bootstrap JS -->
 <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // PC用サイドバーの開閉
-    const pcSidebarToggle = document.getElementById('pcSidebarToggle');
-    if (pcSidebarToggle) {
-      pcSidebarToggle.addEventListener('click', function() {
-        document.getElementById('sidebarMenu').classList.toggle('is-collapsed');
-        document.querySelector('.main-content').classList.toggle('is-collapsed');
+  class SidebarManager {
+    constructor() {
+      this.sidebar = document.getElementById('sidebar');
+      this.mainContent = document.getElementById('mainContent');
+      this.overlay = document.getElementById('sidebarOverlay');
+      this.toggleButtons = document.querySelectorAll('[data-sidebar-toggle]');
+
+      this.isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      this.isOpen = false;
+
+      this.init();
+    }
+
+    init() {
+      this.setupEventListeners();
+      this.setupResponsiveHandling();
+      this.setupSwipeGestures();
+      this.setAppHeight();
+
+      // 初期状態設定
+      if (this.isDesktop) {
+        this.sidebar.classList.remove('show');
+        this.mainContent.classList.remove('expanded');
+      }
+    }
+
+    setupEventListeners() {
+      // トグルボタンのイベント
+      this.toggleButtons.forEach(button => {
+        button.addEventListener('click', () => this.toggle());
+      });
+
+      // オーバーレイクリックでサイドバーを閉じる
+      if (this.overlay) {
+        this.overlay.addEventListener('click', () => this.close());
+      }
+
+      // Escキーでサイドバーを閉じる
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close();
+        }
+      });
+
+      // ウィンドウリサイズ対応
+      window.addEventListener('resize', () => {
+        this.setAppHeight();
+        this.handleResize();
       });
     }
 
-    // スマホでのスワイプ開閉機能
-    const sidebarElement = document.getElementById('sidebarMenu');
-    if (sidebarElement) {
-      const sidebar = new bootstrap.Offcanvas(sidebarElement);
+    setupResponsiveHandling() {
+      const mediaQuery = window.matchMedia('(min-width: 768px)');
+      mediaQuery.addEventListener('change', (e) => {
+        this.isDesktop = e.matches;
+        this.handleResize();
+      });
+    }
 
-      // ▼▼▼ 修正点2: スワイプ検知の閾値をより実用的な値に修正 ▼▼▼
-      const edgeThreshold = 400;     // スワイプを開始して良い画面左端からの範囲(px)
-      const swipeThreshold = 80;    // スワイプとして認識する最小水平距離(px)
-      const verticalThreshold = 400; // スワイプとして許容する最大の垂直移動距離(px)
-
-      let touchStartX = 0;
-      let touchStartY = 0;
+    setupSwipeGestures() {
+      let startX = 0;
+      let startY = 0;
       let isSwipingFromEdge = false;
 
-      document.addEventListener('touchstart', e => {
-        if (e.touches.length === 1 && !sidebarElement.classList.contains('show') && e.touches[0].clientX < edgeThreshold) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          isSwipingFromEdge = true;
+      const EDGE_THRESHOLD = 50;
+      const SWIPE_THRESHOLD = 80;
+      const VERTICAL_THRESHOLD = 100;
+
+      document.addEventListener('touchstart', (e) => {
+        if (!this.isDesktop && e.touches.length === 1 && !this.isOpen) {
+          const touch = e.touches[0];
+          if (touch.clientX < EDGE_THRESHOLD) {
+            startX = touch.clientX;
+            startY = touch.clientY;
+            isSwipingFromEdge = true;
+          }
         }
       }, { passive: true });
 
-      document.addEventListener('touchend', e => {
-        if (!isSwipingFromEdge) {
-          return;
-        }
+      document.addEventListener('touchend', (e) => {
+        if (!isSwipingFromEdge) return;
+
         isSwipingFromEdge = false;
 
         if (e.changedTouches.length === 1) {
           const touch = e.changedTouches[0];
-          const deltaX = touch.clientX - touchStartX;
-          const deltaY = Math.abs(touch.clientY - touchStartY);
+          const deltaX = touch.clientX - startX;
+          const deltaY = Math.abs(touch.clientY - startY);
 
-          if (deltaX > swipeThreshold && deltaY < verticalThreshold) {
-            sidebar.show();
+          if (deltaX > SWIPE_THRESHOLD && deltaY < VERTICAL_THRESHOLD) {
+            this.open();
           }
         }
       }, { passive: true });
 
       document.addEventListener('touchcancel', () => {
         isSwipingFromEdge = false;
-      }, { passive: true });
+      });
     }
 
-    // ▼▼▼ 修正点3: 画面の実際の高さを取得してCSS変数にセットする機能を追加 ▼▼▼
-    const setAppHeight = () => {
-      const doc = document.documentElement;
-      // window.innerHeightから取得した実際の高さを--app-heightというCSS変数にセット
-      doc.style.setProperty('--app-height', `${window.innerHeight}px`);
-    };
+    toggle() {
+      this.isOpen ? this.close() : this.open();
+    }
 
-    // ページ読み込み時とウィンドウサイズ変更時に高さを再計算
-    window.addEventListener('resize', setAppHeight);
-    setAppHeight();
+    open() {
+      this.isOpen = true;
+      this.sidebar.classList.add('show');
+
+      if (this.isDesktop) {
+        this.sidebar.classList.add('expanded');
+        this.mainContent.classList.add('expanded');
+      } else if (this.overlay) {
+        this.overlay.style.display = 'block';
+        this.overlay.style.opacity = '0';
+        requestAnimationFrame(() => {
+          this.overlay.style.opacity = '0.5';
+        });
+      }
+    }
+
+    close() {
+      this.isOpen = false;
+      this.sidebar.classList.remove('show');
+
+      if (this.isDesktop) {
+        this.sidebar.classList.remove('expanded');
+        this.mainContent.classList.remove('expanded');
+      } else if (this.overlay) {
+        this.overlay.style.opacity = '0';
+        setTimeout(() => {
+          this.overlay.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    handleResize() {
+      if (this.isDesktop) {
+        // デスクトップでは閉じた状態をデフォルトに
+        this.isOpen = false;
+        this.sidebar.classList.remove('show');
+        this.sidebar.classList.remove('expanded');
+        this.mainContent.classList.remove('expanded');
+        if (this.overlay) {
+          this.overlay.style.display = 'none';
+        }
+      } else {
+        // モバイルでは完全に閉じた状態に
+        this.close();
+      }
+    }
+
+    setAppHeight() {
+      const height = window.innerHeight;
+      document.documentElement.style.setProperty('--app-height', `${height}px`);
+    }
+  }
+
+  // DOM読み込み完了後に初期化
+  document.addEventListener('DOMContentLoaded', () => {
+    new SidebarManager();
   });
 </script>
 
+<style>
+  /* オーバーレイスタイル */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1035;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+</style>
 </body>
 </html>
