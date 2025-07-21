@@ -4,4 +4,8 @@ spring:
   session:
     timeout: 300
   profiles:
-    active: test
+    active: dev
+
+server:
+  compression:
+    enabled: true
