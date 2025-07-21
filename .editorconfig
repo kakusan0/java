@@ -1,0 +1,27 @@
+# これがルートの設定ファイルであることを示す
+root = true
+
+# すべてのファイルに適用される基本的な設定
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+
+# Javaファイル用の設定
+[*.java]
+indent_size = 4
+
+# HTML, CSS, JavaScriptファイル用の設定
+# Thymeleaf (.html) はこちらに含まれます
+[*.{html,css,js}]
+indent_size = 2
+
+# Mavenのpom.xmlファイル用の設定
+[pom.xml]
+indent_size = 4
+
+# YAMLファイル用の設定
+[*.yml]
+indent_size = 2

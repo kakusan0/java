@@ -1,5 +1,6 @@
 package com.jp.login.controller;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,13 +10,14 @@ import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login
 import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login_to_userName;
 
 @Controller
+@Profile("dev")
 public class RootController {
 
     @GetMapping(ROOT)
     public String root() {
         return from_userName_redirect;
     }
-    
+
     @GetMapping(USERNAME)
     public String userName() {
         return login_to_userName;
@@ -26,3 +28,14 @@ public class RootController {
         return login_to_register;
     }
 }
+
+@Controller
+@Profile("!dev")
+class Dev1Controller {
+
+    @GetMapping(ROOT)
+    public String root() {
+        return "test";
+    }
+}
+

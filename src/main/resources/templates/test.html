@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta charset="UTF-8" />
+  <link
+    href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <title th:text="#{register.page.title}"></title>
+  <style>
+    .sidebar {
+      position: fixed;
+      top: 60px; /* ヘッダーの高さ */
+      left: 0; /* 初期状態で表示 */
+      width: 100px; /* 初期幅 */
+      height: 100vh;
+      background-color: #343a40;
+      color: white;
+      overflow-x: hidden;
+      z-index: 1050; /* offcanvasと同じかそれ以上のz-index */
+    }
+    .sidebar.open {
+      width: 200px; /* メニューが開いている状態 */
+    }
+    .sidebar .nav-link {
+      padding: 10px;
+      color: white;
+      text-align: center; /* アイコンを中央に配置 */
+      display: flex; /* Flexboxを使用 */
+      flex-direction: column; /* 子要素を縦に並べる */
+      align-items: center; /* 水平方向中央揃え */
+    }
+    .sidebar .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .content {
+      margin-left: 100px; /* サイドバーの初期幅 */
+      padding-top: 60px; /* ヘッダーの高さ */
+    }
+    .content.open {
+      margin-left: 200px; /* メニューが開いている状態 */
+    }
+    .nav-link i {
+      display: block; /* アイコンを表示 */
+      margin-bottom: 5px; /* アイコンとテキストの間隔 */
+    }
+    .nav-link span {
+      display: block; /* 初期状態でテキストを表示 */
+      text-align: center; /* テキストを中央に配置 */
+    }
+    .sidebar.open .nav-link {
+      flex-direction: row; /* メニューが開いているときは横並び */
+      text-align: left; /* メニューが開いているときはテキストを左寄せ */
+    }
+    .sidebar.open .nav-link i {
+      display: inline-block; /* メニューが開いているときはアイコンを表示 */
+      margin-right: 5px; /* アイコンとテキストの間隔 */
+      margin-bottom: 0; /* アイコンとテキストの間隔 */
+    }
+    .sidebar.open .nav-link span {
+      display: inline-block; /* メニューが開いているときはテキストを表示 */
+      text-align: left; /* メニューが開いているときはテキストを左寄せ */
+    }
+  </style>
+</head>
+<body>
+<header class="fixed-top bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center py-2">
+      <button class="btn btn-primary" type="button" id="menuButton">
+        <i class="fas fa-bars"></i>
+      </button>
+      <button
+        class="btn btn-primary"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasRight"
+        aria-controls="offcanvasRight"
+      >
+        Toggle right offcanvas
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="sidebar">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<main class="content">
+  <div class="container-fluid">
+    <table class="table">
+      <tr th:each="row : ${#numbers.sequence(1, 100)}">
+        <td th:each="col : ${#numbers.sequence(1, 10)}">
+          コンテンツ <span th:text="${row * col}"></span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>
+
+<div
+  class="offcanvas offcanvas-end"
+  tabindex="-1"
+  id="offcanvasRight"
+  aria-labelledby="offcanvasRightLabel"
+>
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <div th:insert="~{offcanvas :: offcanvas-content}"></div>
+  </div>
+</div>
+<script>
+  document.getElementById('menuButton').addEventListener('click', function() {
+    var sidebar = document.querySelector('.sidebar');
+    var content = document.querySelector('.content');
+
+    sidebar.classList.toggle('open');
+    content.classList.toggle('open');
+  });
+</script>
+</body>
+</html>
