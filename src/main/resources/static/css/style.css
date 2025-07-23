@@ -17,9 +17,10 @@ body {
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  background-color: #ffffff;
   z-index: 1050;
+  /* ▼▼▼ 追加: PC表示でのヘッダー下線 ▼▼▼ */
+  border-bottom: 1px solid #dee2e6;
 }
 
 .offcanvas-md {
@@ -37,7 +38,7 @@ body {
 }
 
 /* スマホ表示 (md未満) のスタイルを定義 */
-@media (max-width: 767.98px) { /* 768pxと重複しないように修正 */
+@media (max-width: 767.98px) {
   body {
     /* ヘッダーが下に来るので、paddingを下に変更 */
     padding-top: 0;
@@ -48,6 +49,7 @@ body {
     /* ヘッダーを画面下部に固定 */
     top: auto;
     bottom: 0;
+    /* ▼▼▼ 修正: ヘッダー上線に変更 ▼▼▼ */
     border-bottom: none;
     border-top: 1px solid #dee2e6;
   }
@@ -107,5 +109,69 @@ body {
   .offcanvas-md.is-collapsed .nav-link .bi {
     margin-right: 0;
     margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
+  }
+}
+
+/* スマホ横画面のスタイル (判定を画面の高さ基準に変更) */
+/* PC表示 (md以上) および スマホ横画面 のスタイルを定義 */
+@media (min-width: 768px), (max-height: 500px) and (orientation: landscape) {
+  /* --- 共通レイアウト調整 --- */
+  body {
+    padding-top: var(--header-height);
+    padding-bottom: 0;
+  }
+
+  .header {
+    top: 0;
+    bottom: auto;
+    border-bottom: 1px solid #dee2e6;
+    border-top: none;
+  }
+
+  /* --- サイドバー & メインコンテンツ (PC/スマホ横画面 共通) --- */
+  .offcanvas-md.offcanvas-start {
+    top: var(--header-height);
+    height: calc(var(--app-height) - var(--header-height));
+    transform: none !important;
+    visibility: visible !important;
+    border-right: 1px solid #dee2e6;
+    width: var(--sidebar-width-expanded);
+    transition: width 0.3s ease;
+  }
+
+  .main-content {
+    margin-left: var(--sidebar-width-expanded);
+    transition: margin-left 0.3s ease;
+  }
+
+  /* --- is-collapsedクラスが付与された時のスタイル --- */
+  .offcanvas-md.is-collapsed {
+    width: var(--sidebar-width-collapsed);
+  }
+
+  .main-content.is-collapsed {
+    margin-left: var(--sidebar-width-collapsed);
+  }
+
+  /* 畳んだ状態のレイアウトを「アイコン＋名称」の縦並びに変更 */
+  .offcanvas-md.is-collapsed .nav-link {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+  .offcanvas-md.is-collapsed .nav-link .bi {
+    margin-right: 0;
+    margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
+  }
+
+  /* --- UI要素の調整 --- */
+  /* 縦画面で下寄せにしていたメニューを通常の上寄せに戻す */
+  .offcanvas-body {
+    display: block;
+  }
+  .offcanvas-body .nav {
+    margin-top: 0;
   }
 }

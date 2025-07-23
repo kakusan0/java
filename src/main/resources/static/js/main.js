@@ -14,9 +14,9 @@ $(function() {
     const sidebar = bootstrap.Offcanvas.getOrCreateInstance($sidebarElement[0]);
 
     // スワイプ検知の閾値
-    const edgeThreshold = 400;     // スワイプを開始して良い画面左端からの範囲(px)
+    const edgeThreshold = 50;     // スワイプを開始して良い画面左端からの範囲(px)
     const swipeThreshold = 80;    // スワイプとして認識する最小水平距離(px)
-    const verticalThreshold = 400; // スワイプとして許容する最大の垂直移動距離(px)
+    const verticalThreshold = 75; // スワイプとして許容する最大の垂直移動距離(px)
 
     let touchStartX = 0;
     let touchStartY = 0;
@@ -24,6 +24,10 @@ $(function() {
 
     // イベントのチェーン（連結）で記述を簡潔に
     $(document).on('touchstart', function(e) {
+      const isMobileLandscape = window.matchMedia("(max-height: 500px) and (orientation: landscape)").matches;
+      if (isMobileLandscape) {
+        return; // 横画面ではスワイプ処理を開始しない
+      }
       // jQueryのイベントオブジェクトから元のtouchイベントを取得
       const touch = e.originalEvent.touches[0];
       if (e.originalEvent.touches.length === 1 && !$sidebarElement.hasClass('show') && touch.clientX < edgeThreshold) {
@@ -60,4 +64,11 @@ $(function() {
 
   // 初期読み込み時にも実行
   setAppHeight();
+
+  // 4. トースト表示機能
+  $('#liveToastBtn').on('click', function() {
+    const toastLiveExample = $('#liveToast');
+    const toast = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    toast.show();
+  });
 });

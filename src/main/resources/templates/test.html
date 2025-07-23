@@ -72,15 +72,19 @@
 </div>
 
 <!-- PC表示の初期状態を「閉じた状態」にする -->
+<!-- PC表示の初期状態を「閉じた状態」にする -->
 <main class="main-content p-4 is-collapsed">
   <div class="container-fluid">
-    <table class="table">
-      <tr th:each="row : ${#numbers.sequence(1, 100)}">
-        <td th:each="col : ${#numbers.sequence(1, 10)}">
-          コンテンツ <span th:text="${row * col}"></span>
-        </td>
-      </tr>
-    </table>
+    <!-- ▼▼▼ 修正点: このdivでテーブルを囲む ▼▼▼ -->
+    <div class="table-responsive">
+      <table class="table">
+        <tr th:each="row : ${#numbers.sequence(1, 100)}">
+          <td th:each="col : ${#numbers.sequence(1, 10)}">
+            コンテンツ <span th:text="${row * col}"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </main>
 
