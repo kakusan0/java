@@ -5,8 +5,6 @@ import jakarta.validation.constraints.Size;
 
 public class formUser {
 
-
-
     @NotBlank(message = "ユーザー名は必須です")
     private String username;
 
