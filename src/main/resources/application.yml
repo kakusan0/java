@@ -5,6 +5,8 @@ spring:
     timeout: 300
   profiles:
     active: dev1
+  thymeleaf:
+    prefix: classpath:/static/html/
 
 server:
   compression:
