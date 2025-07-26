@@ -37,3 +37,4 @@ node
 .vscode/
 actions-runner*
 /logs/
+**/.DS_Store

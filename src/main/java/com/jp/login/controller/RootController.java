@@ -2,7 +2,11 @@ package com.jp.login.controller;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 import static com.jp.login.constants.ApplicationConstants.ApplicationBase.*;
 import static com.jp.login.constants.ApplicationConstants.ApplicationRedirectUrl.from_userName_redirect;
@@ -34,7 +38,23 @@ public class RootController {
 class Dev1Controller {
 
     @GetMapping(ROOT)
-    public String root() {
+    public String root(           // URLから "screenName" パラメータを受け取る。なければ "未選択" になる
+                                  @RequestParam(name = "screenName", defaultValue = "未選択") String screenName,
+                                  Model model) {
+        // --- モーダルに表示するリストの準備 ---
+        // 選択肢となる画面名のリスト
+        List<String> screenList = List.of("ホーム", "ダッシュボード", "設定");
+        model.addAttribute("screens", screenList);
+
+        // --- ▼▼▼ ここが最重要ポイント ▼▼▼ ---
+        // th:switch で使うための現在の画面名を "currentScreen" という名前でModelに追加
+        model.addAttribute("currentScreen", screenName);
+
+        // ボタンに表示するテキストをModelに追加
+        String buttonText = "未選択".equals(screenName) ? "画面を選択" : screenName;
+        model.addAttribute("selectedScreenName", buttonText);
+
+        // 常にレイアウトの骨組みである test.html を返す
         return "test";
     }
 }

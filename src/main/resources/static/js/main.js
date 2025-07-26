@@ -1,8 +1,6 @@
-$(function() {
-  // jQueryの$(document).ready()の短縮形。DOMの読み込み完了後に実行します。
-
+$(function () {
   // 1. PC用サイドバーの開閉
-  $('#pcSidebarToggle').on('click', function() {
+  $('#pcSidebarToggle').on('click', function () {
     // 複数の要素に同じクラスを一度に付け外しできます
     $('#sidebarMenu, .main-content').toggleClass('is-collapsed');
   });
@@ -23,7 +21,7 @@ $(function() {
     let isSwipingFromEdge = false;
 
     // イベントのチェーン（連結）で記述を簡潔に
-    $(document).on('touchstart', function(e) {
+    $(document).on('touchstart', function (e) {
       const isMobileLandscape = window.matchMedia("(max-height: 500px) and (orientation: landscape)").matches;
       if (isMobileLandscape) {
         return; // 横画面ではスワイプ処理を開始しない
@@ -35,7 +33,7 @@ $(function() {
         touchStartY = touch.clientY;
         isSwipingFromEdge = true;
       }
-    }).on('touchend', function(e) {
+    }).on('touchend', function (e) {
       if (!isSwipingFromEdge) {
         return;
       }
@@ -48,7 +46,7 @@ $(function() {
       if (deltaX > swipeThreshold && deltaY < verticalThreshold) {
         sidebar.show();
       }
-    }).on('touchcancel', function() {
+    }).on('touchcancel', function () {
       isSwipingFromEdge = false;
     });
   }
@@ -66,7 +64,7 @@ $(function() {
   setAppHeight();
 
   // 4. トースト表示機能
-  $('#liveToastBtn').on('click', function() {
+  $('#liveToastBtn').on('click', function () {
     const toastLiveExample = $('#liveToast');
     const toast = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
     toast.show();

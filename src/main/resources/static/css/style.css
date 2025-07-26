@@ -37,6 +37,8 @@ body {
   margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
 }
 
+/* (...前略...) */
+
 /* スマホ表示 (md未満) のスタイルを定義 */
 @media (max-width: 767.98px) {
   body {
@@ -69,7 +71,28 @@ body {
     /* メニュー(ul)をコンテナの下端に押しやる */
     margin-top: auto;
   }
+
+  /* ▼▼▼ 追加: スマホ表示でのモーダルサイズ調整 ▼▼▼ */
+  #scrollableModal .modal-dialog {
+    max-width: 80%; /* 横幅を画面の95%に制限 */
+    margin: 1.75rem auto; /* 上下のマージンを確保し、左右中央揃え */
+  }
+
+  /* ▼▼▼ 追加: スマホ表示でのモーダルサイズ調整 ▼▼▼ */
+  #scrollableModal .modal-dialog {
+    max-width: 80%; /* 横幅を画面の80%に制限 */
+    margin: 1.75rem auto; /* 上下のマージンを確保し、左右中央揃え */
+  }
+
+  /* ▼▼▼ 追加: スマホ表示でモーダルがフッターに被らないように調整 ▼▼▼ */
+  #scrollableModal.modal {
+    /* モーダル全体の高さを、フッターの高さを引いた分に制限する */
+    height: calc(var(--app-height) - var(--header-height));
+  }
+
 }
+
+/* (...後略...) */
 
 /* PC表示 (md以上) のスタイルを再定義 */
 @media (min-width: 768px) {
