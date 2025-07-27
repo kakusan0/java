@@ -1,11 +1,11 @@
 package com.jp.login.entity;
 
-import lombok.Data;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
+
+import lombok.Data;
 
 @Data
 public class MasterUser implements Serializable {
@@ -25,21 +25,24 @@ public class MasterUser implements Serializable {
     private boolean accountNonLocked; // アカウントがロックされていないかどうか
 
     /**
-     * パスワードの有効期限が切れている場合は true を返します。 もし passwordExpiryDate が null
-     * の場合は、有効期限が設定されていないと判断し true
-     * を返します。
+     * パスワードの有効期限が切れているか判定します。
+     *
+     * ### 判断基準
+     * - `passwordExpiryDate` が `null` の場合は、有効期限が無期限とみなされ `false` を返します。
+     * - `passwordExpiryDate` が今日より前の日付の場合、期限切れとして `true` を返します。
+     *
+     * @return パスワードが期限切れであれば `true`
      */
     public boolean isPasswordExpired() {
         if (passwordExpiryDate == null) {
-            return true;
+            return false; // 有効期限なし
         }
-        // passwordExpiryDate が今日以降ならfalse（未期限切れ）、
-        // それ以外なら true（期限切れ）
-        return !passwordExpiryDate.after(Date.valueOf(LocalDate.now()));
+        return passwordExpiryDate.before(Date.valueOf(LocalDate.now()));
     }
 
     /**
-     * 資格情報がまだ有効な場合は true を返します。 credentialsNonExpired が null の場合は有効と判断します。
+     * 資格情報がまだ有効な場合は `true` を返します。
+     * `credentialsNonExpired` が `null` の場合は有効と判断します。
      */
     public boolean isCredentialsNonExpired() {
         if (credentialsNonExpired == null) {

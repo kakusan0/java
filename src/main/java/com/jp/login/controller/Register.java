@@ -1,16 +1,18 @@
 package com.jp.login.controller;
 
-import com.jp.login.mapper.UserMapper;
-import com.jp.login.service.registerService;
-import lombok.RequiredArgsConstructor;
+import static com.jp.login.constants.ApplicationConstants.ApplicationBase.register;
+import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login_to_register;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static com.jp.login.constants.ApplicationConstants.ApplicationBase.register;
-import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login_to_register;
+import com.jp.login.mapper.UserMapper;
+import com.jp.login.service.registerService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
