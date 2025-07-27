@@ -49,9 +49,27 @@ body {
   color: #000000;
 }
 
-.modal-backdrop {
-  background-color: #455168;
-  opacity: 0.8;
+/*
+ * モーダルの背景（バックドロップ）のスタイルを上書きします。
+ */
+
+/* エラーモーダル用の背景: 暗い赤色、半透明 */
+.modal-backdrop.backdrop-error {
+  background-color: rgba(114, 28, 36, 0.7);
+  /* Bootstrapの.bg-dangerに近い色 */
+}
+
+/* 画面選択モーダル用の背景: 少し暗いグレー */
+.modal-backdrop.backdrop-select {
+  background-color: rgba(50, 50, 50, 0.75);
+}
+
+/* ▼▼▼ 追加: エラーモーダルのメッセージがはみ出るのを防ぐ ▼▼▼ */
+#errorModal .modal-body {
+  /* 長い文字列を強制的に改行させる */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  /* 旧ブラウザ互換用 */
 }
 
 #scrollableModal .modal-header {

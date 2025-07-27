@@ -69,4 +69,19 @@ $(function () {
     const toast = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
     toast.show();
   });
+
+  // 5. モーダルごとの背景色を設定
+  const setErrorBackdrop = function () {
+    // 複数のモーダルが重なる場合も考慮し、一番手前(最後)の背景要素を取得
+    $('.modal-backdrop').last().addClass('backdrop-error');
+  };
+
+  const setSelectBackdrop = function () {
+    $('.modal-backdrop').last().addClass('backdrop-select');
+  };
+
+  // イベントリスナーを紐付け
+  $('#errorModal').on('shown.bs.modal', setErrorBackdrop);
+  $('#scrollableModal').on('shown.bs.modal', setSelectBackdrop);
+
 });

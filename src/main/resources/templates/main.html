@@ -130,6 +130,7 @@
   <script th:inline="javascript">
     /*<![CDATA[*/
     document.addEventListener('DOMContentLoaded', function () {
+      // --- エラーモーダルの自動表示 ---
       const errorMessage = /*[[${errorMessage}]]*/ null;
       if (errorMessage) {
         const errorModalElement = document.getElementById('errorModal');
