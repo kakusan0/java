@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta charset="UTF-8"/>
-  <link
-    href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-  <link
-    href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
-    rel="stylesheet"
-  />
+  <link href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
   <link href="/css/style.css" rel="stylesheet"/>
   <title th:text="#{register.page.title}"></title>
 </head>
+
 <body>
 
 <!-- ヘッダー (変更なし) -->
 <header class="header">
   <div class="d-flex align-items-center h-100 px-3 px-md-5 position-relative">
     <div>
-      <button
-        aria-controls="sidebarMenu"
-        class="btn btn-primary d-md-none border-0"
-        data-bs-target="#sidebarMenu"
-        data-bs-toggle="offcanvas"
-        type="button"
-      >
+      <button aria-controls="sidebarMenu" class="btn btn-primary d-md-none border-0" data-bs-target="#sidebarMenu"
+              data-bs-toggle="offcanvas" type="button">
         <i class="bi bi-list"></i>
       </button>
       <button class="btn btn-primary d-none d-md-block border-0" id="pcSidebarToggle" type="button">
@@ -44,12 +35,8 @@
 </header>
 
 <!-- サイドバー (変更なし) -->
-<div
-  aria-labelledby="sidebarMenuLabel"
-  class="offcanvas offcanvas-start offcanvas-md is-collapsed"
-  id="sidebarMenu"
-  tabindex="-1"
->
+<div aria-labelledby="sidebarMenuLabel" class="offcanvas offcanvas-start offcanvas-md is-collapsed" id="sidebarMenu"
+     tabindex="-1">
   <div class="offcanvas-body p-0">
     <ul class="nav flex-column">
       <li class="nav-item">
@@ -103,11 +90,13 @@
       <div class="modal-body">
         <div class="list-group">
           <!-- ▼ 修正: th:hrefで正しいURLを生成し、不要なdata属性を削除 ▼ -->
-          <a class="list-group-item list-group-item-action"
-             th:each="screen : ${screens}"
-             th:href="@{/test(screenName=${screen})}"
-             th:text="${screen}">
-          </a>
+          <form class="d-grid" method="get" th:action="@{/}" th:each="screen : ${screens}">
+            <!-- screenNameをリクエストパラメータとして送信するための隠しフィールド -->
+            <input name="screenName" th:value="${screen}" type="hidden"/>
+            <!-- フォームを送信するサブミットボタン -->
+            <button class="list-group-item list-group-item-action text-start" th:text="${screen}"
+                    type="submit"></button>
+          </form>
         </div>
       </div>
       <div class="modal-footer">
@@ -122,4 +111,5 @@
 <script src="/js/main.js"></script>
 
 </body>
+
 </html>
