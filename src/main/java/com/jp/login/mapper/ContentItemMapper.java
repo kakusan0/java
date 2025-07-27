@@ -1,9 +1,10 @@
 package com.jp.login.mapper;
 
-import com.jp.login.entity.ContentItem;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+import com.jp.login.entity.ContentItem;
 
 @Mapper
 public interface ContentItemMapper {

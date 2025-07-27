@@ -16,19 +16,3 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: gmakihiro@gmail.com
-    password: dyuku0915K
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
-server:
-  compression:
-    enabled: true
