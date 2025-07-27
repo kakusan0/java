@@ -5,9 +5,10 @@ spring:
     timeout: 300
   profiles:
     active: dev1
-  thymeleaf:
-    prefix: classpath:/static/html/
-
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 server:
   compression:
     enabled: true

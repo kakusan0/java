@@ -1,12 +1,14 @@
-package com.jp.login.security;
-
-import com.jp.login.entity.MasterUser;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+package com.jp.login.config;
 
 import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import com.jp.login.entity.MasterUser;
+
+import lombok.Getter;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 

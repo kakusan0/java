@@ -28,7 +28,8 @@
       <button class="btn btn-secondary" data-bs-target="#scrollableModal" data-bs-toggle="modal" id="itemSelectButton"
               type="button">
         <!-- ▼ 修正: コントローラーから渡された値でボタンのテキストを表示 ▼ -->
-        <span id="selectedItemName" th:text="${selectedScreenName}">画面を選択</span>
+        <span id="selectedItemName"
+              th:text="${#strings.isEmpty(selectedScreenName) ? '未選択' : selectedScreenName}">画面を選択</span>
       </button>
     </div>
   </div>
@@ -67,9 +68,15 @@
 
     <!-- ▼▼▼ 修正: th:switchブロックのみを残し、後の重複コンテンツを削除 ▼▼▼ -->
     <div th:switch="${currentScreen}">
-      <div th:case="'ホーム'" th:replace="~{fragments/home :: content}"></div>
-      <div th:case="'ダッシュボード'" th:replace="~{fragments/dashboard :: content}"></div>
-      <div th:case="'設定'" th:replace="~{fragments/settings :: content}"></div>
+      <div th:case="'ホーム'">
+        <div th:replace="~{fragments/home :: content}"></div>
+      </div>
+      <div th:case="'ダッシュボード'">
+        <div th:replace="~{fragments/dashboard :: content}"></div>
+      </div>
+      <div th:case="'設定'">
+        <div th:replace="~{fragments/settings :: content}"></div>
+      </div>
       <div th:case="*">
         <p>上のボタンから表示する画面を選択してください。</p>
       </div>
@@ -81,26 +88,21 @@
 
 <!-- モーダル -->
 <div aria-hidden="true" aria-labelledby="scrollableModalLabel" class="modal fade" id="scrollableModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content text-dark">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="scrollableModalLabel">画面を選択してください</h5>
-        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
       </div>
       <div class="modal-body">
         <div class="list-group">
-          <!-- ▼ 修正: th:hrefで正しいURLを生成し、不要なdata属性を削除 ▼ -->
-          <form class="d-grid" method="get" th:action="@{/}" th:each="screen : ${screens}">
+          <form class="d-grid" method="post" th:action="@{/content}" th:each="screen : ${screens}">
             <!-- screenNameをリクエストパラメータとして送信するための隠しフィールド -->
-            <input name="screenName" th:value="${screen}" type="hidden"/>
+            <input name="screenName" th:value="${screen.itemName}" type="hidden"/>
             <!-- フォームを送信するサブミットボタン -->
-            <button class="list-group-item list-group-item-action text-start" th:text="${screen}"
+            <button class="list-group-item list-group-item-action text-start" th:text="${screen.itemName}"
                     type="submit"></button>
           </form>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">キャンセル</button>
       </div>
     </div>
   </div>

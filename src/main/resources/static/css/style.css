@@ -1,7 +1,9 @@
 :root {
   --header-height: 60px;
-  --sidebar-width-expanded: 160px; /* 広げた時の幅 */
-  --sidebar-width-collapsed: 120px;  /* 畳んだ時の幅を少し広げる */
+  --sidebar-width-expanded: 160px;
+  /* 広げた時の幅 */
+  --sidebar-width-collapsed: 120px;
+  /* 畳んだ時の幅を少し広げる */
   /* JSが失敗した場合の予備として100vhを設定 */
   --app-height: 100vh;
 }
@@ -30,11 +32,47 @@ body {
 /* サイドバー内リンクの基本スタイル（横並び） */
 .offcanvas-body .nav-link {
   display: flex;
-  align-items: center; /* アイコンとテキストを垂直方向に中央揃え */
-  padding: 1rem 1.5rem; /* パディングを調整 */
+  align-items: center;
+  /* アイコンとテキストを垂直方向に中央揃え */
+  padding: 1rem 1.5rem;
+  /* パディングを調整 */
 }
+
 .offcanvas-body .nav-link .bi {
-  margin-right: 0.75rem; /* アイコンの右側に余白を設定 */
+  margin-right: 0.75rem;
+  /* アイコンの右側に余白を設定 */
+}
+
+/* --- モーダルのカスタムスタイル (ダークテーマ) --- */
+#scrollableModal .modal-content {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.modal-backdrop {
+  background-color: #455168;
+  opacity: 0.8;
+}
+
+#scrollableModal .modal-header {
+  border: none;
+  /* ヘッダーの境界線の色を調整 */
+}
+
+#scrollableModal .modal-footer {
+  border-top-color: #495057;
+  /* フッターの境界線の色を調整 */
+}
+
+/* モーダル内のリストアイテムのスタイル調整 */
+#scrollableModal .list-group-item-action {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* モーダルの閉じるボタンを白くする */
+#scrollableModal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
 /* (...前略...) */
@@ -74,14 +112,18 @@ body {
 
   /* ▼▼▼ 追加: スマホ表示でのモーダルサイズ調整 ▼▼▼ */
   #scrollableModal .modal-dialog {
-    max-width: 80%; /* 横幅を画面の95%に制限 */
-    margin: 1.75rem auto; /* 上下のマージンを確保し、左右中央揃え */
+    max-width: 80%;
+    /* 横幅を画面の95%に制限 */
+    margin: 1.75rem auto;
+    /* 上下のマージンを確保し、左右中央揃え */
   }
 
   /* ▼▼▼ 追加: スマホ表示でのモーダルサイズ調整 ▼▼▼ */
   #scrollableModal .modal-dialog {
-    max-width: 80%; /* 横幅を画面の80%に制限 */
-    margin: 1.75rem auto; /* 上下のマージンを確保し、左右中央揃え */
+    max-width: 80%;
+    /* 横幅を画面の80%に制限 */
+    margin: 1.75rem auto;
+    /* 上下のマージンを確保し、左右中央揃え */
   }
 
   /* ▼▼▼ 追加: スマホ表示でモーダルがフッターに被らないように調整 ▼▼▼ */
@@ -129,15 +171,19 @@ body {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
   }
+
   .offcanvas-md.is-collapsed .nav-link .bi {
     margin-right: 0;
-    margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
+    margin-bottom: 0.25rem;
+    /* アイコンと名称の間に余白を追加 */
   }
 }
 
 /* スマホ横画面のスタイル (判定を画面の高さ基準に変更) */
 /* PC表示 (md以上) および スマホ横画面 のスタイルを定義 */
-@media (min-width: 768px), (max-height: 500px) and (orientation: landscape) {
+@media (min-width: 768px),
+(max-height: 500px) and (orientation: landscape) {
+
   /* --- 共通レイアウト調整 --- */
   body {
     padding-top: var(--header-height);
@@ -184,9 +230,11 @@ body {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
   }
+
   .offcanvas-md.is-collapsed .nav-link .bi {
     margin-right: 0;
-    margin-bottom: 0.25rem; /* アイコンと名称の間に余白を追加 */
+    margin-bottom: 0.25rem;
+    /* アイコンと名称の間に余白を追加 */
   }
 
   /* --- UI要素の調整 --- */
@@ -194,6 +242,7 @@ body {
   .offcanvas-body {
     display: block;
   }
+
   .offcanvas-body .nav {
     margin-top: 0;
   }

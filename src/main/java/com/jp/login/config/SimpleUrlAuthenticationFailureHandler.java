@@ -1,4 +1,4 @@
-package com.jp.login.security;
+package com.jp.login.config;
 
 import java.io.IOException;
 
