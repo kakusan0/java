@@ -1,0 +1,11 @@
+# User-agent: どのクローラーに対する指示かを指定します。'*'は全てのクローラーを意味します。
+User-agent: *
+
+# Disallow: クロールを禁止するパスを指定します。
+# ログイン、ユーザー登録、ログアウトなど、検索エンジンにインデックスされるべきではないページを指定するのが一般的です。
+Disallow: /login
+Disallow: /logout
+Disallow: /register
+Disallow: /userName
+Disallow: /userNameCheck
+Disallow: /content
