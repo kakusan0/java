@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -11,7 +12,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 
 public class FormLoginMethodCheckFilter extends OncePerRequestFilter {
 
