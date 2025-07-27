@@ -8,6 +8,22 @@
   <link href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet" />
   <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="/css/style.css" rel="stylesheet" />
+  <script defer src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+  <script defer src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+  <script defer src="/js/main.js"></script>
+  <script defer th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function () {
+      // --- エラーモーダルの自動表示 ---
+      const errorMessage = /*[[${errorMessage}]]*/ null;
+      if (errorMessage) {
+        const errorModalElement = document.getElementById('errorModal');
+        const errorModal = new bootstrap.Modal(errorModalElement);
+        errorModal.show();
+      }
+    });
+    /*]]>*/
+  </script>
   <title th:text="#{register.page.title}">メインページ</title>
 </head>
 
@@ -85,22 +101,7 @@
   <div th:replace="~{fragments/modals/errorModal :: content}"></div>
   <div th:replace="~{fragments/modals/contentModal :: content}"></div>
 
-  <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
-  <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/main.js"></script>
-  <script th:inline="javascript">
-    /*<![CDATA[*/
-    document.addEventListener('DOMContentLoaded', function () {
-      // --- エラーモーダルの自動表示 ---
-      const errorMessage = /*[[${errorMessage}]]*/ null;
-      if (errorMessage) {
-        const errorModalElement = document.getElementById('errorModal');
-        const errorModal = new bootstrap.Modal(errorModalElement);
-        errorModal.show();
-      }
-    });
-    /*]]>*/
-  </script>
+
 
 </body>
 
