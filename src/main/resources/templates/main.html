@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta charset="UTF-8" />
+  <!-- 修正: 存在するバージョンに修正 -->
+  <link href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <title th:text="#{register.page.title}">メインページ</title>
+</head>
+
+<body>
+
+  <!-- ヘッダー -->
+  <header class="header">
+    <div class="d-flex align-items-center h-100 px-3 px-md-5 position-relative">
+      <div>
+        <button aria-controls="sidebarMenu" class="btn btn-primary d-md-none border-0" data-bs-target="#sidebarMenu"
+          data-bs-toggle="offcanvas" type="button">
+          <i class="bi bi-list"></i>
+        </button>
+        <button class="btn btn-primary d-none d-md-block border-0" id="pcSidebarToggle" type="button">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <button class="btn btn-secondary" data-bs-target="#scrollableModal" data-bs-toggle="modal" id="itemSelectButton"
+          type="button">
+          <!-- 修正: より簡潔なエルビス演算子を使用 -->
+          <span id="selectedItemName" th:text="${selectedScreenName ?: '画面を選択'}">画面を選択</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- サイドバー -->
+  <div aria-labelledby="sidebarMenuLabel" class="offcanvas offcanvas-start offcanvas-md is-collapsed" id="sidebarMenu"
+    tabindex="-1">
+    <div class="offcanvas-body p-0">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="#">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="#">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="#">
+            <i class="bi bi-gear-fill"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ -->
+  <main class="main-content p-4 is-collapsed">
+    <div class="container-fluid">
+      <!-- 修正: 重複したcaseを削除 -->
+      <div th:switch="${currentScreen}">
+        <div th:case="'ホーム'">
+          <div th:replace="~{fragments/home :: content}"></div>
+        </div>
+        <div th:case="'ダッシュボード'">
+          <div th:replace="~{fragments/dashboard :: content}"></div>
+        </div>
+        <div th:case="'設定'">
+          <div th:replace="~{fragments/settings :: content}"></div>
+        </div>
+        <div th:case="*">
+          <p>上のボタンから表示する画面を選択してください。</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- エラーモーダル -->
+  <!-- 修正: 外枠クリックやESCキーで閉じないように設定 -->
+  <div aria-hidden="true" aria-labelledby="errorModalLabel" class="modal fade" data-bs-backdrop="static"
+    data-bs-keyboard="false" id="errorModal" tabindex="-1" th:if="${errorMessage}">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="errorModalLabel"><i class="bi bi-exclamation-triangle-fill"></i> エラー</h5>
+        </div>
+        <div class="modal-body">
+          <p th:text="${errorMessage}">エラーメッセージがここに表示されます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 画面選択モーダル -->
+  <!-- 修正: 外枠クリックやESCキーで閉じないように設定 -->
+  <div aria-hidden="true" aria-labelledby="scrollableModalLabel" class="modal fade" data-bs-backdrop="static"
+    data-bs-keyboard="false" id="scrollableModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="scrollableModalLabel">画面を選択してください</h5>
+          <!-- 修正: 閉じるボタンを追加して利便性を向上 -->
+          <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group">
+            <form class="d-grid" method="post" th:action="@{/content}" th:each="screen : ${screens}">
+              <input name="screenName" th:value="${screen.itemName}" type="hidden" />
+              <button class="list-group-item list-group-item-action text-start" th:text="${screen.itemName}"
+                type="submit"></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 修正: 存在するバージョンに修正 -->
+  <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+  <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function () {
+      const errorMessage = /*[[${errorMessage}]]*/ null;
+      if (errorMessage) {
+        const errorModalElement = document.getElementById('errorModal');
+        const errorModal = new bootstrap.Modal(errorModalElement);
+        errorModal.show();
+      }
+    });
+    /*]]>*/
+  </script>
+
+</body>
+
+</html>

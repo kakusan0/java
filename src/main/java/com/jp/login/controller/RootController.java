@@ -44,27 +44,27 @@ public class RootController {
 class Dev1Controller {
     private final ContentItemMapper contentItemMapper;
 
-    @GetMapping("error")
-    public String error() {
-        return "error";
-    }
-
     @GetMapping(ROOT)
     public String root(Model model) {
         model.addAttribute("screens", contentItemMapper.findAll());
-        return "test";
+        return "main";
     }
 
     @PostMapping("/content")
     public String selectItem(
             @RequestParam(name = "screenName", defaultValue = "未選択") String screenName,
             Model model) {
+        if ("未選択".equals(screenName)) {
+            model.addAttribute("errorMessage", "表示する画面が選択されていません。");
+        } else {
+            model.addAttribute("errorMessage", null);
+        }
         model.addAttribute("screens", contentItemMapper.findAll());
 
         // "未選択"の場合には caseにヒットしない値を渡す
         model.addAttribute("currentScreen", "未選択".equals(screenName) ? "" : screenName);
 
         model.addAttribute("selectedScreenName", "未選択".equals(screenName) ? "画面を選択" : screenName);
-        return "test";
+        return "main";
     }
 }
