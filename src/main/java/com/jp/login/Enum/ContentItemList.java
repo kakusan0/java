@@ -13,7 +13,7 @@ public enum ContentItemList {
     ContentItemList(String value) {
         this.value = value;
     }
-    
+
     public static ContentItemList fromValue(String value) {
         for (ContentItemList item : values()) {
             if (item.value.equals(value)) {
