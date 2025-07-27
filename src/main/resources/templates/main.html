@@ -45,7 +45,7 @@
         <button class="btn btn-secondary" data-bs-target="#scrollableModal" data-bs-toggle="modal" id="itemSelectButton"
           type="button">
           <!-- 修正: より簡潔なエルビス演算子を使用 -->
-          <span id="selectedItemName" th:text="${selectedScreenName ?: '画面を選択'}">画面を選択</span>
+          <span id="selectedItemName" th:text="${selectedScreenName ?: 'ツールを選択'}" />
         </button>
       </div>
     </div>
@@ -93,7 +93,7 @@
           <div th:replace="~{fragments/settings :: content}"></div>
         </div>
         <div th:case="*">
-          <p>上のボタンから表示する画面を選択してください。</p>
+          <p>ツールを選択ボタンから表示する画面を選択してください。</p>
         </div>
       </div>
     </div>
