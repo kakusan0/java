@@ -54,11 +54,7 @@ class Dev1Controller {
     public String selectItem(
             @RequestParam(name = "screenName", defaultValue = "未選択") String screenName,
             Model model) {
-        if ("未選択".equals(screenName)) {
-            model.addAttribute("errorMessage", "表示する画面が選択されていません。");
-        } else {
-            model.addAttribute("errorMessage", null);
-        }
+        model.addAttribute("errorMessage", null);
         model.addAttribute("screens", contentItemMapper.findAll());
 
         // "未選択"の場合には caseにヒットしない値を渡す
