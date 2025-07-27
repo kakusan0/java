@@ -11,6 +11,16 @@
 /* デスクトップ表示をデフォルトのスタイルとする */
 body {
   padding-top: var(--header-height);
+  user-select: none;
+  -webkit-user-select: none;
+  /* Safari互換用 */
+}
+
+input,
+textarea,
+.selectable-content {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .header {
