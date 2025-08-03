@@ -1,32 +1,87 @@
-/*
- * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
+$(function () {
+  // 1. PC用サイドバーの開閉
+  $('#pcSidebarToggle').on('click', function () {
+    // 複数の要素に同じクラスを一度に付け外しできます
+    $('#sidebarMenu, .main-content').toggleClass('is-collapsed');
+  });
 
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ (() => {
+  // 2. スマホでのスワイプ開閉機能
+  const $sidebarElement = $('#sidebarMenu');
+  if ($sidebarElement.length) { // 要素が存在するかチェック
+    // BootstrapのOffcanvasインスタンスを取得
+    const sidebar = bootstrap.Offcanvas.getOrCreateInstance($sidebarElement[0]);
 
-eval("console.log('Hello, Webpack!');\ndocument.addEventListener('DOMContentLoaded', () => {\n  const textInput = document.getElementById('text-input');\n  const charCount = document.getElementById('char-count');\n  const wordCount = document.getElementById('word-count');\n  const lineCount = document.getElementById('line-count');\n  const updateCounts = text => {\n    const charLength = text.length;\n\n    // 単語数（スペースや改行で単語を分割）\n    const words = text.trim().match(/\\S+/g);\n    const wordLength = words ? words.length : 0;\n\n    // 行数 (\\nで分割)\n    const lines = text.split(/\\n/);\n    const lineLength = lines.length;\n    charCount.textContent = charLength;\n    wordCount.textContent = wordLength;\n    lineCount.textContent = lineLength;\n  };\n  textInput.addEventListener('input', e => {\n    updateCounts(e.target.value);\n  });\n});\n\n//# sourceURL=webpack:///./src/index.js?");
+    // スワイプ検知の閾値
+    const edgeThreshold = 50;     // スワイプを開始して良い画面左端からの範囲(px)
+    const swipeThreshold = 80;    // スワイプとして認識する最小水平距離(px)
+    const verticalThreshold = 75; // スワイプとして許容する最大の垂直移動距離(px)
 
-/***/ })
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isSwipingFromEdge = false;
 
-/******/ 	});
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/index.js"]();
-/******/ 	
-/******/ })()
-;
+    // イベントのチェーン（連結）で記述を簡潔に
+    $(document).on('touchstart', function (e) {
+      const isMobileLandscape = window.matchMedia("(max-height: 500px) and (orientation: landscape)").matches;
+      if (isMobileLandscape) {
+        return; // 横画面ではスワイプ処理を開始しない
+      }
+      // jQueryのイベントオブジェクトから元のtouchイベントを取得
+      const touch = e.originalEvent.touches[0];
+      if (e.originalEvent.touches.length === 1 && !$sidebarElement.hasClass('show') && touch.clientX < edgeThreshold) {
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        isSwipingFromEdge = true;
+      }
+    }).on('touchend', function (e) {
+      if (!isSwipingFromEdge) {
+        return;
+      }
+      isSwipingFromEdge = false;
+
+      const touch = e.originalEvent.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = Math.abs(touch.clientY - touchStartY);
+
+      if (deltaX > swipeThreshold && deltaY < verticalThreshold) {
+        sidebar.show();
+      }
+    }).on('touchcancel', function () {
+      isSwipingFromEdge = false;
+    });
+  }
+
+  // 3. 画面の実際の高さを取得してCSS変数にセットする機能
+  const setAppHeight = () => {
+    // $('html')でdocumentElementを選択し、.css()でカスタムプロパティを設定
+    $('html').css('--app-height', `${window.innerHeight}px`);
+  };
+
+  // ウィンドウのリサイズイベントにsetAppHeightを紐付け
+  $(window).on('resize', setAppHeight);
+
+  // 初期読み込み時にも実行
+  setAppHeight();
+
+  // 4. トースト表示機能
+  $('#liveToastBtn').on('click', function () {
+    const toastLiveExample = $('#liveToast');
+    const toast = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    toast.show();
+  });
+
+  // 5. モーダルごとの背景色を設定
+  const setErrorBackdrop = function () {
+    // 複数のモーダルが重なる場合も考慮し、一番手前(最後)の背景要素を取得
+    $('.modal-backdrop').last().addClass('backdrop-error');
+  };
+
+  const setSelectBackdrop = function () {
+    $('.modal-backdrop').last().addClass('backdrop-select');
+  };
+
+  // イベントリスナーを紐付け
+  $('#errorModal').on('shown.bs.modal', setErrorBackdrop);
+  $('#scrollableModal').on('shown.bs.modal', setSelectBackdrop);
+
+});

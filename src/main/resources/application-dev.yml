@@ -1,34 +1,18 @@
-rcon:
-  port: 25575
-  hostname: localhost
-  password: test
 spring:
-  #  docker:
-  #    compose:
-  #      file: compose.yml
-  #      skip:
-  #        in-tests: false
   devtools:
     restart:
       enabled: true
     livereload:
       enabled: true
+
   thymeleaf:
     cache: false
     check-template: false
     check-template-location: false
     enabled: true
+
   datasource:
     url: jdbc:mysql://localhost:3306/home?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-logging:
-  level:
-    org.apache.ibatis: DEBUG
-    java.sql: TRACE
-    org.springframework.security: DEBUG
-# Discord Bot Token
-discord:
-  bot:
-    token: MTI4NzczNjA2MzYxOTc2NDI2Ng.GYxU_E.Wn6JecbJzuuzjADHWZC8bhRSIYOGxHtuenP42c

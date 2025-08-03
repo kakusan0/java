@@ -1,0 +1,22 @@
+login:
+  page:
+    title: ログイン
+  user:
+    name: ユーザ名
+    password: パスワード
+  error:
+    login: ログインに失敗しました。再度お試しください。
+    status: 管理者にお問い合わせください
+  botton:
+    submit: ログイン
+    clear: クリア
+register:
+  page:
+    title: アカウント登録
+  user:
+    name: 'ユーザー名:'
+    password1: 'パスワード:'
+    password2: 'パスワード確認:'
+  botton:
+    submit: 登録
+    logout: 戻る

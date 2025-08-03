@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div aria-hidden="true" aria-labelledby="scrollableModalLabel" class="modal fade" id="scrollableModal" tabindex="-1"
+     th:fragment="content">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scrollableModalLabel">画面を選択してください</h5>
+        <!-- 修正: 閉じるボタンを追加して利便性を向上 -->
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div class="list-group">
+          <form class="d-grid" method="post" th:action="@{/content}" th:each="screen : ${screens}">
+            <input name="screenName" th:value="${screen.itemName}" type="hidden"/>
+            <button class="list-group-item list-group-item-action text-start" th:text="${screen.itemName}"
+                    type="submit"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>
