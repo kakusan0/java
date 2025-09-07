@@ -4,7 +4,7 @@ spring:
   session:
     timeout: 300
   profiles:
-    active: h2
+    active: dev
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:

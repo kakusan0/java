@@ -116,7 +116,8 @@ $(function () {
       // 1) 認証オプション取得
       const optRes = await fetch('/webauthn/authentication/options', {
         method: 'POST',
-        headers: { [CSRF_HEADER]: CSRF_TOKEN }
+        headers: { [CSRF_HEADER]: CSRF_TOKEN },
+		credentials: 'same-origin'
       });
       if (!optRes.ok) throw new Error('オプション取得に失敗しました');
       const options = await optRes.json();

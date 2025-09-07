@@ -45,14 +45,6 @@
             th:text="#{login.botton.clear}"
             type="reset"
           ></button>
-          <button
-            id="passkeySignInBtn"
-            class="btn btn-warning mb-3"
-            type="button"
-            title="パスキーでサインイン"
-          >
-            <i class="bi bi-key-fill"></i> パスキーで続行
-          </button>
         </div>
         <div th:if="${param.error}">
           <p style="color: red" th:text="#{login.error.login}"></p>
