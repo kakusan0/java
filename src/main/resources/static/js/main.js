@@ -83,5 +83,4 @@ $(function () {
   // イベントリスナーを紐付け
   $('#errorModal').on('shown.bs.modal', setErrorBackdrop);
   $('#scrollableModal').on('shown.bs.modal', setSelectBackdrop);
-
 });
