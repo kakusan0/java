@@ -83,4 +83,89 @@ $(function () {
   // イベントリスナーを紐付け
   $('#errorModal').on('shown.bs.modal', setErrorBackdrop);
   $('#scrollableModal').on('shown.bs.modal', setSelectBackdrop);
+
+  const passkeyBtn = document.getElementById('passkeySignInBtn');
+  if (passkeyBtn && !window.PublicKeyCredential) {
+    passkeyBtn.setAttribute('disabled', 'disabled');
+    passkeyBtn.setAttribute('title', 'このブラウザはパスキーに対応していません');
+  }
+
+  // CSRF（meta タグから取得）
+  const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]')?.content || 'X-CSRF-TOKEN';
+  const CSRF_TOKEN  = document.querySelector('meta[name="_csrf"]')?.content || '';
+
+  // Base64URL <-> ArrayBuffer ヘルパ
+  function b64urlToBuf(b64url) {
+    const pad = '='.repeat((4 - b64url.length % 4) % 4);
+    const b64 = (b64url.replace(/-/g, '+').replace(/_/g, '/')) + pad;
+    const str = atob(b64);
+    const buf = new ArrayBuffer(str.length);
+    const bytes = new Uint8Array(buf);
+    for (let i = 0; i < str.length; i++) bytes[i] = str.charCodeAt(i);
+    return buf;
+  }
+  function bufToB64url(buf) {
+    const bytes = new Uint8Array(buf);
+    let str = '';
+    for (let i = 0; i < bytes.byteLength; i++) str += String.fromCharCode(bytes[i]);
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  async function passkeySignIn() {
+    try {
+      // 1) 認証オプション取得
+      const optRes = await fetch('/webauthn/authentication/options', {
+        method: 'POST',
+        headers: { [CSRF_HEADER]: CSRF_TOKEN }
+      });
+      if (!optRes.ok) throw new Error('オプション取得に失敗しました');
+      const options = await optRes.json();
+
+      // 2) challenge / allowCredentials を ArrayBuffer に変換
+      options.publicKey.challenge = b64urlToBuf(options.publicKey.challenge);
+      if (Array.isArray(options.publicKey.allowCredentials)) {
+        options.publicKey.allowCredentials = options.publicKey.allowCredentials.map(c => ({
+          ...c, id: b64urlToBuf(c.id)
+        }));
+      }
+
+      // 3) デバイス側で認証
+      const cred = await navigator.credentials.get({ publicKey: options.publicKey });
+
+      // 4) サーバ送信用に整形
+      const authData = {
+        id: cred.id,
+        type: cred.type,
+        rawId: bufToB64url(cred.rawId),
+        response: {
+          authenticatorData: bufToB64url(cred.response.authenticatorData),
+          clientDataJSON:    bufToB64url(cred.response.clientDataJSON),
+          signature:         bufToB64url(cred.response.signature),
+          userHandle:        cred.response.userHandle ? bufToB64url(cred.response.userHandle) : null
+        },
+        clientExtensionResults: cred.getClientExtensionResults?.() || {}
+      };
+
+      // 5) 検証
+      const verifyRes = await fetch('/webauthn/authentication/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          [CSRF_HEADER]: CSRF_TOKEN
+        },
+        body: JSON.stringify(authData)
+      });
+      if (!verifyRes.ok) throw new Error('検証に失敗しました');
+
+      // 6) 成功後にトップ等へ遷移
+      window.location.href = '/';
+    } catch (e) {
+      console.error(e);
+      alert('パスキー認証に失敗しました。別の方法でお試しください。');
+    }
+  }
+
+  if (passkeyBtn) {
+    passkeyBtn.addEventListener('click', passkeySignIn);
+  }
 });

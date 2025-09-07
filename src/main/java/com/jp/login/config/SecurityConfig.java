@@ -46,8 +46,8 @@ public class SecurityConfig {
                 return http
                                 .addFilterBefore(methodCheckFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**",
-                                                                "/userName", "/userNameCheck")
+                                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/userName", "/userNameCheck","/webauthn/**","/webauthn/authentication/options","/webauthn/authentication/verify"
+                                                )
                                                 .permitAll()
                                                 .requestMatchers(LOGIN_PROCESSING_URL).hasAuthority("ROLE_UserCheckOK")
                                                 .requestMatchers(REGISTER_PAGE).hasAuthority("ROLE_ADMIN")

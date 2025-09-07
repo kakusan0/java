@@ -3,10 +3,13 @@
 <head>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta charset="UTF-8"/>
-  <link href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet"/>
   <link href="/css/style.css" rel="stylesheet"/>
   <title th:text="#{login.page.title}"></title>
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
 </head>
 <body class="bg-dark text-white">
 <div class="container text-center">
@@ -42,6 +45,14 @@
             th:text="#{login.botton.clear}"
             type="reset"
           ></button>
+          <button
+            id="passkeySignInBtn"
+            class="btn btn-warning mb-3"
+            type="button"
+            title="パスキーでサインイン"
+          >
+            <i class="bi bi-key-fill"></i> パスキーで続行
+          </button>
         </div>
         <div th:if="${param.error}">
           <p style="color: red" th:text="#{login.error.login}"></p>
@@ -54,7 +65,7 @@
   </div>
 </div>
 <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+<script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
 <script src="/js/main.js"></script>
 </body>
 </html>
