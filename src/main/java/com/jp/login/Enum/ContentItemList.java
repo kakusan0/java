@@ -13,11 +13,11 @@ public enum ContentItemList {
     private final String value;
 
     public static ContentItemList fromValue(String value) {
-        for (ContentItemList item : values()) {
-            if (item.value.equals(value)) {
-                return item;
-            }
-        }
-        throw new IllegalArgumentException("Unknown enum value : " + value);
+        return switch (value) {
+            case "ホーム" -> ホーム;
+            case "ダッシュボード" -> ダッシュボード;
+            case "設定" -> 設定;
+            default -> throw new IllegalArgumentException("Unknown enum value : " + value);
+        };
     }
 }
