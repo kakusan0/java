@@ -16,19 +16,31 @@
         <plugin type="com.softwareloop.mybatis.generator.plugins.LombokPlugin"/>
         <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
 
+        <commentGenerator>
+            <property name="suppressAllComments" value="false"/>
+            <property name="addRemarkComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
         <!-- JDBC 接続（MySQLの例） -->
         <jdbcConnection
                 driverClass="com.mysql.cj.jdbc.Driver"
                 connectionURL="${db.url}"
                 userId="${db.user}"
                 password="${db.password}">
+            <!-- 文字コード設定 -->
             <property name="useUnicode" value="true"/>
             <property name="characterEncoding" value="UTF-8"/>
+            <!-- SSL/鍵取得など -->
             <property name="useSSL" value="false"/>
             <property name="allowPublicKeyRetrieval" value="true"/>
+            <!-- タイムゾーン -->
             <property name="serverTimezone" value="Asia/Tokyo"/>
+            <!-- メタデータ（備考）取得を安定させる -->
             <property name="useInformationSchema" value="true"/>
+            <property name="remarks" value="true"/>
         </jdbcConnection>
+
 
         <!-- Java 8+ の日時型を使う -->
         <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">

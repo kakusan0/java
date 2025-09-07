@@ -184,7 +184,6 @@
                     <overwrite>true</overwrite>
                 </configuration>
                 <dependencies>
-                    <!-- MBG 実行時の JDBC ドライバ（必須） -->
                     <dependency>
                         <groupId>com.mysql</groupId>
                         <artifactId>mysql-connector-j</artifactId>
