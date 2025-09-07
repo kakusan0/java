@@ -4,6 +4,7 @@ import static com.jp.login.constants.ApplicationConstants.ApplicationBase.*;
 import static com.jp.login.constants.ApplicationConstants.ApplicationRedirectUrl.*;
 import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.*;
 
+import com.jp.login.entity.ContentItemExample;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,7 +44,7 @@ class Dev1Controller {
 
     @GetMapping(ROOT)
     public String root(Model model) {
-        model.addAttribute("screens", contentItemMapper.findAll());
+        model.addAttribute("screens", contentItemMapper.selectByExample(new ContentItemExample()));
         return "main";
     }
 
@@ -52,7 +53,8 @@ class Dev1Controller {
             @RequestParam(defaultValue = "未選択") String screenName,
             Model model) {
         model.addAttribute("errorMessage", null);
-        model.addAttribute("screens", contentItemMapper.findAll());
+        model.addAttribute("screens", contentItemMapper.selectByExample(new ContentItemExample()
+        ));
 
         // "未選択"の場合には caseにヒットしない値を渡す
         model.addAttribute("currentScreen", "未選択".equals(screenName) ? "" : screenName);

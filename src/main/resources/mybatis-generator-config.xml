@@ -13,14 +13,22 @@
         <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
 
         <!-- Lombok を使う場合のプラグイン（クラスパスにプラグインJarが必要） -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.LombokPlugin"/>
+        <plugin type="com.softwareloop.mybatis.generator.plugins.LombokPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
 
         <!-- JDBC 接続（MySQLの例） -->
         <jdbcConnection
                 driverClass="com.mysql.cj.jdbc.Driver"
                 connectionURL="${db.url}"
                 userId="${db.user}"
-                password="${db.password}"/>
+                password="${db.password}">
+            <property name="useUnicode" value="true"/>
+            <property name="characterEncoding" value="UTF-8"/>
+            <property name="useSSL" value="false"/>
+            <property name="allowPublicKeyRetrieval" value="true"/>
+            <property name="serverTimezone" value="Asia/Tokyo"/>
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
 
         <!-- Java 8+ の日時型を使う -->
         <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
@@ -29,8 +37,11 @@
 
         <!-- 生成先 -->
         <javaModelGenerator targetPackage="com.jp.login.entity" targetProject="src/main/java">
+            <!-- ここはモデル生成の設定（有効） -->
             <property name="trimStrings" value="true"/>
+            <property name="serializable" value="true"/>
         </javaModelGenerator>
+
 
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
@@ -39,7 +50,7 @@
                              type="XMLMAPPER"/>
 
         <!-- 対象テーブル -->
-        <table tableName="content_item" domainObjectName="ContentItem">
+        <table tableName="content_items" domainObjectName="ContentItem">
             <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
         </table>
 
