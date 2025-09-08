@@ -1,5 +1,6 @@
 package com.jp.login.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.webauthn.authentication.PublicKeyCredentialRequestOptionsRepository;
+import org.springframework.security.web.webauthn.registration.HttpSessionPublicKeyCredentialCreationOptionsRepository;
+import org.springframework.security.web.webauthn.registration.PublicKeyCredentialCreationOptionsRepository;
 
 @Configuration
 @Profile("!dev")
@@ -63,7 +65,18 @@ public class SecurityConfig {
                                                 .loginPage("/login")
                                                 .defaultSuccessUrl(REGISTER_PAGE, false)
                                                 .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
-                                .logout(logout -> logout
+                    .webAuthn(webAuthn -> webAuthn
+                        .rpName("Local RP")
+                        .rpId("localhost")
+                        .allowedOrigins("http://localhost:8080/userName")
+                        // 登録用は CreationOptionsRepository（registration）
+//                        .creationOptionsRepository(creationOptionsRepository())
+//                            .requestOptionsRepository
+//                                (requestOptionsRepository())
+                    )
+
+
+                    .logout(logout -> logout
                                                 .logoutSuccessUrl("/userName")
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("SESSION"))
@@ -74,4 +87,18 @@ public class SecurityConfig {
         BCryptPasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
+
+    @Bean
+    PublicKeyCredentialCreationOptionsRepository creationOptionsRepository() {
+        // 登録用は標準のセッション実装を使用
+        return new HttpSessionPublicKeyCredentialCreationOptionsRepository();
+    }
+
+    @Bean
+    PublicKeyCredentialRequestOptionsRepository requestOptionsRepository() {
+        // 認証用は既存のカスタム実装を使用
+        return new CustomPublicKeyCredentialRequestOptionsRepository();
+    }
+
+
 }

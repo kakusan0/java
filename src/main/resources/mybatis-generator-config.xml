@@ -66,5 +66,14 @@
             <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
         </table>
 
+        <table tableName="mst_user" domainObjectName="MstUser">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+        </table>
+
+        <table tableName="webauthn_credentials" domainObjectName="WebauthnCredentials">
+            <generatedKey column="credential_id" sqlStatement="JDBC" identity="true"/>
+        </table>
+
+
     </context>
 </generatorConfiguration>
