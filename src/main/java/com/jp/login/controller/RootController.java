@@ -65,5 +65,4 @@ public class RootController {
         return "login/login";
     }
 
-
 }
