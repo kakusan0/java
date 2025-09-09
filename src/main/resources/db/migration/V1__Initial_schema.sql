@@ -1,3 +1,4 @@
+-- Initial schema creation
 CREATE TABLE mst_user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -31,3 +32,38 @@ CREATE TABLE webauthn_credentials (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (username) REFERENCES mst_user(username) ON DELETE CASCADE
 );
+
+-- Insert default data
+INSERT INTO mst_user (
+    id,
+    username,
+    password,
+    password_expiry_date,
+    credentials_non_expired,
+    account_non_expired,
+    discord_status,
+    enabled,
+    role,
+    account_non_locked,
+    created_at,
+    updated_at
+)
+VALUES (
+    1,
+    'admin',
+    '$2a$10$j/tXs0s2jP3FNeIxsnl/qe6Ejn16xvgdgcE0JZ2Hhe3Nv18/ryYCe',
+    NULL,
+    NULL,
+    NULL,
+    FALSE,
+    TRUE,
+    'ROLE_ADMIN',
+    TRUE,
+    '2025-05-27 15:55:06',
+    '2025-05-27 15:55:06'
+);
+
+INSERT INTO content_items (item_name)
+VALUES ('ホーム'),
+    ('ダッシュボード'),
+    ('設定');

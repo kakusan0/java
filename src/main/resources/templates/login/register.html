@@ -8,6 +8,9 @@
   <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link href="/css/style.css" rel="stylesheet" />
   <title th:text="#{register.page.title}"></title>
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
 </head>
 
 <body class="bg-dark text-white">
@@ -30,6 +33,17 @@
           </div>
           <button class="btn btn-primary mb-3" th:text="#{register.botton.submit}" type="submit" />
         </form>
+        
+        <!-- Passkey Registration Section -->
+        <div class="mt-4">
+          <h3>パスキー登録</h3>
+          <p>パスワードレス認証のためにパスキーを登録できます。</p>
+          <button class="btn btn-success mb-3" type="button" id="registerPasskey">パスキーを登録</button>
+          <div id="statusCreatePasskey" class="alert alert-info" style="display: none;">
+            準備中...
+          </div>
+        </div>
+        
         <form method="post" style="display: inline" th:action="@{/logout}">
           <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
           <button class="btn btn-secondary mb-3" th:text="#{register.botton.logout}" />
@@ -41,6 +55,7 @@
       </div>
     </div>
   </div>
+  <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
   <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
   <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
   <script src="/js/main.js"></script>

@@ -37,6 +37,7 @@ $(function () {
 
   $(window).on("load", function () {
     $("#createPasskey").on("click", () => createPasskey());
+    $("#registerPasskey").on("click", () => createPasskey()); // 新しいボタンID
     $("#authenticatePasskey").on("click", () => signInWithPasskey());
   });
 
@@ -60,6 +61,13 @@ $(function () {
   async function createPasskey() {
     const csrfToken = getCsrfToken();
 
+    // Helper function to update status display
+    function updateStatus(message) {
+      $("#statusCreatePasskey").text(message).show();
+    }
+
+    updateStatus("パスキー登録の準備中...");
+
     // get option
     let optionsJSON;
     try {
@@ -73,9 +81,11 @@ $(function () {
       });
       optionsJSON = await safeJson(optResp);
     } catch (e) {
-      $("#statusCreatePasskey").text("Error: " + e.message);
+      updateStatus("Error: " + e.message);
       return;
     }
+
+    updateStatus("認証機器での操作を完了してください...");
 
     // ... existing code ...
     let attResp;
@@ -84,12 +94,14 @@ $(function () {
       attResp = await SimpleWebAuthnBrowser.startRegistration(options);
     } catch (e) {
       if (e.name === "InvalidStateError") {
-        $("#statusCreatePasskey").text("Error: Authenticator was probably already registered by user");
+        updateStatus("Error: Authenticator was probably already registered by user");
       } else {
-        $("#statusCreatePasskey").text("Error: " + e);
+        updateStatus("Error: " + e);
       }
       return;
     }
+
+    updateStatus("パスキー登録を完了しています...");
 
     // verify
     try {
@@ -112,12 +124,12 @@ $(function () {
 
       const verificationJSON = await safeJson(verificationResp);
       if (verificationJSON && verificationJSON.success) {
-        $("#statusCreatePasskey").text("Successfully created passkey!");
+        updateStatus("パスキー登録が成功しました！");
       } else {
-        $("#statusCreatePasskey").text("Failed to create passkey.");
+        updateStatus("パスキー登録に失敗しました。");
       }
     } catch (e) {
-      $("#statusCreatePasskey").text("Error: " + e.message);
+      updateStatus("Error: " + e.message);
     }
   }
 
