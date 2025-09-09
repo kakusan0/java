@@ -17,7 +17,7 @@ import com.jp.login.mapper.ContentItemMapper;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@Profile("dev")
+@Profile("demo")
 public class RootController {
 
     @GetMapping(ROOT)
@@ -38,7 +38,7 @@ public class RootController {
 
 @Controller
 @RequiredArgsConstructor
-@Profile("!dev")
+@Profile("!demo")
 class Dev1Controller {
     private final ContentItemMapper contentItemMapper;
 

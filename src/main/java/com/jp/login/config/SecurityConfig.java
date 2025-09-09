@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
-@Profile("!dev")
+@Profile("!demo")
 class NoSecurityConfig {
 
         @Bean
@@ -32,7 +32,7 @@ class NoSecurityConfig {
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity()
-@Profile("dev")
+@Profile("demo")
 public class SecurityConfig {
 
         public static final String LOGIN_PROCESSING_URL = "/login";
