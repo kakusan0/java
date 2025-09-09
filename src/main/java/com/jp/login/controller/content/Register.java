@@ -1,8 +1,9 @@
-package com.jp.login.controller;
+package com.jp.login.controller.content;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -19,6 +20,11 @@ public class Register {
 
     private final UserMapper userMapper;
     private final registerService registerService;
+
+    @GetMapping(ApplicationConstants.REGISTER)
+    public String register() {
+        return "login/register";
+    }
 
     @PostMapping(ApplicationConstants.REGISTER)
     public String registerUser(@RequestParam String username, Model model) {
