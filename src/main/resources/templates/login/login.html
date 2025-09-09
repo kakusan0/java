@@ -8,13 +8,25 @@
     <div class="row">
       <div class="col-md-4 offset-md-4">
         <h1 th:text="#{login.page.title}"></h1>
-        <!--
-          ログインフォーム
-          - /login に POST（Spring Security が処理）
-          - 下の CSRF トークンを含めることで Spring Security が POST を受け付ける
-          - ユーザー名は事前チェックの結果で事前入力されることがある
-        -->
-        <form method="post" th:action="@{/login}">
+        <form method="post" th:action="@{/userCheck}" sec:authorize="!hasAuthority('ROLE_UserCheckOK')">
+          <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+          <div class="form-floating mb-3">
+            <input class="form-control bg-dark text-white" id="floatingInput" name="username" placeholder="" required
+              th:value="${param.username}" type="text" />
+            <label for="floatingInput" th:text="#{login.user.name}"></label>
+          </div>
+          <div>
+            <button class="btn btn-primary mb-3" th:text="#{login.botton.submit}" type="submit"></button>
+            <button class="btn btn-secondary mb-3" th:text="#{login.botton.clear}" type="reset"></button>
+          </div>
+          <div th:if="${param.error}">
+            <p style="color: red" th:text="#{login.error.login}"></p>
+          </div>
+          <div th:if="${error}">
+            <p style="color: red" th:text="${error}"></p>
+          </div>
+        </form>
+        <form method="post" th:action="@{/login}" sec:authorize="hasAuthority('ROLE_UserCheckOK')">
           <!-- CSRF トークン（Spring により生成） -->
           <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
           <div class="form-floating mb-3">

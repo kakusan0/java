@@ -35,13 +35,13 @@ public class RootController {
     @GetMapping(ApplicationConstants.USERNAME_CHECK)
     public String userName() {
         // render templates/login/userName.html
-        return "login/userName";
+        return "login/login";
     }
 
     @GetMapping(ApplicationConstants.USER_CHECK)
     public String userCheck() {
         // render templates/login/userCheck.html
-        return "login/userCheck";
+        return "login/login";
     }
 
     @PostMapping(ApplicationConstants.USER_CHECK)
@@ -51,7 +51,7 @@ public class RootController {
             String errorMsg = messageSource.getMessage(
                     "login.error.duplicate", null, Locale.getDefault());
             model.addAttribute("error", user.getUsername() + errorMsg);
-            return "login/userName";
+            return "login/login";
         }
         if (userMapper.existsById(user.getUsername()) == 0) {
             String errorMsg = messageSource.getMessage(
