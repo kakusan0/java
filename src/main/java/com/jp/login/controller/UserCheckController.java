@@ -2,15 +2,10 @@ package com.jp.login.controller;
 
 import static com.jp.login.constants.ApplicationConstants.ApplicationBase.userNameCheck;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import org.springframework.context.MessageSource;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+// security imports are handled in SecurityAuthorityService
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +25,7 @@ public class UserCheckController {
 
         private final UserMapper userMapper;
         private final MessageSource messageSource;
+        private final com.jp.login.service.SecurityAuthorityService securityAuthorityService;
 
         @PostMapping(userNameCheck)
         public String userNameCheck(Model model,
@@ -48,18 +44,8 @@ public class UserCheckController {
                 }
                 model.addAttribute("username", user.getUsername());
                 log.debug("userName: {}", user.getUsername());
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                List<SimpleGrantedAuthority> updatedAuthorities = authentication.getAuthorities()
-                                .stream()
-                                .map(a -> new SimpleGrantedAuthority(a.getAuthority()))
-                                .collect(Collectors.toList());
-                updatedAuthorities.add(new SimpleGrantedAuthority("ROLE_UserCheckOK"));
-
-                Authentication newAuth = new UsernamePasswordAuthenticationToken(
-                                authentication.getPrincipal(),
-                                authentication.getCredentials(),
-                                updatedAuthorities);
-                SecurityContextHolder.getContext().setAuthentication(newAuth);
+                // add the ROLE_UserCheckOK authority to the current authentication
+                securityAuthorityService.addAuthority("ROLE_UserCheckOK");
 
                 // after authority update redirect to login page handled by LoginController
                 return "login/login";

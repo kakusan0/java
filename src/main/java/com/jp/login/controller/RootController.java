@@ -60,29 +60,3 @@ public class RootController {
         return "main";
     }
 }
-
-// @Controller
-// @RequiredArgsConstructor
-// @Profile("!dev")
-// class Dev1Controller {
-
-//     @GetMapping(ROOT)
-//     public String root(Model model) {
-//         model.addAttribute("screens", contentItemMapper.selectByExample(new ContentItemExample()));
-//         return "main";
-//     }
-
-//     @PostMapping("/content")
-//     public String selectItem(
-//             @RequestParam(defaultValue = "未選択") String screenName,
-//             Model model) {
-//         model.addAttribute("errorMessage", null);
-//         model.addAttribute("screens", contentItemMapper.selectByExample(new ContentItemExample()));
-
-//         // "未選択"の場合には caseにヒットしない値を渡す
-//         model.addAttribute("currentScreen", "未選択".equals(screenName) ? "" : screenName);
-
-//         model.addAttribute("selectedScreenName", "未選択".equals(screenName) ? "画面を選択" : screenName);
-//         return "main";
-//     }
-// }
