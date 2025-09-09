@@ -2,6 +2,7 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
 <body>
+  <!-- エラーモーダル: サーバ側から渡された errorMessage を表示する。常に非表示で、必要時に差し替えて表示される -->
   <div aria-hidden="true" aria-labelledby="errorModalLabel" class="modal fade" data-bs-backdrop="static"
     data-bs-keyboard="false" id="errorModal" tabindex="-1" th:fragment="content" th:if="${errorMessage}">
     <div class="modal-dialog modal-dialog-centered">

@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body>
 
-<!-- th:fragment="content" で、このdivが "content" という名前の部品であることを定義 -->
-<div th:fragment="content">
-  <h1>ホーム画面</h1>
-  <p>ここはホーム画面のコンテンツです。</p>
-  <table class="table">
-    <!-- ... テーブルの内容 ... -->
-  </table>
-</div>
+  <!-- th:fragment="content" で、このdivが "content" という名前の部品であることを定義 -->
+  <!-- ホーム画面用のフラグメント。メインテンプレートから差し替えて表示される -->
+  <div th:fragment="content">
+    <h1>ホーム画面</h1>
+    <p>ここはホーム画面のコンテンツです。</p>
+    <table class="table">
+      <!-- ... テーブルの内容 ... -->
+    </table>
+  </div>
 
 </body>
+
 </html>

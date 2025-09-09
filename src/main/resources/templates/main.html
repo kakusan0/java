@@ -1,17 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta charset="UTF-8" />
-  <link href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link href="/css/style.css" rel="stylesheet" />
-  <script defer src="/webjars/jquery/3.7.1/jquery.min.js"></script>
-  <script defer src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
-  <script defer src="/js/main.js"></script>
-  <title th:text="${currentScreen ?: 'メインページ'}"></title>
-</head>
+<head th:replace="~{fragments/head :: commonHead(${currentScreen ?: 'メインページ'})}"></head>
 
 <body>
 
@@ -38,6 +28,7 @@
   </header>
 
   <!-- サイドバー -->
+  <!-- サイドバーはアプリ内のナビゲーション。モバイルではオフキャンバス、PCでは固定表示 -->
   <div aria-labelledby="sidebarMenuLabel" class="offcanvas offcanvas-start offcanvas-md is-collapsed" id="sidebarMenu"
     tabindex="-1">
     <div class="offcanvas-body p-0">
@@ -65,6 +56,7 @@
   </div>
 
   <!-- メインコンテンツ -->
+  <!-- currentScreen に応じて各フラグメント（home, dashboard, settings）を差し替えて表示する -->
   <main class="main-content p-4 is-collapsed">
     <div class="container-fluid">
       <!-- 修正: 重複したcaseを削除 -->

@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta charset="UTF-8" />
-  <link href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link href="/css/style.css" rel="stylesheet" />
-  <title th:text="#{register.page.title}"></title>
-</head>
+<head th:replace="~{fragments/head :: commonHead(#{register.page.title})}"></head>
 
 <body class="bg-dark text-white">
   <div class="container text-center">
@@ -21,8 +14,10 @@
           <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
         </div>
         <h1 th:text="#{register.page.title}"></h1>
+        <!-- 登録ページ: 新規ユーザー登録用のフォーム。登録後は画面にユーザー名と生成されたパスワードが表示される -->
         <form method="post" th:action="@{/register}">
           <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+          <!-- 登録フォーム（CSRF トークンを含む） -->
           <div class="form-floating mb-3">
             <input class="form-control bg-dark text-white" id="username" name="username" placeholder="" required
               type="text" />
@@ -32,7 +27,7 @@
         </form>
         <form method="post" style="display: inline" th:action="@{/logout}">
           <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
-          <button class="btn btn-secondary mb-3" th:text="#{register.botton.logout}" />
+          <!-- 登録ページからのログアウトボタン（オプション） -->
         </form>
 
         <div th:if="${error}">
@@ -45,4 +40,5 @@
   <script src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
   <script src="/js/main.js"></script>
 </body>
+
 </html>
