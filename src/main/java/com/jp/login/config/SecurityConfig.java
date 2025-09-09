@@ -11,9 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.webauthn.authentication.PublicKeyCredentialRequestOptionsRepository;
-import org.springframework.security.web.webauthn.registration.HttpSessionPublicKeyCredentialCreationOptionsRepository;
-import org.springframework.security.web.webauthn.registration.PublicKeyCredentialCreationOptionsRepository;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @Profile("!dev")
@@ -48,7 +46,7 @@ public class SecurityConfig {
                 return http
                                 .addFilterBefore(methodCheckFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/userName", "/userNameCheck","/webauthn/**","/webauthn/authentication/options","/webauthn/authentication/verify"
+                                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/userName", "/userNameCheck","/webauthn/**","/login/webauthn"
                                                 )
                                                 .permitAll()
                                                 .requestMatchers(LOGIN_PROCESSING_URL).hasAuthority("ROLE_UserCheckOK")
@@ -65,18 +63,7 @@ public class SecurityConfig {
                                                 .loginPage("/login")
                                                 .defaultSuccessUrl(REGISTER_PAGE, false)
                                                 .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
-                    .webAuthn(webAuthn -> webAuthn
-                        .rpName("Local RP")
-                        .rpId("localhost")
-                        .allowedOrigins("http://localhost:8080/userName")
-                        // 登録用は CreationOptionsRepository（registration）
-//                        .creationOptionsRepository(creationOptionsRepository())
-//                            .requestOptionsRepository
-//                                (requestOptionsRepository())
-                    )
-
-
-                    .logout(logout -> logout
+                                .logout(logout -> logout
                                                 .logoutSuccessUrl("/userName")
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("SESSION"))
@@ -87,18 +74,4 @@ public class SecurityConfig {
         BCryptPasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
-
-    @Bean
-    PublicKeyCredentialCreationOptionsRepository creationOptionsRepository() {
-        // 登録用は標準のセッション実装を使用
-        return new HttpSessionPublicKeyCredentialCreationOptionsRepository();
-    }
-
-    @Bean
-    PublicKeyCredentialRequestOptionsRepository requestOptionsRepository() {
-        // 認証用は既存のカスタム実装を使用
-        return new CustomPublicKeyCredentialRequestOptionsRepository();
-    }
-
-
 }

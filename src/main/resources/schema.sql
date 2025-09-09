@@ -20,3 +20,14 @@ CREATE TABLE content_items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE webauthn_credentials (
+    credential_id VARBINARY(255) PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    public_key_cose BLOB NOT NULL,
+    user_handle VARBINARY(255) NOT NULL,
+    sign_count BIGINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES mst_user(username) ON DELETE CASCADE
+);
