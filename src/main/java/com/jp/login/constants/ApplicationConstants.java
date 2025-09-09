@@ -9,24 +9,22 @@ public class ApplicationConstants {
         public static final int PASSWORD_LENGTH = 15;
     }
 
+    // 基本パス
+    public static final String ROOT = "/";
+    public static final String USERNAME = "userName";
+    public static final String USERNAME_CHECK = "userNameCheck";
+    public static final String LOGIN = "login";
+    public static final String REGISTER = "register";
+
+    // 互換性を保つため既存のネーミングを残すエイリアス
     public static final class ApplicationBase {
-        public static final String ROOT = "/";
-        public static final String USERNAME = "userName";
-        public static final String userNameCheck = "userNameCheck";
-        public static final String LOGIN = "login";
-        public static final String register = "register";
+        public static final String ROOT = ApplicationConstants.ROOT;
+        public static final String USERNAME = ApplicationConstants.USERNAME;
+        public static final String userNameCheck = ApplicationConstants.USERNAME_CHECK;
+        public static final String LOGIN = ApplicationConstants.LOGIN;
+        public static final String register = ApplicationConstants.REGISTER;
     }
 
-    public static final class ApplicationToUrl {
-        public static final String login_to_register = ApplicationBase.LOGIN + SLASH + ApplicationBase.register;
-        public static final String login_to_userName = ApplicationBase.LOGIN + SLASH + ApplicationBase.USERNAME;
-    }
-
-    public static final class ApplicationFromUrl {
-        public static final String from_login = ApplicationBase.LOGIN + SLASH + ApplicationBase.LOGIN;
-    }
-
-        public static final class ApplicationRedirectUrl {
-        public static final String from_userName_redirect = REDIRECT + SLASH + ApplicationBase.USERNAME;
-    }
+    // 備考: view 名や redirect はコントローラ側で直接返すようにするため、
+    // 組み合わせ用の URL 定数は削除しました。
 }

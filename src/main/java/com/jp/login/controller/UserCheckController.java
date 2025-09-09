@@ -1,9 +1,6 @@
 package com.jp.login.controller;
 
 import static com.jp.login.constants.ApplicationConstants.ApplicationBase.userNameCheck;
-import static com.jp.login.constants.ApplicationConstants.ApplicationFromUrl.from_login;
-import static com.jp.login.constants.ApplicationConstants.ApplicationRedirectUrl.from_userName_redirect;
-import static com.jp.login.constants.ApplicationConstants.ApplicationToUrl.login_to_userName;
 
 import java.util.List;
 import java.util.Locale;
@@ -41,13 +38,13 @@ public class UserCheckController {
                         String errorMsg = messageSource.getMessage(
                                         "login.error.duplicate", null, Locale.getDefault());
                         model.addAttribute("error", user.getUsername() + errorMsg);
-                        return login_to_userName;
+                        return "login/userName";
                 }
                 if (userMapper.existsById(user.getUsername()) == 0) {
                         String errorMsg = messageSource.getMessage(
                                         "login.error.notfound", null, Locale.getDefault());
                         model.addAttribute("error", user.getUsername() + errorMsg);
-                        return from_userName_redirect;
+                        return "redirect:/userName";
                 }
                 model.addAttribute("username", user.getUsername());
                 log.debug("userName: {}", user.getUsername());
@@ -64,6 +61,7 @@ public class UserCheckController {
                                 updatedAuthorities);
                 SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-                return from_login;
+                // after authority update redirect to login page handled by LoginController
+                return "login/login";
         }
 }

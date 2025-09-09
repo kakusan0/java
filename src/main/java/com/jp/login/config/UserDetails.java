@@ -19,7 +19,19 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // コンストラクタ: MasterUserを受け取り、権限を設定する
     public UserDetails(MasterUser user) {
         this.loginUser = user;
-        this.authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+        // MasterUser.role may contain a single role or multiple roles separated by
+        // commas.
+        // Split, trim and map to SimpleGrantedAuthority, ignoring empty entries.
+        String roles = user.getRole();
+        if (roles == null || roles.isBlank()) {
+            this.authorities = List.of();
+        } else {
+            this.authorities = java.util.Arrays.stream(roles.split(","))
+                    .map(String::trim)
+                    .filter(r -> !r.isEmpty())
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
+        }
     }
 
     // ユーザーに付与された権限を返す
