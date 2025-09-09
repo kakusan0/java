@@ -9,7 +9,7 @@
       <div class="col-md-4 offset-md-4">
         <!-- ユーザー名チェック画面: ユーザー名の存在確認を行い、存在する場合はログイン画面へ誘導する -->
         <h1 th:text="#{login.page.title}"></h1>
-        <form method="post" th:action="@{/userNameCheck}">
+        <form method="post" th:action="@{/userCheck}">
           <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
           <div class="form-floating mb-3">
             <input class="form-control bg-dark text-white" id="floatingInput" name="username" placeholder="" required

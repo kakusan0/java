@@ -10,5 +10,13 @@
     <script defer src="/webjars/jquery/3.7.1/jquery.min.js"></script>
     <script defer src="/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js"></script>
     <script defer src="/js/main.js"></script>
+    <!-- Ensure page is reloaded if restored from bfcache (back-forward cache) to avoid showing protected content after logout -->
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
     <title th:text="${title}">アプリケーション</title>
 </head>

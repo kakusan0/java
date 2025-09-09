@@ -1,13 +1,12 @@
 package com.jp.login.controller;
 
-import static com.jp.login.constants.ApplicationConstants.ApplicationBase.register;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jp.login.constants.ApplicationConstants;
 import com.jp.login.mapper.UserMapper;
 import com.jp.login.service.registerService;
 
@@ -21,7 +20,7 @@ public class Register {
     private final UserMapper userMapper;
     private final registerService registerService;
 
-    @PostMapping(register)
+    @PostMapping(ApplicationConstants.REGISTER)
     public String registerUser(@RequestParam String username, Model model) {
         // 入力値のチェック
         if (username == null || username.isEmpty()) {

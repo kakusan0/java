@@ -1,72 +1,57 @@
 package com.jp.login.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.jp.login.constants.ApplicationConstants;
+
 import lombok.RequiredArgsConstructor;
-
-@Configuration
-@Profile("!dev")
-class NoSecurityConfig {
-
-        @Bean
-        SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                return http
-                                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                                .csrf(csrf -> csrf.disable())
-                                .formLogin(form -> form.disable())
-                                .httpBasic(basic -> basic.disable())
-                                .build();
-        }
-}
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity()
-@Profile("dev")
 public class SecurityConfig {
-
-        public static final String LOGIN_PROCESSING_URL = "/login";
-        @Value("/register")
         private static final String REGISTER_PAGE = "/register";
 
         @Bean
         SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
                 return http
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**",
-                                                                "/userName", "/userNameCheck",
-                                                                "/webauthn/**", "/main")
+                                                                "/webauthn/**",
+                                                                ApplicationConstants.USERNAME_CHECK,
+                                                                ApplicationConstants.USER_CHECK,
+                                                                ApplicationConstants.LOGIN)
                                                 .permitAll()
-                                                .requestMatchers(LOGIN_PROCESSING_URL).hasAuthority("ROLE_UserCheckOK")
                                                 .requestMatchers(REGISTER_PAGE).hasAuthority("ROLE_ADMIN")
                                                 .anyRequest().authenticated())
+                                .exceptionHandling(e -> e.accessDeniedPage(
+                                                ApplicationConstants.USERNAME_CHECK))
                                 .sessionManagement(session -> session
-                                                .invalidSessionUrl("/userName")
+                                                .invalidSessionUrl(
+                                                                ApplicationConstants.USERNAME_CHECK)
                                                 .sessionFixation()
                                                 .migrateSession()
                                                 .maximumSessions(1)
                                                 .maxSessionsPreventsLogin(true)
-                                                .expiredUrl("/userName"))
+                                                .expiredUrl(ApplicationConstants.USERNAME_CHECK))
                                 .formLogin(form -> form
-                                                .loginPage("/login")
-                                                .defaultSuccessUrl("/main", false)
-                                                .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
+                                                .loginPage(ApplicationConstants.LOGIN)
+                                                .defaultSuccessUrl(
+                                                                ApplicationConstants.MAIN, false))
                                 .webAuthn(webAuthn -> webAuthn
                                                 .rpName("Local RP")
                                                 .rpId("localhost")
                                                 .allowedOrigins("http://localhost:8080/userName"))
                                 .logout(logout -> logout
-                                                .logoutSuccessUrl("/userName")
+                                                .logoutSuccessUrl(
+                                                                ApplicationConstants.USERNAME_CHECK)
                                                 .invalidateHttpSession(true)
                                                 .deleteCookies("SESSION"))
                                 .build();

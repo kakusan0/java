@@ -1,7 +1,5 @@
 package com.jp.login.controller;
 
-import static com.jp.login.constants.ApplicationConstants.ApplicationBase.userNameCheck;
-
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
@@ -12,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.jp.login.constants.ApplicationConstants;
 import com.jp.login.entity.MasterUser;
 import com.jp.login.mapper.UserMapper;
 
@@ -27,7 +26,7 @@ public class UserCheckController {
         private final MessageSource messageSource;
         private final com.jp.login.service.SecurityAuthorityService securityAuthorityService;
 
-        @PostMapping(userNameCheck)
+        @PostMapping(ApplicationConstants.USER_CHECK)
         public String userNameCheck(Model model,
                         @ModelAttribute("userValidation") MasterUser user) {
                 if (ObjectUtils.isEmpty(user)) {
@@ -40,7 +39,8 @@ public class UserCheckController {
                         String errorMsg = messageSource.getMessage(
                                         "login.error.notfound", null, Locale.getDefault());
                         model.addAttribute("error", user.getUsername() + errorMsg);
-                        return "redirect:/userName";
+                        // return "redirect:/userName";
+                        return ApplicationConstants.REDIRECT + ApplicationConstants.USERNAME_CHECK;
                 }
                 model.addAttribute("username", user.getUsername());
                 log.debug("userName: {}", user.getUsername());

@@ -17,12 +17,17 @@
           <i class="bi bi-list"></i>
         </button>
       </div>
-      <div class="position-absolute top-50 start-50 translate-middle">
+      <div class="position-absolute top-50 start-50 translate-middle d-flex align-items-center">
         <button class="btn btn-secondary" data-bs-target="#scrollableModal" data-bs-toggle="modal" id="itemSelectButton"
           type="button">
           <!-- 修正: より簡潔なエルビス演算子を使用 -->
           <span id="selectedItemName" th:text="${selectedScreenName ?: 'ツールを選択'}" />
         </button>
+        <!-- Logout form placed next to the tool selector -->
+        <form th:action="@{/logout}" method="post" style="display:inline;" class="ms-2">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <button type="submit" class="btn btn-outline-secondary">ログアウト</button>
+        </form>
       </div>
     </div>
   </header>
