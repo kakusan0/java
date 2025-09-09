@@ -28,6 +28,7 @@
         <bootstrap.version>5.3.8</bootstrap.version>
         <bootstrap-icons.version>1.13.1</bootstrap-icons.version>
         <jquery.version>3.7.1</jquery.version>
+        <webauthn4j.version>0.29.6.RELEASE</webauthn4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -149,7 +150,17 @@
         <dependency>
             <groupId>com.webauthn4j</groupId>
             <artifactId>webauthn4j-core</artifactId>
-            <version>0.29.6.RELEASE</version>
+            <version>${webauthn4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.webauthn4j</groupId>
+            <artifactId>webauthn4j-util</artifactId>
+            <version>${webauthn4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.webauthn4j</groupId>
+            <artifactId>webauthn4j-metadata</artifactId>
+            <version>${webauthn4j.version}</version>
         </dependency>
     </dependencies>
     <build>
