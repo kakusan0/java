@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -13,6 +14,7 @@ public class MasterUser implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private Long id; // ユーザーの一意な識別子
+    @NotBlank(message = "login.error.username.blank")
     private String username; // ユーザー名
     private String password; // ユーザーのパスワード
     private String role; // ユーザーに割り当てられたロールのリスト
