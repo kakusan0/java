@@ -1,16 +1,18 @@
 package com.jp.login.service;
 
-import com.jp.login.entity.MasterUser;
-import com.jp.login.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
+import static com.jp.login.constants.ApplicationConstants.RegisterConstants.CHARACTERS;
+import static com.jp.login.constants.ApplicationConstants.RegisterConstants.PASSWORD_LENGTH;
+
+import java.security.SecureRandom;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
+import com.jp.login.entity.MstUser;
+import com.jp.login.mapper.UserMapper;
 
-import static com.jp.login.constants.ApplicationConstants.RegisterConstants.CHARACTERS;
-import static com.jp.login.constants.ApplicationConstants.RegisterConstants.PASSWORD_LENGTH;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class registerService {
         String hashedPassword = new BCryptPasswordEncoder().encode(password);
 
         // ユーザー登録用エンティティの作成
-        MasterUser user = new MasterUser();
+        MstUser user = new MstUser();
         user.setUsername(username);
         user.setPassword(hashedPassword);
 

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import com.jp.login.entity.MasterUser;
+import com.jp.login.entity.MstUser;
 
 @Mapper
 public interface UserMapper {
@@ -14,10 +14,10 @@ public interface UserMapper {
         int existsById(String username);
 
         @Select("select * from mst_user where username = #{username}")
-        Optional<MasterUser> existsByUsername(String username);
+        Optional<MstUser> existsByUsername(String username);
 
         @Insert("insert into mst_user(username, password, role) values (#{username}, #{password}, 'ROLE_USER')")
-        void insert(MasterUser username);
+        void insert(MstUser user);
 
         @Select("select password from mst_user where username = #{username}")
         String getPassword(String username);

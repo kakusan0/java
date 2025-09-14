@@ -3,16 +3,17 @@ package com.jp.login.controller;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-// ...existing imports...
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.jp.login.constants.ApplicationConstants;
-import com.jp.login.entity.MasterUser;
+import com.jp.login.entity.MstUser;
 import com.jp.login.mapper.UserMapper;
 import com.jp.login.service.SecurityAuthorityService;
 
@@ -30,7 +31,24 @@ public class RootController {
 
     @GetMapping(ApplicationConstants.ROOT)
     public String root() {
-        // redirect to the username entry page
+        // If user has neither ROLE_UserCheckOK nor ROLE_ADMIN, redirect to username
+        // entry page
+        Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (auth != null && auth.isAuthenticated()) {
+            boolean hasUserCheck = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .anyMatch(a -> "ROLE_UserCheckOK".equals(a));
+            boolean hasAdmin = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .anyMatch(a -> "ROLE_ADMIN".equals(a));
+            if (!hasUserCheck && !hasAdmin) {
+                return ApplicationConstants.REDIRECT + ApplicationConstants.USERNAME_CHECK;
+            }
+            // user has required role, proceed to main
+            return ApplicationConstants.REDIRECT + ApplicationConstants.MAIN;
+        }
+        // unauthenticated -> ask for username
         return ApplicationConstants.REDIRECT + ApplicationConstants.USERNAME_CHECK;
     }
 
@@ -47,7 +65,7 @@ public class RootController {
     }
 
     @PostMapping(ApplicationConstants.USER_CHECK)
-    public String userNameCheck(Model model, @ModelAttribute("userValidation") @Valid MasterUser user,
+    public String userNameCheck(Model model, @ModelAttribute("userValidation") @Valid MstUser user,
             BindingResult bindingResult) {
         // validation errors from @NotBlank will populate bindingResult
         if (bindingResult.hasErrors()) {

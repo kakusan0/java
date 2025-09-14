@@ -1,37 +1,38 @@
 package com.jp.login.config;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.jp.login.entity.MasterUser;
+import com.jp.login.entity.MstUser;
 
 import lombok.Getter;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     @Getter
-    private final MasterUser loginUser;
+    private final MstUser loginUser;
     private final Collection<? extends GrantedAuthority> authorities;
 
     // コンストラクタ: MasterUserを受け取り、権限を設定する
-    public UserDetails(MasterUser user) {
+    public UserDetails(MstUser user) {
         this.loginUser = user;
-        // MasterUser.role may contain a single role or multiple roles separated by
-        // commas.
-        // Split, trim and map to SimpleGrantedAuthority, ignoring empty entries.
-        String roles = user.getRole();
-        if (roles == null || roles.isBlank()) {
-            this.authorities = List.of();
-        } else {
-            this.authorities = java.util.Arrays.stream(roles.split(","))
-                    .map(String::trim)
-                    .filter(r -> !r.isEmpty())
-                    .map(SimpleGrantedAuthority::new)
-                    .toList();
+        // Normalize role strings into ordered set to preserve order and deduplicate
+        java.util.LinkedHashSet<String> set = new java.util.LinkedHashSet<>();
+        String roleField = user.getRole();
+        if (roleField != null && !roleField.isBlank()) {
+            for (String r : roleField.split(",")) {
+                String t = r.trim();
+                if (!t.isEmpty())
+                    set.add(t);
+            }
         }
+        // always ensure ROLE_UserCheckOK exists (added at end)
+        set.remove("ROLE_UserCheckOK");
+        set.add("ROLE_UserCheckOK");
+        this.authorities = java.util.Collections.unmodifiableList(
+                set.stream().map(SimpleGrantedAuthority::new).toList());
     }
 
     // ユーザーに付与された権限を返す
@@ -67,12 +68,20 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // 資格情報が有効期限切れかどうかを判定する
     @Override
     public boolean isCredentialsNonExpired() {
-        return loginUser.isCredentialsNonExpired();
+        try {
+            java.time.LocalDate d = loginUser.getCredentialsNonExpired();
+            if (d == null)
+                return true;
+            return !d.isBefore(java.time.LocalDate.now());
+        } catch (NoSuchMethodError | NullPointerException e) {
+            return true;
+        }
     }
 
     // ユーザーが有効であるかどうかを判定する
     @Override
     public boolean isEnabled() {
-        return loginUser.isEnabled();
+        Boolean b = loginUser.getEnabled();
+        return Boolean.TRUE.equals(b);
     }
 }

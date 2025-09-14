@@ -24,7 +24,6 @@ public class SecurityConfig {
                 return http
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**",
-                                                                "/webauthn/**",
                                                                 ApplicationConstants.USERNAME_CHECK,
                                                                 ApplicationConstants.USER_CHECK,
                                                                 ApplicationConstants.LOGIN)
@@ -45,10 +44,7 @@ public class SecurityConfig {
                                                 .loginPage(ApplicationConstants.LOGIN)
                                                 .defaultSuccessUrl(
                                                                 ApplicationConstants.MAIN, false))
-                                .webAuthn(webAuthn -> webAuthn
-                                                .rpName("Local RP")
-                                                .rpId("localhost")
-                                                .allowedOrigins("http://localhost:8080/userName"))
+
                                 .logout(logout -> logout
                                                 .logoutSuccessUrl(
                                                                 ApplicationConstants.USERNAME_CHECK)

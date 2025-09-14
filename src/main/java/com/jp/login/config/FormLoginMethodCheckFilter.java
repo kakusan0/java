@@ -29,30 +29,31 @@ public class FormLoginMethodCheckFilter extends OncePerRequestFilter {
             "/css/**", true, // 静的リソース
             "/js/**", true,
             "/img/**", true,
-            "/webjars/**", true
-    );
+            "/webjars/**", true);
 
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-
+        String contextPath = request.getContextPath() == null ? "" : request.getContextPath();
         String requestUri = request.getRequestURI();
+        // Remove context path so matching is done against application-relative paths
+        String path = requestUri.startsWith(contextPath) ? requestUri.substring(contextPath.length()) : requestUri;
         String method = request.getMethod();
 
-        // GETメソッドでのログインURLへのアクセスをチェック
-        if (HttpMethod.GET.matches(method) && pathMatcher.match("/login", requestUri)) {
-            response.sendRedirect(ApplicationConstants.USERNAME_CHECK);
+        // GET メソッドでのログイン URL への直接アクセスは username check に誘導する
+        if (HttpMethod.GET.matches(method) && pathMatcher.match(ApplicationConstants.LOGIN, path)) {
+            response.sendRedirect(contextPath + ApplicationConstants.USERNAME_CHECK);
             return;
         }
 
-        // パターンマッチングの確認
-        boolean isPermitted = URL_PATTERNS.entrySet().stream()
-                .anyMatch(entry -> pathMatcher.match(entry.getKey(), requestUri));
+        // パターンマッチングの確認 (アプリケーション相対パスで照合)
+        boolean isPermitted = URL_PATTERNS.keySet().stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path));
 
         if (!isPermitted) {
-            response.sendRedirect(ApplicationConstants.USERNAME_CHECK);
+            response.sendRedirect(contextPath + ApplicationConstants.USERNAME_CHECK);
             return;
         }
 
